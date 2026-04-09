@@ -174,5 +174,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const PORT = process.env.PORT_PLAYER || 3001;
-app.listen(PORT, () => console.log(`🎮 Player app running on port ${PORT}`));
+// const PORT = process.env.PORT_PLAYER || 3001;
+// app.listen(PORT, () => console.log(`🎮 Player app running on port ${PORT}`));
+
+module.exports = app;

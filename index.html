@@ -561,7 +561,7 @@
 
   <script>
     // ─── CONFIG ─────────────────────────────────────────────────────────────────
-    const API = '';  // Same origin — player app serves this HTML
+    const API = 'https://host-iota-vert.vercel.app/';  // Same origin — player app serves this HTML
     const POLL_MS = 2000;
 
     // ─── STATE ──────────────────────────────────────────────────────────────────
@@ -915,7 +915,7 @@ if (!r.ok) {
       document.getElementById('final-emoji').textContent = '🎁';
       document.getElementById('final-gift-name').textContent = 'Check the big screen!';
       if (state.giftImageUrl) {
-        document.getElementById('gift-img').src = state.giftImageUrl;
+        document.getElementById('gift-img').src = API + state.giftImageUrl;
         document.getElementById('gift-img').style.display = '';
       }
       showScreen('screen-gift');

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Game Night</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:       #FAF7F2;
+      --cream-dark:  #F2EDE3;
+      --cream-deep:  #E8E0D0;
+      --espresso:    #2C1A0E;
+      --espresso-md: #4A2E1A;
+      --terracotta:  #C4622D;
+      --terra-light: #D97D4A;
+      --gold:        #B8860B;
+      --gold-light:  #D4A843;
+      --sage:        #6B7C5C;
+      --blush:       #E8C4B0;
+      --border:      rgba(44,26,14,0.12);
+      --shadow:      rgba(44,26,14,0.08);
+    }
+
+    html, body {
+      min-height: 100%; height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--espresso);
+      overflow-x: hidden;
+    }
+
+    /* ── TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.6;
+    }
+
+    /* ── DECORATIVE BLOBS ── */
+    .blob {
+      position: fixed; border-radius: 50%; filter: blur(80px);
+      pointer-events: none; z-index: 0;
+    }
+    .blob-1 { width: 400px; height: 400px; background: rgba(196,98,45,0.08); top: -100px; right: -100px; }
+    .blob-2 { width: 300px; height: 300px; background: rgba(184,134,11,0.07); bottom: -50px; left: -80px; }
+
+    /* ── SCREENS ── */
+    .screen {
+      position: fixed; inset: 0; z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.45s ease;
+      overflow-y: auto;
+    }
+    .screen.active { opacity: 1; pointer-events: all; }
+
+    .inner { position: relative; z-index: 2; width: 100%; max-width: 420px; }
+
+    /* ── ORNAMENT ── */
+    .ornament {
+      text-align: center; margin-bottom: 28px;
+      font-size: 11px; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--terracotta);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .ornament::before, .ornament::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--terracotta));
+    }
+    .ornament::after { background: linear-gradient(to left, transparent, var(--terracotta)); }
+
+    /* ── WELCOME CARD ── */
+    .welcome-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 44px 36px 40px;
+      box-shadow:
+        0 2px 0 var(--cream-deep),
+        0 8px 32px var(--shadow),
+        0 32px 80px rgba(44,26,14,0.04);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .welcome-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--terracotta), var(--gold-light), var(--terracotta));
+    }
+
+    .welcome-emoji { font-size: 52px; margin-bottom: 16px; display: block; animation: gentle-float 4s ease-in-out infinite; }
+    @keyframes gentle-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+    .welcome-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 7vw, 34px);
+      font-weight: 900;
+      color: var(--espresso);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .welcome-sub {
+      font-size: 15px;
+      color: var(--espresso-md);
+      opacity: 0.7;
+      margin-bottom: 32px;
+      font-weight: 300;
+    }
+
+    .input-wrap { position: relative; margin-bottom: 14px; }
+    .input-label {
+      display: block;
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--terracotta); font-weight: 500; margin-bottom: 8px;
+      text-align: left;
+    }
+    .name-input {
+      width: 100%;
+      background: var(--cream);
+      border: 1.5px solid var(--cream-deep);
+      border-radius: 12px;
+      padding: 15px 18px;
+      font-size: 16px;
+      color: var(--espresso);
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .name-input:focus {
+      border-color: var(--terracotta);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(196,98,45,0.1);
+    }
+    .name-input::placeholder { color: rgba(44,26,14,0.3); }
+
+    .btn-join {
+      width: 100%;
+      background: linear-gradient(135deg, var(--terracotta) 0%, var(--espresso-md) 100%);
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 17px;
+      border: none;
+      border-radius: 12px;
+      padding: 17px 24px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(196,98,45,0.35), 0 1px 0 rgba(255,255,255,0.1) inset;
+      letter-spacing: 0.02em;
+    }
+    .btn-join:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(196,98,45,0.45); }
+    .btn-join:active { transform: scale(0.97); }
+    .btn-join:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .error-box {
+      background: rgba(196,98,45,0.08);
+      border: 1px solid rgba(196,98,45,0.25);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      color: var(--terracotta);
+      margin-bottom: 12px;
+      display: none; text-align: left;
+    }
+    .error-box.show { display: block; }
+
+    /* ── PLAYERS PILL LIST ── */
+    .players-joined {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--cream-deep);
+    }
+    .pj-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sage); margin-bottom: 10px; }
+    .pj-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pj-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--cream);
+      border: 1px solid var(--cream-deep);
+      border-radius: 100px;
+      padding: 5px 12px 5px 8px;
+      font-size: 13px;
+      animation: chip-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    @keyframes chip-pop { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+    .pj-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); }
+
+    /* ── LOBBY WAITING ── */
+    .lobby-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 44px 36px;
+      box-shadow: 0 8px 32px var(--shadow), 0 2px 0 var(--cream-deep);
+      text-align: center;
+    }
+    .lobby-icon { font-size: 56px; margin-bottom: 20px; animation: gentle-float 4s ease-in-out infinite; display: block; }
+    .lobby-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+    .lobby-name { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; color: var(--terracotta); margin-bottom: 8px; }
+    .lobby-sub { font-size: 14px; color: var(--espresso-md); opacity: 0.6; }
+    .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--sage); margin-left: 6px; animation: pulse-dot 1.5s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 0 rgba(107,124,92,0.5)} 50%{box-shadow:0 0 0 6px rgba(107,124,92,0)} }
+
+    /* ── ROUND BADGE ── */
+    .round-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(184,134,11,0.3);
+    }
+
+    /* ── BUZZER SCREEN ── */
+    .buzzer-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px 40px;
+      box-shadow: 0 8px 40px var(--shadow), 0 2px 0 var(--cream-deep);
+      text-align: center;
+    }
+    .buzzer-card-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+    .buzzer-card-sub { font-size: 14px; color: rgba(44,26,14,0.5); margin-bottom: 32px; }
+
+    .buzzer-wrap { display: flex; justify-content: center; margin-bottom: 28px; }
+    .buzzer-btn {
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #E8775A, var(--terracotta) 50%, #A3461C);
+      border: 0;
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      outline: none;
+      box-shadow:
+        0 0 0 8px rgba(196,98,45,0.15),
+        0 0 0 16px rgba(196,98,45,0.07),
+        0 12px 40px rgba(196,98,45,0.4);
+      transition: transform 0.12s, box-shadow 0.2s;
+      animation: buzzer-breathe 2.5s ease-in-out infinite;
+      position: relative;
+    }
+    @keyframes buzzer-breathe {
+      0%,100% { box-shadow: 0 0 0 8px rgba(196,98,45,0.15), 0 0 0 16px rgba(196,98,45,0.07), 0 12px 40px rgba(196,98,45,0.4); }
+      50% { box-shadow: 0 0 0 14px rgba(196,98,45,0.12), 0 0 0 28px rgba(196,98,45,0.04), 0 20px 60px rgba(196,98,45,0.5); }
+    }
+    .buzzer-btn:active:not(:disabled) { transform: scale(0.91); }
+    .buzzer-btn.won {
+      background: radial-gradient(circle at 35% 35%, #F0D060, var(--gold) 50%, #8B6800);
+      box-shadow: 0 0 0 14px rgba(184,134,11,0.2), 0 20px 60px rgba(184,134,11,0.5);
+      animation: winner-glow 0.8s ease 3;
+    }
+    @keyframes winner-glow { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+    .buzzer-btn.lost {
+      background: radial-gradient(circle at 35% 35%, #ccc, #aaa);
+      box-shadow: none; animation: none; cursor: not-allowed;
+      opacity: 0.5;
+    }
+    .buzzer-btn.locked {
+      cursor: not-allowed;
+      animation: none;
+      box-shadow: 0 0 0 8px rgba(196,98,45,0.08), 0 8px 20px rgba(196,98,45,0.2);
+      opacity: 0.65;
+    }
+
+    .winner-toast {
+      background: linear-gradient(135deg, rgba(184,134,11,0.1), rgba(184,134,11,0.05));
+      border: 1.5px solid rgba(184,134,11,0.3);
+      border-radius: 14px;
+      padding: 16px 20px;
+      text-align: center;
+      animation: toast-slide 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    @keyframes toast-slide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .winner-toast-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--gold); }
+    .winner-toast-sub { font-size: 13px; color: rgba(44,26,14,0.5); margin-top: 3px; }
+
+    /* Score strip */
+    .score-strip {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--cream);
+      border: 1px solid var(--cream-deep);
+      border-radius: 12px;
+      padding: 12px 18px;
+      margin-top: 20px;
+    }
+    .score-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage); }
+    .score-value { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--espresso); }
+
+    /* ── SCRATCH SCREEN ── */
+    .scratch-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px;
+      box-shadow: 0 8px 40px var(--shadow), 0 2px 0 var(--cream-deep);
+      text-align: center;
+    }
+    .scratch-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .scratch-sub { font-size: 14px; color: rgba(44,26,14,0.5); margin-bottom: 24px; }
+
+    .scratch-container {
+      width: 260px; height: 160px;
+      border-radius: 16px;
+      margin: 0 auto 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(44,26,14,0.12), 0 2px 0 var(--cream-deep);
+    }
+    .gift-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #FFF8EC 0%, #FFF1D4 50%, #FFECC4 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px;
+    }
+    .gift-bg-emoji { font-size: 44px; animation: gift-pop 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+    @keyframes gift-pop { from{transform:scale(0) rotate(-15deg)} to{transform:scale(1) rotate(0deg)} }
+    .gift-bg-text { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: var(--terracotta); }
+    #scratchCanvas { position: absolute; inset: 0; cursor: crosshair; touch-action: none; border-radius: 16px; }
+
+    .scratch-hint { font-size: 13px; color: rgba(44,26,14,0.4); margin-bottom: 18px; }
+
+    .btn-scratch-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--sage) 0%, #4A5E3A 100%);
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 24px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+      box-shadow: 0 4px 16px rgba(107,124,92,0.35);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .btn-scratch-submit.ready { opacity: 1; pointer-events: all; }
+    .btn-scratch-submit.ready:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(107,124,92,0.4); }
+
+    /* ── SUBMITTED WAIT ── */
+    .wait-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 36px;
+      box-shadow: 0 8px 40px var(--shadow), 0 2px 0 var(--cream-deep);
+      text-align: center;
+    }
+    .wait-dots { display: flex; gap: 10px; justify-content: center; margin-bottom: 24px; }
+    .wd { width: 10px; height: 10px; border-radius: 50%; background: var(--terracotta); animation: wd-anim 1.4s ease-in-out infinite; }
+    .wd:nth-child(2){animation-delay:.2s} .wd:nth-child(3){animation-delay:.4s}
+    @keyframes wd-anim { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1.2);opacity:1} }
+
+    .wait-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+    .wait-sub { font-size: 15px; color: rgba(44,26,14,0.5); line-height: 1.6; margin-bottom: 24px; }
+
+    .wait-progress { background: var(--cream-deep); border-radius: 100px; height: 6px; overflow: hidden; }
+    .wait-progress-bar { height: 100%; background: linear-gradient(90deg, var(--terracotta), var(--gold-light)); border-radius: 100px; transition: width 0.5s ease; }
+    .wait-progress-text { font-size: 13px; color: rgba(44,26,14,0.4); margin-top: 8px; }
+
+    /* ── GIFT REVEAL ── */
+    .gift-reveal-card {
+      background: linear-gradient(135deg, #FFF8EC, #FFF4E0);
+      border: 1.5px solid rgba(184,134,11,0.3);
+      border-radius: 24px;
+      padding: 48px 36px;
+      box-shadow: 0 8px 40px rgba(184,134,11,0.1), 0 2px 0 #F0E4C4;
+      text-align: center;
+    }
+    .gift-reveal-emoji { font-size: 72px; display: block; margin-bottom: 16px; animation: gift-pop 0.6s cubic-bezier(0.175,0.885,0.32,1.275); }
+    .gift-reveal-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .gift-reveal-name { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--espresso); margin-bottom: 8px; }
+    .gift-img { width: 100%; max-width: 280px; border-radius: 16px; margin: 16px auto 0; display: block; box-shadow: 0 8px 32px rgba(44,26,14,0.12); }
+
+    /* ── CONFETTI ── */
+    .confetti-piece { position: fixed; border-radius: 3px; animation: cf-fall 3s ease-in forwards; z-index: 9999; pointer-events: none; }
+    @keyframes cf-fall { 0%{transform:translateY(-80px) rotate(0deg);opacity:1} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
+
+    /* ── ENDED ── */
+    .ended-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 36px;
+      box-shadow: 0 8px 40px var(--shadow);
+      text-align: center;
+    }
+
+    /* ── UTILITY ── */
+    .hidden { display: none !important; }
+    .mt8 { margin-top: 8px; }
+    .mt16 { margin-top: 16px; }
+    .mt24 { margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- ═══ SCREEN: WELCOME ═══ -->
+  <div class="screen active" id="screen-welcome">
+    <div class="inner">
+      <div class="ornament">Game Night</div>
+      <div class="welcome-card">
+        <span class="welcome-emoji">🎉</span>
+        <h1 class="welcome-title">Welcome to<br>Game Night!</h1>
+        <p class="welcome-sub">Enter your name to join the fun</p>
+
+        <div class="input-wrap">
+          <label class="input-label" for="name-input">Your Name</label>
+          <input class="name-input" id="name-input" type="text" placeholder="e.g. Priya" maxlength="20" autocomplete="off" autocorrect="off" spellcheck="false"/>
+        </div>
+
+        <div class="error-box" id="join-error"></div>
+        <button class="btn-join" id="join-btn" onclick="joinGame()">Let the Game Begin →</button>
+
+        <div class="players-joined" id="players-joined" style="display:none">
+          <div class="pj-label">Players joined <span class="live-dot"></span></div>
+          <div class="pj-chips" id="pj-chips"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: LOBBY ═══ -->
+  <div class="screen" id="screen-lobby">
+    <div class="inner">
+      <div class="ornament">Game Night</div>
+      <div class="lobby-card">
+        <span class="lobby-icon">⏳</span>
+        <p style="font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage);margin-bottom:8px;">Welcome</p>
+        <div class="lobby-name" id="lobby-player-name">—</div>
+        <div class="lobby-title">You're in!</div>
+        <p class="lobby-sub" style="margin-top:8px;">Waiting for the host to start the game <span class="live-dot"></span></p>
+        <div id="lobby-players-section" class="mt24" style="display:none">
+          <div class="pj-label">Players in lobby</div>
+          <div class="pj-chips" id="lobby-chips"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: BUZZER ═══ -->
+  <div class="screen" id="screen-buzzer">
+    <div class="inner">
+      <div class="ornament">Game Night</div>
+      <div class="buzzer-card">
+        <div class="round-badge" id="round-badge">Round 1 of 5</div>
+        <h2 class="buzzer-card-title">Buzzer Round</h2>
+        <p class="buzzer-card-sub">Press as fast as you can!</p>
+
+        <div class="buzzer-wrap">
+          <button class="buzzer-btn" id="buzzer-btn" onclick="pressBuzzer()">BUZZ!</button>
+        </div>
+
+        <div id="winner-toast" class="winner-toast hidden">
+          <div class="winner-toast-name" id="winner-toast-name">—</div>
+          <div class="winner-toast-sub">buzzed first! 🏆</div>
+        </div>
+
+        <div class="score-strip" id="score-strip">
+          <div>
+            <div class="score-label">Your Score</div>
+            <div class="score-value" id="my-score">0</div>
+          </div>
+          <div style="text-align:right">
+            <div class="score-label" id="lobby-name-label">—</div>
+            <div style="font-size:12px;color:var(--sage);margin-top:2px;">Player</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: SCRATCH ═══ -->
+  <div class="screen" id="screen-scratch">
+    <div class="inner">
+      <div class="ornament">Bonus Round</div>
+      <div class="scratch-card">
+        <h2 class="scratch-title">🎴 Scratch Your Card!</h2>
+        <p class="scratch-sub">Reveal your special gift below</p>
+
+        <div class="scratch-container">
+          <div class="gift-bg" id="gift-bg">
+            <div class="gift-bg-emoji" id="gift-bg-emoji">🎁</div>
+            <div class="gift-bg-text" id="gift-bg-text">Your Gift</div>
+          </div>
+          <canvas id="scratchCanvas" width="260" height="160"></canvas>
+        </div>
+
+        <p class="scratch-hint" id="scratch-hint">Scratch 70% to unlock</p>
+        <button class="btn-scratch-submit" id="scratch-submit-btn" onclick="submitScratch()">
+          🎁 Submit — Wait for Your Gift
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: WAIT FOR OTHERS ═══ -->
+  <div class="screen" id="screen-wait">
+    <div class="inner">
+      <div class="ornament">Hold on…</div>
+      <div class="wait-card">
+        <div class="wait-dots"><div class="wd"></div><div class="wd"></div><div class="wd"></div></div>
+        <h2 class="wait-title">Card Submitted!</h2>
+        <p class="wait-sub">Wait for your gift…<br>Everyone is scratching their cards!</p>
+        <div class="wait-progress"><div class="wait-progress-bar" id="wait-bar" style="width:0%"></div></div>
+        <div class="wait-progress-text" id="wait-text">0 of 0 scratched</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: GIFT REVEAL ═══ -->
+  <div class="screen" id="screen-gift">
+    <div class="inner">
+      <div class="ornament">Your Gift</div>
+      <div class="gift-reveal-card">
+        <span class="gift-reveal-emoji" id="final-emoji">🎁</span>
+        <div class="gift-reveal-label">Congratulations!</div>
+        <div class="gift-reveal-name" id="final-gift-name">Mystery Gift</div>
+        <img class="gift-img" id="gift-img" src="photo.png" alt="Gift" onerror="this.style.display='none'"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: ENDED ═══ -->
+  <div class="screen" id="screen-ended">
+    <div class="inner">
+      <div class="ornament">Game Over</div>
+      <div class="ended-card">
+        <div style="font-size:56px;margin-bottom:16px;">🎊</div>
+        <h2 class="lobby-title" style="font-family:'Playfair Display',serif;font-size:28px;margin-bottom:8px;">Game Night's Over!</h2>
+        <p class="lobby-sub">Thanks for playing. See you next time!</p>
+        <div class="score-strip mt24">
+          <div><div class="score-label">Final Score</div><div class="score-value" id="ended-score">0</div></div>
+          <div style="text-align:right"><div class="score-label" id="ended-name">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── CONFIG ─────────────────────────────────────────────────────────────────
+    const API = '';  // Same origin — player app serves this HTML
+    const POLL_MS = 2000;
+
+    // ─── STATE ──────────────────────────────────────────────────────────────────
+    let sessionId = localStorage.getItem('gn_session');
+    let myName    = localStorage.getItem('gn_name');
+    let myScore   = 0;
+
+    // Generate session id if needed
+    if (!sessionId) {
+      sessionId = 'p_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('gn_session', sessionId);
+    }
+
+    let scratchPct = 0;
+    let scratchDone = false;
+    let scratchInit = false;
+    let buzzerLocked = false;
+    let iHaveScratched = false;
+    let lastPhase = null;
+
+    // ─── SCREENS ────────────────────────────────────────────────────────────────
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // ─── JOIN ────────────────────────────────────────────────────────────────────
+    async function joinGame() {
+      const name = document.getElementById('name-input').value.trim();
+      const errEl = document.getElementById('join-error');
+      errEl.classList.remove('show');
+      if (!name) { errEl.textContent = 'Please enter your name!'; errEl.classList.add('show'); return; }
+
+      const btn = document.getElementById('join-btn');
+      btn.disabled = true; btn.textContent = 'Joining…';
+
+      try {
+        const r = await fetch(`${API}/api/join`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, sessionId })
+        });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Failed');
+
+        myName = name;
+        localStorage.setItem('gn_name', name);
+        document.getElementById('lobby-player-name').textContent = name;
+        document.getElementById('lobby-name-label').textContent = name;
+        document.getElementById('ended-name').textContent = name;
+        showScreen('screen-lobby');
+        startPolling();
+      } catch (e) {
+        errEl.textContent = e.message; errEl.classList.add('show');
+        btn.disabled = false; btn.textContent = 'Let the Game Begin →';
+      }
+    }
+
+    document.getElementById('name-input').addEventListener('keyup', e => { if (e.key === 'Enter') joinGame(); });
+
+    // ─── POLLING ─────────────────────────────────────────────────────────────────
+    let pollTimer = null;
+    function startPolling() { poll(); pollTimer = setInterval(poll, POLL_MS); }
+
+    async function poll() {
+      try {
+        const r = await fetch(`${API}/api/state`);
+        const d = await r.json();
+        handleState(d.state, d.players);
+      } catch (e) { /* ignore network errors */ }
+    }
+
+    function handleState(state, players) {
+      if (!state) return;
+
+      const phase = state.phase;
+      const currentRound = state.currentRound;
+
+      // Update player chips in welcome screen
+      updateChips(players);
+
+      // Update score
+      const me = players.find(p => p.sessionId === sessionId);
+      if (me) { myScore = me.score; }
+
+      // Phase routing
+      if (!myName) { showScreen('screen-welcome'); return; }
+
+      switch (phase) {
+        case 'lobby':
+          updateLobbyChips(players);
+          if (document.getElementById('screen-welcome').classList.contains('active')) return;
+          showScreen('screen-lobby');
+          // Reset flags for new session
+          buzzerLocked = false;
+          scratchDone = false;
+          scratchInit = false;
+          iHaveScratched = false;
+          lastPhase = 'lobby';
+          break;
+
+case 'buzzer':
+  updateBuzzerUI(state, players);
+
+  // 🔥 RESET when NEW ROUND starts
+  if (lastPhase !== 'buzzer' || state.currentRound !== window.lastRound) {
+    buzzerLocked = false;
+
+    const btn = document.getElementById('buzzer-btn');
+    btn.className = 'buzzer-btn';
+    btn.textContent = 'BUZZ!';
+  }
+
+  window.lastRound = state.currentRound;
+  lastPhase = 'buzzer';
+  showScreen('screen-buzzer');
+  break;
+
+        case 'scratch':
+          lastPhase = 'scratch';
+          if (iHaveScratched || (me && me.hasScratched)) {
+            iHaveScratched = true;
+            // Show wait screen with progress
+            const total = players.length;
+            const scratched = players.filter(p => p.hasScratched).length;
+            const pct = total > 0 ? Math.round(scratched / total * 100) : 0;
+            document.getElementById('wait-bar').style.width = pct + '%';
+            document.getElementById('wait-text').textContent = `${scratched} of ${total} scratched`;
+            showScreen('screen-wait');
+          } else {
+            if (!scratchInit) initScratch(me);
+            showScreen('screen-scratch');
+          }
+          break;
+
+        case 'gift_reveal':
+          lastPhase = 'gift_reveal';
+          showGiftReveal(state, me);
+          break;
+
+        case 'ended':
+          lastPhase = 'ended';
+          document.getElementById('ended-score').textContent = myScore;
+          showScreen('screen-ended');
+          break;
+      }
+
+      // Update round badge
+      if (state.currentRound) {
+        document.getElementById('round-badge').textContent = `Round ${state.currentRound} of ${state.totalRounds}`;
+      }
+      // Update score display
+      document.getElementById('my-score').textContent = myScore;
+    }
+
+    // ─── CHIPS ───────────────────────────────────────────────────────────────────
+    function updateChips(players) {
+      const chips = document.getElementById('pj-chips');
+      const section = document.getElementById('players-joined');
+      if (players && players.length > 0) {
+        section.style.display = '';
+        chips.innerHTML = players.map(p =>
+          `<span class="pj-chip"><span class="pj-dot"></span>${esc(p.name)}</span>`
+        ).join('');
+      }
+    }
+
+    function updateLobbyChips(players) {
+      const chips = document.getElementById('lobby-chips');
+      const section = document.getElementById('lobby-players-section');
+      if (players && players.length > 0) {
+        section.style.display = '';
+        chips.innerHTML = players.map(p =>
+          `<span class="pj-chip"><span class="pj-dot"></span>${esc(p.name)}</span>`
+        ).join('');
+      }
+    }
+
+    // ─── BUZZER ──────────────────────────────────────────────────────────────────
+    function updateBuzzerUI(state, players) {
+      const btn = document.getElementById('buzzer-btn');
+      const toast = document.getElementById('winner-toast');
+
+      if (state.buzzerWinnerId) {
+        toast.classList.remove('hidden');
+        document.getElementById('winner-toast-name').textContent = state.buzzerWinnerName;
+
+        const iWon = players.find(p => p.sessionId === sessionId && p.buzzerPressedRound === state.currentRound);
+        if (iWon && state.buzzerWinnerName === myName) {
+          btn.className = 'buzzer-btn won'; btn.textContent = '🏆 You Win!';
+        } else {
+          btn.className = 'buzzer-btn lost'; btn.textContent = '😅 Too Slow';
+        }
+      } else {
+        toast.classList.add('hidden');
+        btn.className = 'buzzer-btn'; btn.textContent = 'BUZZ!';
+      }
+    }
+
+    async function pressBuzzer() {
+      if (buzzerLocked) return;
+      const btn = document.getElementById('buzzer-btn');
+      if (btn.classList.contains('lost') || btn.classList.contains('won') || btn.classList.contains('locked')) return;
+
+      buzzerLocked = true;
+      btn.classList.add('locked'); btn.textContent = 'Sent!';
+
+      try {
+        const r = await fetch(`${API}/api/buzzer`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId })
+        });
+        const d = await r.json();
+if (!r.ok) {
+  buzzerLocked = false; // 🔥 IMPORTANT
+
+  if (d.error === 'Already buzzed this round') {
+    btn.className = 'buzzer-btn locked';
+    btn.textContent = 'Already Pressed';
+  } else {
+    btn.className = 'buzzer-btn lost';
+    btn.textContent = '😅 Too Slow';
+  }
+}
+      } catch (e) {
+        buzzerLocked = false;
+        btn.className = 'buzzer-btn'; btn.textContent = 'BUZZ!';
+      }
+    }
+
+    // ─── SCRATCH ─────────────────────────────────────────────────────────────────
+    const GIFTS = [
+      { emoji: '🎂', name: 'Birthday Cake' },
+      { emoji: '🍕', name: 'Pizza Night' },
+      { emoji: '🎬', name: 'Movie Tickets' },
+      { emoji: '☕', name: 'Coffee Hamper' },
+      { emoji: '🌸', name: 'Spa Voucher' },
+      { emoji: '🎮', name: 'Game Voucher' },
+      { emoji: '🍫', name: 'Chocolate Box' },
+      { emoji: '🛍️', name: 'Shopping Spree' }
+    ];
+
+    function initScratch(player) {
+      if (scratchInit) return;
+      scratchInit = true;
+
+      // Assign random gift display (actual gift from DB if available)
+      const gift = GIFTS[Math.floor(Math.random() * GIFTS.length)];
+      document.getElementById('gift-bg-emoji').textContent = gift.emoji;
+      document.getElementById('gift-bg-text').textContent = gift.name;
+
+      const canvas = document.getElementById('scratchCanvas');
+      const ctx = canvas.getContext('2d');
+
+      // Draw scratch surface
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, '#C4622D');
+      grad.addColorStop(0.5, '#D4A843');
+      grad.addColorStop(1, '#C4622D');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Decorative dots
+      for (let i = 0; i < 40; i++) {
+        ctx.beginPath();
+        ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 3 + 1, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        ctx.fill();
+      }
+
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.font = 'bold 16px Playfair Display, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('✦ SCRATCH HERE ✦', canvas.width / 2, canvas.height / 2 - 8);
+      ctx.font = '13px DM Sans, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.fillText('Reveal your gift', canvas.width / 2, canvas.height / 2 + 14);
+
+      ctx.globalCompositeOperation = 'destination-out';
+
+      let drawing = false, lx, ly;
+
+      function pos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const sx = canvas.width / rect.width, sy = canvas.height / rect.height;
+        const cx = e.touches ? e.touches[0].clientX : e.clientX;
+        const cy = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: (cx - rect.left) * sx, y: (cy - rect.top) * sy };
+      }
+
+      function drawAt(x, y) {
+        ctx.beginPath(); ctx.arc(x, y, 26, 0, Math.PI * 2); ctx.fill();
+        checkPct();
+      }
+
+      function checkPct() {
+        const d = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let cleared = 0;
+        for (let i = 3; i < d.length; i += 4) if (d[i] < 128) cleared++;
+        scratchPct = Math.round(cleared / (canvas.width * canvas.height) * 100);
+        const hint = document.getElementById('scratch-hint');
+        const btn = document.getElementById('scratch-submit-btn');
+        if (scratchPct >= 70) {
+          hint.textContent = '🎉 Revealed! Submit your card.';
+          btn.classList.add('ready');
+        } else {
+          hint.textContent = `${scratchPct}% scratched — keep going!`;
+        }
+      }
+
+      canvas.addEventListener('mousedown', e => { drawing = true; const p = pos(e); lx = p.x; ly = p.y; drawAt(p.x, p.y); });
+      canvas.addEventListener('mousemove', e => {
+        if (!drawing) return; const p = pos(e);
+        ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(p.x, p.y);
+        ctx.lineWidth = 52; ctx.lineCap = 'round'; ctx.stroke();
+        lx = p.x; ly = p.y; checkPct();
+      });
+      canvas.addEventListener('mouseup', () => drawing = false);
+      canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = pos(e); lx = p.x; ly = p.y; drawAt(p.x, p.y); }, { passive: false });
+      canvas.addEventListener('touchmove', e => {
+        e.preventDefault(); if (!drawing) return; const p = pos(e);
+        ctx.beginPath(); ctx.moveTo(lx || p.x, ly || p.y); ctx.lineTo(p.x, p.y);
+        ctx.lineWidth = 52; ctx.lineCap = 'round'; ctx.stroke();
+        lx = p.x; ly = p.y; checkPct();
+      }, { passive: false });
+      canvas.addEventListener('touchend', () => drawing = false);
+    }
+
+    async function submitScratch() {
+      if (scratchPct < 70 || scratchDone) return;
+      scratchDone = true; iHaveScratched = true;
+
+      const btn = document.getElementById('scratch-submit-btn');
+      btn.textContent = 'Submitting…'; btn.classList.remove('ready'); btn.style.pointerEvents = 'none';
+
+      try {
+        await fetch(`${API}/api/scratch`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId })
+        });
+        showScreen('screen-wait');
+      } catch (e) {
+        scratchDone = false; iHaveScratched = false;
+        btn.textContent = '🎁 Submit — Wait for Your Gift';
+        btn.classList.add('ready'); btn.style.pointerEvents = '';
+      }
+    }
+
+    // ─── GIFT REVEAL ─────────────────────────────────────────────────────────────
+    function showGiftReveal(state, me) {
+      const gift = GIFTS[0]; // Placeholder — host controls the reveal
+      document.getElementById('final-emoji').textContent = '🎁';
+      document.getElementById('final-gift-name').textContent = 'Check the big screen!';
+      if (state.giftImageUrl) {
+        document.getElementById('gift-img').src = state.giftImageUrl;
+        document.getElementById('gift-img').style.display = '';
+      }
+      showScreen('screen-gift');
+      launchConfetti();
+    }
+
+    function launchConfetti() {
+      const colors = ['#C4622D','#B8860B','#D4A843','#6B7C5C','#E8C4B0','#FAF7F2'];
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const el = document.createElement('div');
+          el.className = 'confetti-piece';
+          el.style.cssText = `left:${Math.random()*100}vw;top:-20px;width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${2+Math.random()*2}s;animation-delay:${Math.random()*0.5}s`;
+          document.body.appendChild(el);
+          setTimeout(() => el.remove(), 4000);
+        }, i * 60);
+      }
+    }
+
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // ─── INIT ────────────────────────────────────────────────────────────────────
+    // If we have a name from before, pre-fill and auto-start polling
+    if (myName) {
+      document.getElementById('name-input').value = myName;
+      document.getElementById('lobby-player-name').textContent = myName;
+      document.getElementById('lobby-name-label').textContent = myName;
+      document.getElementById('ended-name').textContent = myName;
+      // Try to restore session — will go to right screen on first poll
+      startPolling();
+    } else {
+      // Still poll to show who's joined on welcome screen
+      pollTimer = setInterval(async () => {
+        try {
+          const r = await fetch(`${API}/api/state`);
+          const d = await r.json();
+          updateChips(d.players || []);
+        } catch(e) {}
+      }, POLL_MS);
+    }
+  </script>
+</body>
+</html>

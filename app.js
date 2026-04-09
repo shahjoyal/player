@@ -8,6 +8,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ error: "Database connection failed" });
+  }
+});
 
 // ─── MONGODB MODELS ───────────────────────────────────────────────────────────
 
@@ -39,17 +47,52 @@ const GameState = mongoose.model('GameState', GameStateSchema);
 const Player = mongoose.model('Player', PlayerSchema);
 
 // ─── DB CONNECT ───────────────────────────────────────────────────────────────
-mongoose.connect(process.env.MONGO_URI)
-  .then(async () => {
-    console.log('✅ MongoDB connected');
-    // Ensure a game state doc exists
+// mongoose.connect(process.env.MONGO_URI)
+//   .then(async () => {
+//     console.log('✅ MongoDB connected');
+//     // Ensure a game state doc exists
+//     await GameState.findOneAndUpdate(
+//       { key: 'main' },
+//       { $setOnInsert: { key: 'main' } },
+//       { upsert: true, new: true }
+//     );
+//   })
+//   .catch(err => console.error('MongoDB error:', err));/
+
+
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  console.error("❌ MONGO_URI is missing in .env");
+  process.exit(1);
+}
+
+let isConnected = false;
+
+async function connectDB() {
+  if (isConnected) return;
+
+  try {
+    const conn = await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    isConnected = true;
+    console.log("✅ MongoDB connected");
+
+    // Ensure game state exists
     await GameState.findOneAndUpdate(
       { key: 'main' },
       { $setOnInsert: { key: 'main' } },
       { upsert: true, new: true }
     );
-  })
-  .catch(err => console.error('MongoDB error:', err));
+
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err);
+    throw err;
+  }
+}
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 async function getState() {

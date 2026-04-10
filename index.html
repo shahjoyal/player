@@ -1652,11 +1652,11 @@ if (!r.ok) {
         // Heart stays for 1.8s then moves to another box
         hpHeartAnim = setTimeout(() => {
           if (!hpShowingCard) popNext();
-        }, 1800);
+        }, 1600);
       }
 
       // Small delay before first pop
-      hpHeartAnim = setTimeout(popNext, 600);
+      hpHeartAnim = setTimeout(popNext, 350);
     }
 
     async function onBoxTap(boxIndex) {

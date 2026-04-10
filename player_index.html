@@ -411,6 +411,133 @@
     .mt8 { margin-top: 8px; }
     .mt16 { margin-top: 16px; }
     .mt24 { margin-top: 24px; }
+
+    /* ── LETTER FALL GAME ── */
+    .lf-screen {
+      padding: 0 !important;
+      background: var(--cream);
+    }
+    .lf-wrap {
+      position: relative; z-index: 2;
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+    }
+    .lf-header {
+      width: 100%; padding: 16px 20px 12px;
+      background: rgba(255,255,255,0.9);
+      border-bottom: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      flex-shrink: 0; z-index: 10; position: relative;
+    }
+    .lf-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 900;
+      color: var(--espresso);
+    }
+    /* Target sequence display */
+    .lf-target {
+      display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+    }
+    .lf-target-letter {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 900;
+      background: var(--cream-dark);
+      border: 2px solid var(--cream-deep);
+      color: var(--espresso-lt);
+      transition: all 0.25s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .lf-target-letter.collected {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      color: #fff;
+      transform: scale(1.1);
+    }
+    .lf-target-letter.next {
+      border-color: var(--terracotta);
+      color: var(--terracotta);
+      animation: lf-next-pulse 1s ease-in-out infinite;
+    }
+    @keyframes lf-next-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(196,98,45,0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(196,98,45,0); }
+    }
+
+    /* Game canvas area */
+    .lf-game-area {
+      flex: 1; width: 100%; position: relative; overflow: hidden;
+      max-width: 420px;
+    }
+    #lf-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      cursor: none;
+      touch-action: none;
+    }
+
+    /* Status overlay */
+    .lf-status {
+      position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+      font-size: 13px; color: var(--espresso-lt);
+      background: rgba(255,255,255,0.85);
+      padding: 6px 16px; border-radius: 100px;
+      border: 1px solid var(--border);
+      pointer-events: none; z-index: 5;
+      white-space: nowrap;
+    }
+
+    /* Restart overlay */
+    .lf-restart-overlay {
+      position: absolute; inset: 0;
+      background: rgba(196,98,45,0.92);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; z-index: 20;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .lf-restart-overlay.show { opacity: 1; pointer-events: all; }
+    .lf-restart-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 900; color: #fff;
+    }
+    .lf-restart-sub { font-size: 15px; color: rgba(255,255,255,0.8); }
+    .lf-restart-btn {
+      background: #fff; color: var(--terracotta);
+      font-family: 'Playfair Display', serif; font-weight: 700; font-size: 17px;
+      border: none; border-radius: 12px; padding: 14px 32px;
+      cursor: pointer; transition: transform 0.15s;
+    }
+    .lf-restart-btn:hover { transform: scale(1.05); }
+
+    /* Win overlay */
+    .lf-win-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(107,124,92,0.93), rgba(74,94,58,0.93));
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px; z-index: 20;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .lf-win-overlay.show { opacity: 1; pointer-events: all; }
+    .lf-win-emoji { font-size: 64px; animation: gift-pop 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+    .lf-win-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 900; color: #fff;
+    }
+    .lf-win-sub { font-size: 15px; color: rgba(255,255,255,0.8); text-align: center; }
+
+    /* Lives indicator */
+    .lf-lives {
+      display: flex; gap: 4px;
+    }
+    .lf-heart { font-size: 16px; transition: opacity 0.3s; }
+    .lf-heart.lost { opacity: 0.2; }
   </style>
 </head>
 <body>
@@ -559,6 +686,44 @@
     </div>
   </div>
 
+  <!-- ═══ SCREEN: LETTER FALL ═══ -->
+  <div class="screen lf-screen" id="screen-letterfall">
+    <div class="lf-wrap">
+
+      <!-- Header -->
+      <div class="lf-header">
+        <div class="lf-title">🔤 Collect Your Name!</div>
+        <div class="lf-lives" id="lf-lives">
+          <span class="lf-heart">❤️</span>
+          <span class="lf-heart">❤️</span>
+          <span class="lf-heart">❤️</span>
+        </div>
+        <div class="lf-target" id="lf-target"></div>
+      </div>
+
+      <!-- Game Canvas -->
+      <div class="lf-game-area" id="lf-game-area">
+        <canvas id="lf-canvas"></canvas>
+        <div class="lf-status" id="lf-status">Move your finger to catch letters!</div>
+
+        <!-- Wrong letter overlay -->
+        <div class="lf-restart-overlay" id="lf-restart-overlay">
+          <div class="lf-restart-title">Wrong Letter! 😬</div>
+          <div class="lf-restart-sub" id="lf-restart-msg">You caught the wrong one</div>
+          <button class="lf-restart-btn" onclick="restartLetterFall()">Try Again →</button>
+        </div>
+
+        <!-- Win overlay -->
+        <div class="lf-win-overlay" id="lf-win-overlay">
+          <span class="lf-win-emoji">🎉</span>
+          <div class="lf-win-title">You did it!</div>
+          <div class="lf-win-sub" id="lf-win-msg">Your name is complete!<br>Waiting for others…</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script>
     // ─── CONFIG ─────────────────────────────────────────────────────────────────
     const API = '';  // Same origin — player app serves this HTML
@@ -699,6 +864,16 @@ case 'buzzer':
         case 'gift_reveal':
           lastPhase = 'gift_reveal';
           showGiftReveal(state, me);
+          break;
+
+        case 'letter_fall':
+          if (lastPhase !== 'letter_fall') {
+            // Fresh entry — init the game
+            letterFallCompleted = false;
+            initLetterFall();
+          }
+          lastPhase = 'letter_fall';
+          showScreen('screen-letterfall');
           break;
 
         case 'ended':
@@ -933,6 +1108,337 @@ if (!r.ok) {
           setTimeout(() => el.remove(), 4000);
         }, i * 60);
       }
+    }
+
+    let letterFallCompleted = false;
+
+    // ─── LETTER FALL GAME ────────────────────────────────────────────────────────
+    let lfAnim = null;         // requestAnimationFrame id
+    let lfLetters = [];        // falling letter objects
+    let lfCollected = 0;       // how many letters collected so far
+    let lfTargetName = '';     // uppercase name to spell
+    let lfBasket = { x: 0.5 }; // basket x position (0–1 fraction of canvas width)
+    let lfSpawnTimer = 0;
+    let lfRunning = false;
+    let lfWon = false;
+    let lfLastTs = 0;
+    let lfCanvas, lfCtx;
+    let lfW = 0, lfH = 0;
+
+    // Colour palette matching cream theme
+    const LF_COLORS = {
+      correct:  { fill: '#C4622D', text: '#fff' },  // terracotta
+      decoy:    { fill: '#E8E0D0', text: '#7A5C44' }, // cream-deep
+      empty:    { fill: '#FAF7F2', text: '#C4622D', border: '#C4622D' },
+      basket:   '#C4622D',
+      basketRim:'#A3461C',
+    };
+
+    function initLetterFall() {
+      lfTargetName = (myName || '').toUpperCase().replace(/\s/g, '');
+      lfCollected = 0;
+      lfLetters = [];
+      lfWon = false;
+      lfSpawnTimer = 0;
+      lfBasket.x = 0.5;
+
+      // Reset overlays
+      document.getElementById('lf-restart-overlay').classList.remove('show');
+      document.getElementById('lf-win-overlay').classList.remove('show');
+
+      // Build target display
+      buildTargetDisplay();
+
+      // Setup canvas
+      lfCanvas = document.getElementById('lf-canvas');
+      lfCtx = lfCanvas.getContext('2d');
+      resizeLFCanvas();
+
+      // Touch/mouse move for basket
+      lfCanvas.addEventListener('touchmove', lfHandleTouch, { passive: false });
+      lfCanvas.addEventListener('touchstart', lfHandleTouch, { passive: false });
+      lfCanvas.addEventListener('mousemove', lfHandleMouse);
+
+      window.removeEventListener('resize', resizeLFCanvas);
+      window.addEventListener('resize', resizeLFCanvas);
+
+      // Cancel any existing loop
+      if (lfAnim) cancelAnimationFrame(lfAnim);
+      lfRunning = true;
+      lfLastTs = 0;
+      lfAnim = requestAnimationFrame(lfLoop);
+    }
+
+    function resizeLFCanvas() {
+      const area = document.getElementById('lf-game-area');
+      lfW = area.clientWidth;
+      lfH = area.clientHeight;
+      lfCanvas.width = lfW;
+      lfCanvas.height = lfH;
+    }
+
+    function buildTargetDisplay() {
+      const container = document.getElementById('lf-target');
+      container.innerHTML = lfTargetName.split('').map((ch, i) => `
+        <div class="lf-target-letter ${i < lfCollected ? 'collected' : i === lfCollected ? 'next' : ''}" id="lf-tl-${i}">${ch}</div>
+      `).join('');
+    }
+
+    function updateTargetDisplay() {
+      lfTargetName.split('').forEach((ch, i) => {
+        const el = document.getElementById(`lf-tl-${i}`);
+        if (!el) return;
+        el.className = 'lf-target-letter ' + (i < lfCollected ? 'collected' : i === lfCollected ? 'next' : '');
+      });
+    }
+
+    function lfHandleTouch(e) {
+      e.preventDefault();
+      const rect = lfCanvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      lfBasket.x = Math.max(0.08, Math.min(0.92, (touch.clientX - rect.left) / rect.width));
+    }
+
+    function lfHandleMouse(e) {
+      const rect = lfCanvas.getBoundingClientRect();
+      lfBasket.x = Math.max(0.08, Math.min(0.92, (e.clientX - rect.left) / rect.width));
+    }
+
+    // Spawn a falling letter
+    function spawnLetter() {
+      const letters = lfTargetName.split('');
+      const totalLetters = letters.length;
+
+      // Decide what to spawn:
+      // 40% chance: correct next letter
+      // 30% chance: a different letter from the name (wrong order)
+      // 20% chance: a random alphabet letter (decoy)
+      // 10% chance: empty/blank tile
+      const rand = Math.random();
+      let char, type;
+
+      if (rand < 0.42) {
+        // Correct next letter
+        char = letters[lfCollected];
+        type = 'correct';
+      } else if (rand < 0.65 && totalLetters > 1) {
+        // Wrong letter from name
+        const others = letters.filter((_, i) => i !== lfCollected);
+        char = others[Math.floor(Math.random() * others.length)];
+        type = 'decoy';
+      } else if (rand < 0.88) {
+        // Random alphabet decoy
+        const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        char = alpha[Math.floor(Math.random() * alpha.length)];
+        type = 'decoy';
+      } else {
+        // Empty/blank tile
+        char = '';
+        type = 'empty';
+      }
+
+      // Random x position that avoids edges
+      const x = 0.08 + Math.random() * 0.84;
+      const speed = 0.04 + Math.random() * 0.05; // fraction of canvas height per second
+
+      lfLetters.push({ char, type, x, y: -0.06, speed, size: 40, opacity: 1 });
+    }
+
+    function lfLoop(ts) {
+      if (!lfRunning) return;
+      const dt = lfLastTs ? Math.min((ts - lfLastTs) / 1000, 0.05) : 0.016;
+      lfLastTs = ts;
+
+      // Clear
+      lfCtx.clearRect(0, 0, lfW, lfH);
+
+      if (lfWon || !lfRunning) { lfAnim = requestAnimationFrame(lfLoop); return; }
+
+      // Spawn timer
+      const spawnInterval = Math.max(0.55, 1.4 - lfCollected * 0.08); // gets faster as you progress
+      lfSpawnTimer += dt;
+      if (lfSpawnTimer >= spawnInterval) {
+        lfSpawnTimer = 0;
+        spawnLetter();
+        // Occasionally spawn a 2nd letter for more variety
+        if (Math.random() < 0.25) spawnLetter();
+      }
+
+      // Draw decorative falling dashes (background feel)
+      lfCtx.globalAlpha = 0.06;
+      lfCtx.fillStyle = '#C4622D';
+      lfCtx.font = '10px DM Sans';
+
+      lfCtx.globalAlpha = 1;
+
+      // Update + draw letters
+      const basket_x_px = lfBasket.x * lfW;
+      const basket_y_px = lfH - 70;
+      const basket_w = 70, basket_h = 28;
+
+      lfLetters = lfLetters.filter(l => {
+        l.y += l.speed * dt;
+
+        const lx = l.x * lfW;
+        const ly = l.y * lfH;
+        const s = l.size;
+
+        // Collision with basket
+        const inBasketX = Math.abs(lx - basket_x_px) < (basket_w / 2 + s / 2 - 6);
+        const inBasketY = ly + s / 2 > basket_y_px - 4 && ly - s / 2 < basket_y_px + basket_h;
+
+        if (inBasketX && inBasketY) {
+          handleCatch(l.char, l.type);
+          return false; // remove letter
+        }
+
+        // Off screen
+        if (l.y > 1.05) return false;
+
+        // Draw letter tile
+        const isNext = l.type === 'correct';
+        const col = l.type === 'empty' ? LF_COLORS.empty : (l.type === 'correct' ? LF_COLORS.correct : LF_COLORS.decoy);
+
+        // Tile background
+        lfCtx.save();
+        lfCtx.translate(lx, ly);
+
+        // Slight wobble
+        const wobble = Math.sin(ts * 0.003 + l.x * 10) * 2;
+        lfCtx.rotate((wobble * Math.PI) / 180);
+
+        const r = 10;
+        const hw = s / 2;
+        lfCtx.beginPath();
+        lfCtx.roundRect(-hw, -hw, s, s, r);
+
+        if (l.type === 'empty') {
+          lfCtx.fillStyle = col.fill;
+          lfCtx.fill();
+          lfCtx.strokeStyle = col.border;
+          lfCtx.lineWidth = 2;
+          lfCtx.stroke();
+        } else {
+          lfCtx.fillStyle = col.fill;
+          lfCtx.fill();
+          // subtle shadow
+          lfCtx.shadowColor = 'rgba(44,26,14,0.15)';
+          lfCtx.shadowBlur = 6;
+          lfCtx.shadowOffsetY = 3;
+          lfCtx.fill();
+          lfCtx.shadowBlur = 0;
+          lfCtx.shadowOffsetY = 0;
+        }
+
+        // Letter text
+        if (l.char) {
+          lfCtx.fillStyle = col.text;
+          lfCtx.font = `bold ${s * 0.5}px 'Playfair Display', serif`;
+          lfCtx.textAlign = 'center';
+          lfCtx.textBaseline = 'middle';
+          lfCtx.fillText(l.char, 0, 1);
+        }
+
+        lfCtx.restore();
+
+        return true;
+      });
+
+      // Draw basket
+      drawBasket(basket_x_px, basket_y_px, basket_w, basket_h);
+
+      lfAnim = requestAnimationFrame(lfLoop);
+    }
+
+    function drawBasket(cx, cy, w, h) {
+      lfCtx.save();
+
+      // Basket body
+      lfCtx.beginPath();
+      lfCtx.roundRect(cx - w / 2, cy, w, h, [0, 0, 10, 10]);
+      lfCtx.fillStyle = LF_COLORS.basket;
+      lfCtx.shadowColor = 'rgba(196,98,45,0.4)';
+      lfCtx.shadowBlur = 12;
+      lfCtx.shadowOffsetY = 4;
+      lfCtx.fill();
+      lfCtx.shadowBlur = 0;
+      lfCtx.shadowOffsetY = 0;
+
+      // Rim
+      lfCtx.beginPath();
+      lfCtx.roundRect(cx - w / 2 - 4, cy - 5, w + 8, 10, 5);
+      lfCtx.fillStyle = LF_COLORS.basketRim;
+      lfCtx.fill();
+
+      // Name collected so far
+      if (lfCollected > 0) {
+        lfCtx.fillStyle = '#fff';
+        lfCtx.font = `bold 11px 'Playfair Display', serif`;
+        lfCtx.textAlign = 'center';
+        lfCtx.textBaseline = 'middle';
+        lfCtx.fillText(lfTargetName.slice(0, lfCollected), cx, cy + h / 2 + 1);
+      }
+
+      lfCtx.restore();
+    }
+
+    function handleCatch(char, type) {
+      const nextLetter = lfTargetName[lfCollected];
+
+      if (type === 'empty') {
+        // Blank tile — restart
+        triggerRestart('You caught a blank tile! 😱');
+        return;
+      }
+
+      if (type === 'correct' && char === nextLetter) {
+        // Correct!
+        lfCollected++;
+        updateTargetDisplay();
+
+        if (lfCollected >= lfTargetName.length) {
+          // WON!
+          lfWon = true;
+          triggerWin();
+        }
+      } else {
+        // Wrong letter — restart
+        triggerRestart(`Wrong letter! Need "${nextLetter}", got "${char}" 😬`);
+      }
+    }
+
+    function triggerRestart(msg) {
+      lfRunning = false;
+      document.getElementById('lf-restart-msg').textContent = msg;
+      document.getElementById('lf-restart-overlay').classList.add('show');
+    }
+
+    function restartLetterFall() {
+      lfCollected = 0;
+      lfLetters = [];
+      lfSpawnTimer = 0;
+      lfWon = false;
+      lfRunning = true;
+      lfLastTs = 0;
+      document.getElementById('lf-restart-overlay').classList.remove('show');
+      buildTargetDisplay();
+      lfAnim = requestAnimationFrame(lfLoop);
+    }
+
+    async function triggerWin() {
+      lfRunning = false;
+      if (lfAnim) cancelAnimationFrame(lfAnim);
+
+      document.getElementById('lf-win-overlay').classList.add('show');
+      letterFallCompleted = true;
+
+      // Report to server
+      try {
+        await fetch(`${API}/api/letter-fall-done`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId })
+        });
+      } catch (e) { /* ignore */ }
     }
 
     function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }

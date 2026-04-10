@@ -40,6 +40,8 @@ const PlayerSchema = new mongoose.Schema({
   buzzerPressedAt: { type: Date, default: null },
   hasScratched: { type: Boolean, default: false },
   scratchedAt: { type: Date, default: null },
+  letterFallDone: { type: Boolean, default: false },
+  letterFallTime: { type: Date, default: null },
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -196,6 +198,22 @@ app.post('/api/scratch', async (req, res) => {
     const scratched = await Player.countDocuments({ hasScratched: true });
 
     res.json({ success: true, allScratched: scratched >= total, scratched, total });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// POST /api/letter-fall-done — player completed letter fall game
+app.post('/api/letter-fall-done', async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    const player = await Player.findOneAndUpdate(
+      { sessionId },
+      { letterFallDone: true, letterFallTime: new Date() },
+      { new: true }
+    );
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+    res.json({ success: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

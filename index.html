@@ -1694,6 +1694,7 @@ if (!r.ok) {
     let compatLastQ = -1;
     let compatAnswered = {};   // { qIndex: true } — questions this player answered
     let compatInPair = false;
+    let compatLastAnswerSnapshot = '';  // track when OTHER player's answer arrives
 
     function initCompatGame(state) {
       const pair = state.compatPair || {};
@@ -1703,17 +1704,38 @@ if (!r.ok) {
 
       compatInPair = (myName === pair.player1 || myName === pair.player2);
 
-      // Update pair label
+      // Update pair label (safe — not inside the input area)
       if (pair.player1 && pair.player2) {
         document.getElementById('compat-pair-label').textContent =
           `💑 ${pair.player1} & ${pair.player2}`;
       }
 
-      renderCompatBody(questions, currentQ, answers, pair);
+      // Work out whether THIS player has already answered this question
+      const myAnswer = answers[currentQ] ? answers[currentQ][myName] : null;
+      const alreadyAnswered = myAnswer != null;
+
+      // Build a snapshot of what the other player has answered (to detect new arrivals)
+      const otherName = pair.player1 === myName ? pair.player2 : pair.player1;
+      const otherAnswer = answers[currentQ] ? answers[currentQ][otherName] : null;
+      const currentSnapshot = `${currentQ}|${myAnswer}|${otherAnswer}`;
+
+      // SKIP re-render if:
+      //   - same question AND
+      //   - user is actively typing in the input AND
+      //   - nothing new has arrived (my answer unchanged, other answer unchanged)
+      const inputEl = document.getElementById('compat-input');
+      const userIsTyping = inputEl && document.activeElement === inputEl;
+
+      if (compatLastQ === currentQ && userIsTyping && currentSnapshot === compatLastAnswerSnapshot) {
+        return; // don't wipe what they're typing
+      }
+
+      compatLastAnswerSnapshot = currentSnapshot;
+      renderCompatBody(questions, currentQ, answers, pair, alreadyAnswered, myAnswer);
       compatLastQ = currentQ;
     }
 
-    function renderCompatBody(questions, currentQ, answers, pair) {
+    function renderCompatBody(questions, currentQ, answers, pair, alreadyAnswered, myAnswer) {
       const body = document.getElementById('compat-body');
 
       if (!compatInPair) {
@@ -1730,7 +1752,6 @@ if (!r.ok) {
       }
 
       if (currentQ >= questions.length) {
-        // All questions done
         body.innerHTML = `
           <div class="compat-waiting-card">
             <div style="font-size:48px;margin-bottom:12px;">🎉</div>
@@ -1741,8 +1762,6 @@ if (!r.ok) {
       }
 
       const q = questions[currentQ];
-      const myAnswer = answers[currentQ] ? answers[currentQ][myName] : null;
-      const alreadyAnswered = myAnswer != null;
 
       let html = `
         <div class="compat-q-card">
@@ -1764,7 +1783,7 @@ if (!r.ok) {
       } else {
         html += `
           <input class="compat-answer-input" id="compat-input" type="text"
-            placeholder="Type your answer…" maxlength="80" autocomplete="off"
+            placeholder="Type your answer…" maxlength="80" autocomplete="off" autocorrect="off" spellcheck="false"
             onkeyup="if(event.key==='Enter') submitCompatAnswer(${currentQ})"/>
           <button class="compat-submit-btn" id="compat-submit-btn"
             onclick="submitCompatAnswer(${currentQ})">
@@ -1775,12 +1794,12 @@ if (!r.ok) {
       html += `</div>`;
       body.innerHTML = html;
 
-      // Focus input if not answered
-      if (!alreadyAnswered) {
+      // Only auto-focus if user is not mid-interaction elsewhere
+      if (!alreadyAnswered && document.activeElement === document.body) {
         setTimeout(() => {
           const inp = document.getElementById('compat-input');
           if (inp) inp.focus();
-        }, 100);
+        }, 80);
       }
     }
 
@@ -1789,8 +1808,9 @@ if (!r.ok) {
       if (!inp) return;
       const answer = inp.value.trim();
       if (!answer) {
-        inp.style.borderColor = 'var(--terracotta)';
+        inp.style.borderColor = '#C4622D';
         inp.placeholder = 'Please type something first!';
+        inp.focus();
         return;
       }
 
@@ -1798,30 +1818,28 @@ if (!r.ok) {
       if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
       inp.disabled = true;
 
+      // Mark as answered immediately so poll doesn't re-render the input
+      compatAnswered[qIndex] = true;
+      compatLastAnswerSnapshot = ''; // force a re-render after submit to show locked state
+
       try {
         const r = await fetch(`${API}/api/compat-answer`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ sessionId, answer, qIndex })
         });
-        const d = await r.json();
-        if (r.ok) {
-          compatAnswered[qIndex] = true;
-          // Re-render to show submitted state
-          const stateR = await fetch(`${API}/api/state`);
-          const stateD = await stateR.json();
-          if (stateD.state) renderCompatBody(
-            stateD.state.compatQuestions || [],
-            stateD.state.compatCurrentQ || 0,
-            stateD.state.compatAnswers || {},
-            stateD.state.compatPair || {}
-          );
-        } else {
+        if (!r.ok) {
+          // Revert on failure
+          compatAnswered[qIndex] = false;
           if (btn) { btn.disabled = false; btn.textContent = 'Lock in Answer 🔒'; }
           inp.disabled = false;
+          inp.focus();
         }
+        // On success, next poll will show the submitted state naturally
       } catch (e) {
+        compatAnswered[qIndex] = false;
         if (btn) { btn.disabled = false; btn.textContent = 'Lock in Answer 🔒'; }
         inp.disabled = false;
+        inp.focus();
       }
     }
 

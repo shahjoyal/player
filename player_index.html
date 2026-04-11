@@ -412,7 +412,146 @@
     .mt16 { margin-top: 16px; }
     .mt24 { margin-top: 24px; }
 
-    /* ── LETTER FALL GAME ── */
+    /* ── HEART POP GAME ── */
+    .hp-screen {
+      padding: 0 !important;
+      background: linear-gradient(135deg, #FFF0F5 0%, #FFF8F0 100%);
+    }
+    .hp-wrap {
+      position: relative; z-index: 2;
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center;
+    }
+    .hp-header {
+      width: 100%; padding: 18px 20px 14px;
+      background: rgba(255,255,255,0.9);
+      border-bottom: 1px solid var(--border);
+      text-align: center; flex-shrink: 0;
+    }
+    .hp-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 900; color: var(--espresso);
+      margin-bottom: 4px;
+    }
+    .hp-round-label {
+      font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--terracotta);
+    }
+    .hp-sub {
+      font-size: 13px; color: rgba(44,26,14,0.5); margin-top: 6px;
+    }
+    .hp-game-area {
+      flex: 1; width: 100%; max-width: 420px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .hp-boxes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+    }
+    .hp-box {
+      aspect-ratio: 1;
+      border-radius: 24px;
+      background: #fff;
+      border: 2px solid var(--cream-deep);
+      box-shadow: 0 4px 16px var(--shadow);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .hp-box:active { transform: scale(0.93); }
+    .hp-box.hp-active {
+      border-color: #E84393;
+      box-shadow: 0 0 0 4px rgba(232,67,147,0.2), 0 8px 32px rgba(232,67,147,0.3);
+      animation: hp-box-pulse 0.8s ease-in-out infinite;
+    }
+    @keyframes hp-box-pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+    .hp-box.hp-miss {
+      animation: hp-miss-shake 0.4s ease;
+    }
+    @keyframes hp-miss-shake {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+    .hp-box-inner { display: flex; align-items: center; justify-content: center; }
+    .hp-box-emoji {
+      font-size: 52px;
+      transition: font-size 0.2s;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    }
+    .hp-active .hp-box-emoji {
+      font-size: 58px;
+      animation: hp-heart-bounce 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    @keyframes hp-heart-bounce {
+      0% { transform: scale(0.4) rotate(-15deg); }
+      60% { transform: scale(1.15) rotate(5deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    /* Heart pop card overlay */
+    .hp-card-overlay {
+      position: fixed; inset: 0;
+      background: rgba(44,26,14,0.55);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s;
+    }
+    .hp-card-overlay.show { opacity: 1; pointer-events: all; }
+    .hp-card {
+      background: #fff;
+      border: 2px solid rgba(232,67,147,0.3);
+      border-radius: 28px;
+      padding: 40px 32px 32px;
+      max-width: 340px; width: 88%;
+      text-align: center;
+      box-shadow: 0 24px 80px rgba(232,67,147,0.2);
+      animation: hp-card-pop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      position: relative; overflow: hidden;
+    }
+    .hp-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, #E84393, #FF8DC7, #E84393);
+      border-radius: 28px 28px 0 0;
+    }
+    @keyframes hp-card-pop {
+      from { opacity: 0; transform: scale(0.7) translateY(30px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .hp-card-emoji { font-size: 56px; display: block; margin-bottom: 14px; animation: gentle-float 3s ease-in-out infinite; }
+    .hp-card-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #E84393; margin-bottom: 10px; }
+    .hp-card-message {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700;
+      color: var(--espresso); line-height: 1.45;
+      margin-bottom: 28px;
+    }
+    .hp-card-ok-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #E84393, #C4622D);
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700; font-size: 17px;
+      border: none; border-radius: 14px;
+      padding: 16px 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(232,67,147,0.35);
+      transition: transform 0.15s;
+    }
+    .hp-card-ok-btn:active { transform: scale(0.96); }
     .lf-screen {
       padding: 0 !important;
       background: var(--cream);
@@ -547,10 +686,10 @@
   <!-- ═══ SCREEN: WELCOME ═══ -->
   <div class="screen active" id="screen-welcome">
     <div class="inner">
-      <div class="ornament">Game Night</div>
+      <div class="ornament">Game Night </div>
       <div class="welcome-card">
         <span class="welcome-emoji">🎉</span>
-        <h1 class="welcome-title">Only 25 days to go for the special day!</h1>
+        <h1 class="welcome-title">Only 24 days to go for the special day!</h1>
         <p class="welcome-sub">Enter your name to join the fun</p>
 
         <div class="input-wrap">
@@ -704,7 +843,7 @@
       <!-- Game Canvas -->
       <div class="lf-game-area" id="lf-game-area">
         <canvas id="lf-canvas"></canvas>
-        <div class="lf-status" id="lf-status">Move your finger to catch letters!</div>
+        <div class="lf-status" id="lf-status">Tap the correct letter!</div>
 
         <!-- Wrong letter overlay -->
         <div class="lf-restart-overlay" id="lf-restart-overlay">
@@ -721,6 +860,30 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: HEART POP ═══ -->
+  <div class="screen hp-screen" id="screen-heartpop">
+    <div class="hp-wrap">
+      <div class="hp-header">
+        <div class="hp-title">💝 Heart Pop!</div>
+        <div class="hp-round-label" id="hp-round-label">Round 1 of 2</div>
+        <div class="hp-sub">Tap the box when the heart appears!</div>
+      </div>
+      <div class="hp-game-area">
+        <div class="hp-boxes" id="hp-boxes"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heart Pop Card Overlay -->
+  <div class="hp-card-overlay" id="hp-card-overlay">
+    <div class="hp-card">
+      <span class="hp-card-emoji">💝</span>
+      <div class="hp-card-label">A message for you</div>
+      <div class="hp-card-message" id="hp-card-message">✨ A special surprise awaits!</div>
+      <button class="hp-card-ok-btn" onclick="dismissHeartCard()">Okay 💕</button>
     </div>
   </div>
 
@@ -868,12 +1031,17 @@ case 'buzzer':
 
         case 'letter_fall':
           if (lastPhase !== 'letter_fall') {
-            // Fresh entry — init the game
             letterFallCompleted = false;
             initLetterFall();
           }
           lastPhase = 'letter_fall';
           showScreen('screen-letterfall');
+          break;
+
+        case 'heart_pop':
+          initHeartPop(state);
+          lastPhase = 'heart_pop';
+          showScreen('screen-heartpop');
           break;
 
         case 'ended':
@@ -1112,12 +1280,11 @@ if (!r.ok) {
 
     let letterFallCompleted = false;
 
-    // ─── LETTER FALL GAME ────────────────────────────────────────────────────────
-    let lfAnim = null;         // requestAnimationFrame id
-    let lfLetters = [];        // falling letter objects
-    let lfCollected = 0;       // how many letters collected so far
-    let lfTargetName = '';     // uppercase name to spell
-    let lfBasket = { x: 0.5 }; // basket x position (0–1 fraction of canvas width)
+    // ─── LETTER FALL GAME (TAP VERSION) ──────────────────────────────────────────
+    let lfAnim = null;
+    let lfLetters = [];
+    let lfCollected = 0;
+    let lfTargetName = '';
     let lfSpawnTimer = 0;
     let lfRunning = false;
     let lfWon = false;
@@ -1125,13 +1292,10 @@ if (!r.ok) {
     let lfCanvas, lfCtx;
     let lfW = 0, lfH = 0;
 
-    // Colour palette matching cream theme
     const LF_COLORS = {
-      correct:  { fill: '#C4622D', text: '#fff' },  // terracotta
-      decoy:    { fill: '#E8E0D0', text: '#7A5C44' }, // cream-deep
+      correct:  { fill: '#C4622D', text: '#fff' },
+      decoy:    { fill: '#E8E0D0', text: '#7A5C44' },
       empty:    { fill: '#FAF7F2', text: '#C4622D', border: '#C4622D' },
-      basket:   '#C4622D',
-      basketRim:'#A3461C',
     };
 
     function initLetterFall() {
@@ -1140,29 +1304,25 @@ if (!r.ok) {
       lfLetters = [];
       lfWon = false;
       lfSpawnTimer = 0;
-      lfBasket.x = 0.5;
 
-      // Reset overlays
       document.getElementById('lf-restart-overlay').classList.remove('show');
       document.getElementById('lf-win-overlay').classList.remove('show');
 
-      // Build target display
       buildTargetDisplay();
 
-      // Setup canvas
       lfCanvas = document.getElementById('lf-canvas');
       lfCtx = lfCanvas.getContext('2d');
       resizeLFCanvas();
 
-      // Touch/mouse move for basket
-      lfCanvas.addEventListener('touchmove', lfHandleTouch, { passive: false });
-      lfCanvas.addEventListener('touchstart', lfHandleTouch, { passive: false });
-      lfCanvas.addEventListener('mousemove', lfHandleMouse);
+      // TAP to collect letters
+      lfCanvas.removeEventListener('click', lfHandleTap);
+      lfCanvas.removeEventListener('touchend', lfHandleTapTouch);
+      lfCanvas.addEventListener('click', lfHandleTap);
+      lfCanvas.addEventListener('touchend', lfHandleTapTouch, { passive: false });
 
       window.removeEventListener('resize', resizeLFCanvas);
       window.addEventListener('resize', resizeLFCanvas);
 
-      // Cancel any existing loop
       if (lfAnim) cancelAnimationFrame(lfAnim);
       lfRunning = true;
       lfLastTs = 0;
@@ -1192,56 +1352,83 @@ if (!r.ok) {
       });
     }
 
-    function lfHandleTouch(e) {
+    function lfGetCanvasPos(e) {
+      const rect = lfCanvas.getBoundingClientRect();
+      let cx, cy;
+      if (e.changedTouches) {
+        cx = e.changedTouches[0].clientX;
+        cy = e.changedTouches[0].clientY;
+      } else {
+        cx = e.clientX;
+        cy = e.clientY;
+      }
+      return {
+        x: (cx - rect.left) * (lfW / rect.width),
+        y: (cy - rect.top) * (lfH / rect.height)
+      };
+    }
+
+    function lfHandleTap(e) {
+      if (!lfRunning || lfWon) return;
+      const pos = lfGetCanvasPos(e);
+      checkLetterTap(pos.x, pos.y);
+    }
+
+    function lfHandleTapTouch(e) {
       e.preventDefault();
-      const rect = lfCanvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      lfBasket.x = Math.max(0.08, Math.min(0.92, (touch.clientX - rect.left) / rect.width));
+      if (!lfRunning || lfWon) return;
+      const pos = lfGetCanvasPos(e);
+      checkLetterTap(pos.x, pos.y);
     }
 
-    function lfHandleMouse(e) {
-      const rect = lfCanvas.getBoundingClientRect();
-      lfBasket.x = Math.max(0.08, Math.min(0.92, (e.clientX - rect.left) / rect.width));
+    function checkLetterTap(tapX, tapY) {
+      // Find the topmost letter under the tap
+      for (let i = lfLetters.length - 1; i >= 0; i--) {
+        const l = lfLetters[i];
+        const lx = l.x * lfW;
+        const ly = l.y * lfH;
+        const halfSize = (l.size / 2) + 8; // generous tap area
+        if (Math.abs(tapX - lx) < halfSize && Math.abs(tapY - ly) < halfSize) {
+          lfLetters.splice(i, 1); // remove tapped letter
+          handleCatch(l.char, l.type, l);
+          return;
+        }
+      }
     }
 
-    // Spawn a falling letter
     function spawnLetter() {
       const letters = lfTargetName.split('');
-      const totalLetters = letters.length;
+      const nextNeeded = letters[lfCollected];
 
-      // Decide what to spawn:
-      // 40% chance: correct next letter
-      // 30% chance: a different letter from the name (wrong order)
-      // 20% chance: a random alphabet letter (decoy)
-      // 10% chance: empty/blank tile
       const rand = Math.random();
       let char, type;
 
-      if (rand < 0.42) {
-        // Correct next letter
-        char = letters[lfCollected];
+      if (rand < 0.45) {
+        // Correct next letter — always spawn the EXACT char needed
+        char = nextNeeded;
         type = 'correct';
-      } else if (rand < 0.65 && totalLetters > 1) {
-        // Wrong letter from name
-        const others = letters.filter((_, i) => i !== lfCollected);
-        char = others[Math.floor(Math.random() * others.length)];
+      } else if (rand < 0.65 && letters.length > 1) {
+        // A different letter from the name (wrong)
+        const others = [...new Set(letters.filter((c, i) => i !== lfCollected))];
+        char = others.length > 0 ? others[Math.floor(Math.random() * others.length)] : nextNeeded;
+        // Make sure this decoy is not accidentally the same as next needed
+        if (char === nextNeeded) char = 'X';
         type = 'decoy';
       } else if (rand < 0.88) {
-        // Random alphabet decoy
-        const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        // Random alphabet decoy — avoid spawning the correct next letter as a decoy
+        const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').filter(c => c !== nextNeeded);
         char = alpha[Math.floor(Math.random() * alpha.length)];
         type = 'decoy';
       } else {
-        // Empty/blank tile
         char = '';
         type = 'empty';
       }
 
-      // Random x position that avoids edges
       const x = 0.08 + Math.random() * 0.84;
-      const speed = 0.04 + Math.random() * 0.05; // fraction of canvas height per second
+      // FASTER speed: was 0.04–0.09, now 0.12–0.20 fraction of canvas height per second
+      const speed = 0.13 + Math.random() * 0.08;
 
-      lfLetters.push({ char, type, x, y: -0.06, speed, size: 40, opacity: 1 });
+      lfLetters.push({ char, type, x, y: -0.06, speed, size: 48, opacity: 1 });
     }
 
     function lfLoop(ts) {
@@ -1249,33 +1436,20 @@ if (!r.ok) {
       const dt = lfLastTs ? Math.min((ts - lfLastTs) / 1000, 0.05) : 0.016;
       lfLastTs = ts;
 
-      // Clear
       lfCtx.clearRect(0, 0, lfW, lfH);
 
-      if (lfWon || !lfRunning) { lfAnim = requestAnimationFrame(lfLoop); return; }
+      if (lfWon) { lfAnim = requestAnimationFrame(lfLoop); return; }
 
-      // Spawn timer
-      const spawnInterval = Math.max(0.55, 1.4 - lfCollected * 0.08); // gets faster as you progress
+      // Spawn timer — faster intervals too
+      const spawnInterval = Math.max(0.35, 1.0 - lfCollected * 0.06);
       lfSpawnTimer += dt;
       if (lfSpawnTimer >= spawnInterval) {
         lfSpawnTimer = 0;
         spawnLetter();
-        // Occasionally spawn a 2nd letter for more variety
-        if (Math.random() < 0.25) spawnLetter();
+        if (Math.random() < 0.3) spawnLetter();
       }
 
-      // Draw decorative falling dashes (background feel)
-      lfCtx.globalAlpha = 0.06;
-      lfCtx.fillStyle = '#C4622D';
-      lfCtx.font = '10px DM Sans';
-
-      lfCtx.globalAlpha = 1;
-
       // Update + draw letters
-      const basket_x_px = lfBasket.x * lfW;
-      const basket_y_px = lfH - 70;
-      const basket_w = 70, basket_h = 28;
-
       lfLetters = lfLetters.filter(l => {
         l.y += l.speed * dt;
 
@@ -1283,31 +1457,19 @@ if (!r.ok) {
         const ly = l.y * lfH;
         const s = l.size;
 
-        // Collision with basket
-        const inBasketX = Math.abs(lx - basket_x_px) < (basket_w / 2 + s / 2 - 6);
-        const inBasketY = ly + s / 2 > basket_y_px - 4 && ly - s / 2 < basket_y_px + basket_h;
-
-        if (inBasketX && inBasketY) {
-          handleCatch(l.char, l.type);
-          return false; // remove letter
-        }
-
         // Off screen
-        if (l.y > 1.05) return false;
+        if (l.y > 1.08) return false;
 
         // Draw letter tile
-        const isNext = l.type === 'correct';
         const col = l.type === 'empty' ? LF_COLORS.empty : (l.type === 'correct' ? LF_COLORS.correct : LF_COLORS.decoy);
 
-        // Tile background
         lfCtx.save();
         lfCtx.translate(lx, ly);
 
-        // Slight wobble
-        const wobble = Math.sin(ts * 0.003 + l.x * 10) * 2;
+        const wobble = Math.sin(ts * 0.002 + l.x * 10) * 1.5;
         lfCtx.rotate((wobble * Math.PI) / 180);
 
-        const r = 10;
+        const r = 12;
         const hw = s / 2;
         lfCtx.beginPath();
         lfCtx.roundRect(-hw, -hw, s, s, r);
@@ -1319,91 +1481,68 @@ if (!r.ok) {
           lfCtx.lineWidth = 2;
           lfCtx.stroke();
         } else {
+          lfCtx.shadowColor = 'rgba(44,26,14,0.18)';
+          lfCtx.shadowBlur = 8;
+          lfCtx.shadowOffsetY = 4;
           lfCtx.fillStyle = col.fill;
-          lfCtx.fill();
-          // subtle shadow
-          lfCtx.shadowColor = 'rgba(44,26,14,0.15)';
-          lfCtx.shadowBlur = 6;
-          lfCtx.shadowOffsetY = 3;
           lfCtx.fill();
           lfCtx.shadowBlur = 0;
           lfCtx.shadowOffsetY = 0;
+
+          // Highlight ring for the CORRECT next letter
+          if (l.type === 'correct') {
+            const pulse = 0.5 + 0.5 * Math.sin(ts * 0.006);
+            lfCtx.strokeStyle = `rgba(255,255,255,${0.4 + pulse * 0.4})`;
+            lfCtx.lineWidth = 3;
+            lfCtx.stroke();
+          }
         }
 
         // Letter text
         if (l.char) {
           lfCtx.fillStyle = col.text;
-          lfCtx.font = `bold ${s * 0.5}px 'Playfair Display', serif`;
+          lfCtx.font = `bold ${s * 0.52}px 'Playfair Display', serif`;
           lfCtx.textAlign = 'center';
           lfCtx.textBaseline = 'middle';
           lfCtx.fillText(l.char, 0, 1);
         }
 
         lfCtx.restore();
-
         return true;
       });
 
-      // Draw basket
-      drawBasket(basket_x_px, basket_y_px, basket_w, basket_h);
+      // Tap hint text at bottom
+      lfCtx.save();
+      lfCtx.fillStyle = 'rgba(44,26,14,0.25)';
+      lfCtx.font = '13px DM Sans, sans-serif';
+      lfCtx.textAlign = 'center';
+      lfCtx.textBaseline = 'bottom';
+      lfCtx.fillText('Tap the correct letter!', lfW / 2, lfH - 10);
+      lfCtx.restore();
 
       lfAnim = requestAnimationFrame(lfLoop);
     }
 
-    function drawBasket(cx, cy, w, h) {
-      lfCtx.save();
-
-      // Basket body
-      lfCtx.beginPath();
-      lfCtx.roundRect(cx - w / 2, cy, w, h, [0, 0, 10, 10]);
-      lfCtx.fillStyle = LF_COLORS.basket;
-      lfCtx.shadowColor = 'rgba(196,98,45,0.4)';
-      lfCtx.shadowBlur = 12;
-      lfCtx.shadowOffsetY = 4;
-      lfCtx.fill();
-      lfCtx.shadowBlur = 0;
-      lfCtx.shadowOffsetY = 0;
-
-      // Rim
-      lfCtx.beginPath();
-      lfCtx.roundRect(cx - w / 2 - 4, cy - 5, w + 8, 10, 5);
-      lfCtx.fillStyle = LF_COLORS.basketRim;
-      lfCtx.fill();
-
-      // Name collected so far
-      if (lfCollected > 0) {
-        lfCtx.fillStyle = '#fff';
-        lfCtx.font = `bold 11px 'Playfair Display', serif`;
-        lfCtx.textAlign = 'center';
-        lfCtx.textBaseline = 'middle';
-        lfCtx.fillText(lfTargetName.slice(0, lfCollected), cx, cy + h / 2 + 1);
-      }
-
-      lfCtx.restore();
-    }
-
-    function handleCatch(char, type) {
-      const nextLetter = lfTargetName[lfCollected];
+    function handleCatch(char, type, letterObj) {
+      // Robustness: normalise both to uppercase for comparison
+      const nextLetter = (lfTargetName[lfCollected] || '').toUpperCase();
+      const tappedChar = (char || '').toUpperCase();
 
       if (type === 'empty') {
-        // Blank tile — restart
-        triggerRestart('You caught a blank tile! 😱');
+        triggerRestart('You tapped a blank tile! 😱');
         return;
       }
 
-      if (type === 'correct' && char === nextLetter) {
-        // Correct!
+      // Correct if type === 'correct' OR if char matches next needed (handles edge cases)
+      if (tappedChar === nextLetter) {
         lfCollected++;
         updateTargetDisplay();
-
         if (lfCollected >= lfTargetName.length) {
-          // WON!
           lfWon = true;
           triggerWin();
         }
       } else {
-        // Wrong letter — restart
-        triggerRestart(`Wrong letter! Need "${nextLetter}", got "${char}" 😬`);
+        triggerRestart(`Wrong letter! Need "${nextLetter}", got "${tappedChar}" 😬`);
       }
     }
 
@@ -1428,17 +1567,140 @@ if (!r.ok) {
     async function triggerWin() {
       lfRunning = false;
       if (lfAnim) cancelAnimationFrame(lfAnim);
-
       document.getElementById('lf-win-overlay').classList.add('show');
       letterFallCompleted = true;
-
-      // Report to server
       try {
         await fetch(`${API}/api/letter-fall-done`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ sessionId })
         });
       } catch (e) { /* ignore */ }
+    }
+
+    // ─── HEART POP GAME ───────────────────────────────────────────────────────────
+    let hpCurrentRound = 1;
+    let hpTotalRounds = 2;
+    let hpMessages = {};        // { "1": {"0": "msg", "1": "msg", ...}, "2": {...} }
+    let hpActiveBox = null;     // which box has the heart popped
+    let hpShowingCard = false;
+    let hpHeartAnim = null;
+    let hpBoxPulseTimers = [];
+    let hpLastStateRound = -1;
+
+    function initHeartPop(state) {
+      hpCurrentRound = state.heartPopRound || 1;
+      hpTotalRounds = state.heartPopTotalRounds || 2;
+      hpMessages = state.heartMessages || {};
+
+      // Only reinit if round changed
+      if (hpLastStateRound === hpCurrentRound) return;
+      hpLastStateRound = hpCurrentRound;
+
+      hpActiveBox = null;
+      hpShowingCard = false;
+
+      renderHeartPop();
+    }
+
+    function renderHeartPop() {
+      const container = document.getElementById('hp-boxes');
+      if (!container) return;
+
+      document.getElementById('hp-round-label').textContent = `Round ${hpCurrentRound} of ${hpTotalRounds}`;
+
+      // Clear old pulse timers
+      hpBoxPulseTimers.forEach(clearTimeout);
+      hpBoxPulseTimers = [];
+
+      container.innerHTML = '';
+      for (let i = 0; i < 4; i++) {
+        const box = document.createElement('div');
+        box.className = 'hp-box';
+        box.id = `hp-box-${i}`;
+        box.innerHTML = `<div class="hp-box-inner"><span class="hp-box-emoji">📦</span></div>`;
+        box.addEventListener('click', () => onBoxTap(i));
+        box.addEventListener('touchend', (e) => { e.preventDefault(); onBoxTap(i); }, { passive: false });
+        container.appendChild(box);
+      }
+
+      // Start the heart pop animation — randomly show heart in one box at a time
+      startHeartPopAnimation();
+    }
+
+    function startHeartPopAnimation() {
+      if (hpHeartAnim) clearTimeout(hpHeartAnim);
+
+      function popNext() {
+        // Reset all boxes
+        for (let i = 0; i < 4; i++) {
+          const box = document.getElementById(`hp-box-${i}`);
+          if (!box) return;
+          box.classList.remove('hp-active');
+          box.querySelector('.hp-box-emoji').textContent = '📦';
+        }
+
+        // Pick random box to show heart
+        const idx = Math.floor(Math.random() * 4);
+        hpActiveBox = idx;
+
+        const box = document.getElementById(`hp-box-${idx}`);
+        if (!box || hpShowingCard) return;
+
+        box.classList.add('hp-active');
+        box.querySelector('.hp-box-emoji').textContent = '💝';
+
+        // Heart stays for 1.8s then moves to another box
+        hpHeartAnim = setTimeout(() => {
+          if (!hpShowingCard) popNext();
+        }, 1600);
+      }
+
+      // Small delay before first pop
+      hpHeartAnim = setTimeout(popNext, 350);
+    }
+
+    async function onBoxTap(boxIndex) {
+      if (hpShowingCard) return;
+
+      const box = document.getElementById(`hp-box-${boxIndex}`);
+      if (!box) return;
+
+      // Only react if this box has the heart
+      if (hpActiveBox !== boxIndex) {
+        // Wrong box — animate a miss
+        box.classList.add('hp-miss');
+        setTimeout(() => box.classList.remove('hp-miss'), 500);
+        return;
+      }
+
+      // Pause animation
+      if (hpHeartAnim) clearTimeout(hpHeartAnim);
+      hpShowingCard = true;
+
+      // Get message from state
+      const roundKey = String(hpCurrentRound);
+      const roundMessages = hpMessages[roundKey] || {};
+      const message = roundMessages[String(boxIndex)] || '✨ A special surprise awaits you!';
+
+      // Show the card
+      showHeartCard(message);
+    }
+
+    function showHeartCard(message) {
+      const overlay = document.getElementById('hp-card-overlay');
+      const msgEl = document.getElementById('hp-card-message');
+      msgEl.textContent = message;
+      overlay.classList.add('show');
+    }
+
+    function dismissHeartCard() {
+      const overlay = document.getElementById('hp-card-overlay');
+      overlay.classList.remove('show');
+      hpShowingCard = false;
+      hpActiveBox = null;
+
+      // Resume heart animation
+      startHeartPopAnimation();
     }
 
     function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }

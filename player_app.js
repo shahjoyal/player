@@ -29,6 +29,9 @@ const GameStateSchema = new mongoose.Schema({
   buzzerLockedAt: { type: Date, default: null },
   scratchRevealedAt: { type: Date, default: null },
   giftImageUrl: { type: String, default: null },
+  heartMessages: { type: mongoose.Schema.Types.Mixed, default: {} },
+  heartPopRound: { type: Number, default: 0 },
+  heartPopTotalRounds: { type: Number, default: 2 },
   updatedAt: { type: Date, default: Date.now }
 });
 
@@ -214,6 +217,27 @@ app.post('/api/letter-fall-done', async (req, res) => {
     );
     if (!player) return res.status(404).json({ error: 'Player not found' });
     res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// POST /api/heart-pop-tap — player tapped a heart box
+app.post('/api/heart-pop-tap', async (req, res) => {
+  try {
+    const { sessionId, boxIndex, round } = req.body;
+    const state = await getState();
+    if (state.phase !== 'heart_pop') return res.status(400).json({ error: 'Not in heart pop phase' });
+
+    const player = await Player.findOne({ sessionId });
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+
+    // Get the message for this box/round from state
+    const heartMessages = state.heartMessages || [];
+    const roundMessages = heartMessages[round] || {};
+    const message = roundMessages[boxIndex] || '';
+
+    res.json({ success: true, message, playerName: player.name });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

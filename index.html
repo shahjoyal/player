@@ -412,6 +412,84 @@
     .mt16 { margin-top: 16px; }
     .mt24 { margin-top: 24px; }
 
+    /* ── COMPATIBILITY GAME ── */
+    .compat-screen { background: linear-gradient(135deg, #F0F4FF 0%, #FFF8F0 100%); }
+    .compat-wrap {
+      position: relative; z-index: 2; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; overflow-y: auto;
+    }
+    .compat-header {
+      width: 100%; padding: 18px 20px 14px;
+      background: rgba(255,255,255,0.92);
+      border-bottom: 1px solid var(--border);
+      text-align: center; flex-shrink: 0;
+    }
+    .compat-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 900; color: var(--espresso); margin-bottom: 3px;
+    }
+    .compat-pair-label { font-size: 13px; color: var(--terracotta); font-weight: 500; }
+    .compat-body {
+      flex: 1; width: 100%; max-width: 420px;
+      padding: 24px 20px 32px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .compat-q-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-left: 4px solid var(--terracotta);
+      border-radius: 16px; padding: 20px 22px;
+      box-shadow: 0 4px 16px var(--shadow);
+    }
+    .compat-q-num {
+      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 6px;
+    }
+    .compat-q-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700; color: var(--espresso); line-height: 1.4;
+    }
+    .compat-answer-wrap { display: flex; flex-direction: column; gap: 10px; }
+    .compat-answer-label {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--sage); font-weight: 500;
+    }
+    .compat-answer-input {
+      width: 100%; background: var(--cream);
+      border: 1.5px solid var(--cream-deep); border-radius: 12px;
+      padding: 14px 16px; font-size: 16px; color: var(--espresso);
+      font-family: 'DM Sans', sans-serif; outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .compat-answer-input:focus { border-color: var(--terracotta); background: #fff; }
+    .compat-answer-input::placeholder { color: rgba(44,26,14,0.3); }
+    .compat-answer-input:disabled { opacity: 0.6; cursor: not-allowed; }
+    .compat-submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--terracotta), var(--espresso-md));
+      color: #fff; font-family: 'Playfair Display', serif;
+      font-weight: 700; font-size: 16px; border: none;
+      border-radius: 12px; padding: 15px 20px; cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
+      box-shadow: 0 4px 16px rgba(196,98,45,0.35);
+    }
+    .compat-submit-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    .compat-submit-btn:active:not(:disabled) { transform: scale(0.97); }
+    .compat-submitted-badge {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(107,124,92,0.1); border: 1px solid rgba(107,124,92,0.3);
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 14px; color: var(--sage); font-weight: 500;
+    }
+    .compat-waiting-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 24px 20px; text-align: center;
+    }
+    .compat-waiting-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .compat-waiting-sub { font-size: 13px; color: rgba(44,26,14,0.5); }
+    .compat-spectator-card {
+      background: rgba(255,255,255,0.8); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px 20px; text-align: center;
+    }
     /* ── HEART POP GAME ── */
     .hp-screen {
       padding: 0 !important;
@@ -614,8 +692,7 @@
     #lf-canvas {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
-      cursor: none;
-      touch-action: none;
+      cursor: pointer;
     }
 
     /* Status overlay */
@@ -686,10 +763,10 @@
   <!-- ═══ SCREEN: WELCOME ═══ -->
   <div class="screen active" id="screen-welcome">
     <div class="inner">
-      <div class="ornament">Game Night </div>
+      <div class="ornament">Game Night</div>
       <div class="welcome-card">
         <span class="welcome-emoji">🎉</span>
-        <h1 class="welcome-title">Only 24 days to go for the special day!</h1>
+        <h1 class="welcome-title">Only 25 days to go for the special day!</h1>
         <p class="welcome-sub">Enter your name to join the fun</p>
 
         <div class="input-wrap">
@@ -863,6 +940,19 @@
     </div>
   </div>
 
+  <!-- ═══ SCREEN: COMPATIBILITY GAME ═══ -->
+  <div class="screen compat-screen" id="screen-compat">
+    <div class="compat-wrap">
+      <div class="compat-header">
+        <div class="compat-title">💑 Compatibility Game</div>
+        <div class="compat-pair-label" id="compat-pair-label">Loading…</div>
+      </div>
+      <div class="compat-body" id="compat-body">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ SCREEN: HEART POP ═══ -->
   <div class="screen hp-screen" id="screen-heartpop">
     <div class="hp-wrap">
@@ -912,6 +1002,8 @@
 
     // ─── SCREENS ────────────────────────────────────────────────────────────────
     function showScreen(id) {
+      // If navigating away from letter fall, stop the game loop
+      if (id !== 'screen-letterfall') stopLetterFall();
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
@@ -1036,6 +1128,12 @@ case 'buzzer':
           }
           lastPhase = 'letter_fall';
           showScreen('screen-letterfall');
+          break;
+
+        case 'compat':
+          initCompatGame(state);
+          lastPhase = 'compat';
+          showScreen('screen-compat');
           break;
 
         case 'heart_pop':
@@ -1298,7 +1396,22 @@ if (!r.ok) {
       empty:    { fill: '#FAF7F2', text: '#C4622D', border: '#C4622D' },
     };
 
+    function stopLetterFall() {
+      lfRunning = false;
+      if (lfAnim) { cancelAnimationFrame(lfAnim); lfAnim = null; }
+      const c = document.getElementById('lf-canvas');
+      if (c) {
+        c.style.touchAction = '';
+        c.style.pointerEvents = 'none';
+        c.removeEventListener('click', lfHandleTap);
+        c.removeEventListener('touchend', lfHandleTapTouch);
+      }
+      window.removeEventListener('resize', resizeLFCanvas);
+    }
+
     function initLetterFall() {
+      stopLetterFall(); // always clean up first
+
       lfTargetName = (myName || '').toUpperCase().replace(/\s/g, '');
       lfCollected = 0;
       lfLetters = [];
@@ -1312,18 +1425,18 @@ if (!r.ok) {
 
       lfCanvas = document.getElementById('lf-canvas');
       lfCtx = lfCanvas.getContext('2d');
+
+      // Enable touch handling only while game is running
+      lfCanvas.style.pointerEvents = 'auto';
+      lfCanvas.style.touchAction = 'none';
+
       resizeLFCanvas();
 
-      // TAP to collect letters
-      lfCanvas.removeEventListener('click', lfHandleTap);
-      lfCanvas.removeEventListener('touchend', lfHandleTapTouch);
       lfCanvas.addEventListener('click', lfHandleTap);
       lfCanvas.addEventListener('touchend', lfHandleTapTouch, { passive: false });
 
-      window.removeEventListener('resize', resizeLFCanvas);
       window.addEventListener('resize', resizeLFCanvas);
 
-      if (lfAnim) cancelAnimationFrame(lfAnim);
       lfRunning = true;
       lfLastTs = 0;
       lfAnim = requestAnimationFrame(lfLoop);
@@ -1577,6 +1690,141 @@ if (!r.ok) {
       } catch (e) { /* ignore */ }
     }
 
+    // ─── COMPATIBILITY GAME ───────────────────────────────────────────────────────
+    let compatLastQ = -1;
+    let compatAnswered = {};   // { qIndex: true } — questions this player answered
+    let compatInPair = false;
+
+    function initCompatGame(state) {
+      const pair = state.compatPair || {};
+      const questions = state.compatQuestions || [];
+      const currentQ = state.compatCurrentQ || 0;
+      const answers = state.compatAnswers || {};
+
+      compatInPair = (myName === pair.player1 || myName === pair.player2);
+
+      // Update pair label
+      if (pair.player1 && pair.player2) {
+        document.getElementById('compat-pair-label').textContent =
+          `💑 ${pair.player1} & ${pair.player2}`;
+      }
+
+      renderCompatBody(questions, currentQ, answers, pair);
+      compatLastQ = currentQ;
+    }
+
+    function renderCompatBody(questions, currentQ, answers, pair) {
+      const body = document.getElementById('compat-body');
+
+      if (!compatInPair) {
+        // Spectator view
+        body.innerHTML = `
+          <div class="compat-spectator-card">
+            <div style="font-size:48px;margin-bottom:12px;">👀</div>
+            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:8px;">Watching the fun!</div>
+            <div style="font-size:14px;color:rgba(44,26,14,0.5);">
+              ${pair.player1 || '?'} & ${pair.player2 || '?'} are playing the compatibility round.
+            </div>
+          </div>`;
+        return;
+      }
+
+      if (currentQ >= questions.length) {
+        // All questions done
+        body.innerHTML = `
+          <div class="compat-waiting-card">
+            <div style="font-size:48px;margin-bottom:12px;">🎉</div>
+            <div class="compat-waiting-title">All done!</div>
+            <div class="compat-waiting-sub">Wait for the host to show results.</div>
+          </div>`;
+        return;
+      }
+
+      const q = questions[currentQ];
+      const myAnswer = answers[currentQ] ? answers[currentQ][myName] : null;
+      const alreadyAnswered = myAnswer != null;
+
+      let html = `
+        <div class="compat-q-card">
+          <div class="compat-q-num">Question ${currentQ + 1} of ${questions.length}</div>
+          <div class="compat-q-text">${esc(q)}</div>
+        </div>
+        <div class="compat-answer-wrap">
+          <div class="compat-answer-label">Your Answer</div>`;
+
+      if (alreadyAnswered) {
+        html += `
+          <div class="compat-submitted-badge">
+            ✅ Submitted: <strong>${esc(myAnswer)}</strong>
+          </div>
+          <div class="compat-waiting-card" style="margin-top:0;">
+            <div class="compat-waiting-title">Answer locked in! 🔒</div>
+            <div class="compat-waiting-sub">Waiting for the other player & host…</div>
+          </div>`;
+      } else {
+        html += `
+          <input class="compat-answer-input" id="compat-input" type="text"
+            placeholder="Type your answer…" maxlength="80" autocomplete="off"
+            onkeyup="if(event.key==='Enter') submitCompatAnswer(${currentQ})"/>
+          <button class="compat-submit-btn" id="compat-submit-btn"
+            onclick="submitCompatAnswer(${currentQ})">
+            Lock in Answer 🔒
+          </button>`;
+      }
+
+      html += `</div>`;
+      body.innerHTML = html;
+
+      // Focus input if not answered
+      if (!alreadyAnswered) {
+        setTimeout(() => {
+          const inp = document.getElementById('compat-input');
+          if (inp) inp.focus();
+        }, 100);
+      }
+    }
+
+    async function submitCompatAnswer(qIndex) {
+      const inp = document.getElementById('compat-input');
+      if (!inp) return;
+      const answer = inp.value.trim();
+      if (!answer) {
+        inp.style.borderColor = 'var(--terracotta)';
+        inp.placeholder = 'Please type something first!';
+        return;
+      }
+
+      const btn = document.getElementById('compat-submit-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+      inp.disabled = true;
+
+      try {
+        const r = await fetch(`${API}/api/compat-answer`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, answer, qIndex })
+        });
+        const d = await r.json();
+        if (r.ok) {
+          compatAnswered[qIndex] = true;
+          // Re-render to show submitted state
+          const stateR = await fetch(`${API}/api/state`);
+          const stateD = await stateR.json();
+          if (stateD.state) renderCompatBody(
+            stateD.state.compatQuestions || [],
+            stateD.state.compatCurrentQ || 0,
+            stateD.state.compatAnswers || {},
+            stateD.state.compatPair || {}
+          );
+        } else {
+          if (btn) { btn.disabled = false; btn.textContent = 'Lock in Answer 🔒'; }
+          inp.disabled = false;
+        }
+      } catch (e) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Lock in Answer 🔒'; }
+        inp.disabled = false;
+      }
+    }
+
     // ─── HEART POP GAME ───────────────────────────────────────────────────────────
     let hpCurrentRound = 1;
     let hpTotalRounds = 2;
@@ -1652,11 +1900,11 @@ if (!r.ok) {
         // Heart stays for 1.8s then moves to another box
         hpHeartAnim = setTimeout(() => {
           if (!hpShowingCard) popNext();
-        }, 1600);
+        }, 1800);
       }
 
       // Small delay before first pop
-      hpHeartAnim = setTimeout(popNext, 350);
+      hpHeartAnim = setTimeout(popNext, 600);
     }
 
     async function onBoxTap(boxIndex) {

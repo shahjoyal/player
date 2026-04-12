@@ -32,6 +32,10 @@ const GameStateSchema = new mongoose.Schema({
   heartMessages: { type: mongoose.Schema.Types.Mixed, default: {} },
   heartPopRound: { type: Number, default: 0 },
   heartPopTotalRounds: { type: Number, default: 2 },
+  compatQuestions: { type: [String], default: [] },
+  compatPair: { type: mongoose.Schema.Types.Mixed, default: {} }, // { player1: name, player2: name }
+  compatCurrentQ: { type: Number, default: 0 },
+  compatAnswers: { type: mongoose.Schema.Types.Mixed, default: {} }, // { qIdx: { playerName: answer } }
   updatedAt: { type: Date, default: Date.now }
 });
 
@@ -243,7 +247,49 @@ app.post('/api/heart-pop-tap', async (req, res) => {
   }
 });
 
-// GET /api/player/:sessionId
+// POST /api/compat-answer — player submits their answer for current compat question
+app.post('/api/compat-answer', async (req, res) => {
+  try {
+    const { sessionId, answer, qIndex } = req.body;
+    const state = await getState();
+    if (state.phase !== 'compat') return res.status(400).json({ error: 'Not in compat phase' });
+
+    const player = await Player.findOne({ sessionId });
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+
+    // Only allow players in the pair
+    const pair = state.compatPair || {};
+    if (player.name !== pair.player1 && player.name !== pair.player2) {
+      return res.status(403).json({ error: 'You are not in this round' });
+    }
+
+    // Store answer: compatAnswers[qIndex][playerName] = answer
+    const answers = state.compatAnswers || {};
+    if (!answers[qIndex]) answers[qIndex] = {};
+    answers[qIndex][player.name] = answer.trim();
+
+    await GameState.updateOne({ key: 'main' }, { compatAnswers: answers, updatedAt: new Date() });
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// GET /api/compat-state — get compat game state for a player
+app.get('/api/compat-state', async (req, res) => {
+  try {
+    const state = await getState();
+    res.json({
+      phase: state.phase,
+      compatQuestions: state.compatQuestions || [],
+      compatPair: state.compatPair || {},
+      compatCurrentQ: state.compatCurrentQ || 0,
+      compatAnswers: state.compatAnswers || {}
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 app.get('/api/player/:sessionId', async (req, res) => {
   try {
     const player = await Player.findOne({ sessionId: req.params.sessionId });

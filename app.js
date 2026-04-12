@@ -35,7 +35,14 @@ const GameStateSchema = new mongoose.Schema({
   compatQuestions: { type: [String], default: [] },
   compatPair: { type: mongoose.Schema.Types.Mixed, default: {} }, // { player1: name, player2: name }
   compatCurrentQ: { type: Number, default: 0 },
-  compatAnswers: { type: mongoose.Schema.Types.Mixed, default: {} }, // { qIdx: { playerName: answer } }
+  compatAnswers: { type: mongoose.Schema.Types.Mixed, default: {} },
+  raceQuestions: { type: mongoose.Schema.Types.Mixed, default: [] },
+  racePair: { type: mongoose.Schema.Types.Mixed, default: {} },
+  raceCurrentQ: { type: Number, default: 0 },
+  raceStatus: { type: String, default: 'idle' },
+  raceAnswers: { type: mongoose.Schema.Types.Mixed, default: {} },
+  raceScores: { type: mongoose.Schema.Types.Mixed, default: {} },
+  updatedAt: { type: Date, default: Date.now }
   updatedAt: { type: Date, default: Date.now }
 });
 
@@ -298,6 +305,35 @@ app.get('/api/player/:sessionId', async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
+});
+
+    if (!player) return res.status(404).json({ error: 'Not found' });
+    res.json(player);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// POST /api/race-answer — player submits race answer
+app.post('/api/race-answer', async (req, res) => {
+  try {
+    const { sessionId, answer, qIndex } = req.body;
+    const state = await getState();
+    if (state.phase !== 'race') return res.status(400).json({ error: 'Not in race phase' });
+    if (state.raceStatus !== 'question') return res.status(400).json({ error: 'Not accepting answers' });
+    const player = await Player.findOne({ sessionId });
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+    const pair = state.racePair || {};
+    if (player.name !== pair.player1 && player.name !== pair.player2)
+      return res.status(403).json({ error: 'Not in this game' });
+    const answers = state.raceAnswers || {};
+    if (!answers[qIndex]) answers[qIndex] = {};
+    if (!answers[qIndex][player.name]) {
+      answers[qIndex][player.name] = { answer: (answer || '').trim(), time: new Date() };
+    }
+    await GameState.updateOne({ key: 'main' }, { raceAnswers: answers, updatedAt: new Date() });
+    res.json({ success: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 // Serve index.html

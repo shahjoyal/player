@@ -412,6 +412,99 @@
     .mt16 { margin-top: 16px; }
     .mt24 { margin-top: 24px; }
 
+    /* ── ANSWER RACE GAME ── */
+    .race-screen { background: linear-gradient(135deg, #FFF5F0 0%, #F5F0FF 100%); }
+    .race-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;overflow-y:auto; }
+    .race-header {
+      width:100%;padding:14px 20px 10px;
+      background:rgba(255,255,255,0.93);
+      border-bottom:1px solid var(--border);
+      text-align:center;flex-shrink:0;
+    }
+    .race-title { font-family:'Playfair Display',serif;font-size:19px;font-weight:900;color:var(--espresso); }
+    .race-sub { font-size:12px;color:var(--terracotta);font-weight:500;margin-top:2px; }
+    .race-body { flex:1;width:100%;max-width:420px;padding:18px 18px 32px;display:flex;flex-direction:column;gap:16px; }
+
+    /* scores strip */
+    .race-scores-row { display:flex;gap:10px; }
+    .race-score-card {
+      flex:1;background:#fff;border:1.5px solid var(--cream-deep);
+      border-radius:14px;padding:12px 14px;text-align:center;
+      box-shadow:0 2px 8px var(--shadow);
+    }
+    .race-score-card.me { border-color:var(--terracotta); }
+    .race-score-name { font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--espresso-lt);margin-bottom:3px; }
+    .race-score-num { font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--terracotta); }
+
+    /* question card */
+    .race-q-card {
+      background:#fff;border:1.5px solid var(--border);
+      border-left:4px solid var(--terracotta);
+      border-radius:16px;padding:18px 20px;
+      box-shadow:0 4px 16px var(--shadow);
+    }
+    .race-q-num { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--terracotta);margin-bottom:6px; }
+    .race-q-text { font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--espresso);line-height:1.4; }
+    .race-q-images { display:flex;gap:10px;margin-top:12px; }
+    .race-q-img { flex:1;border-radius:12px;object-fit:cover;max-height:160px;width:100%;box-shadow:0 4px 12px var(--shadow); }
+
+    /* options (multiple choice) */
+    .race-options { display:flex;flex-direction:column;gap:10px; }
+    .race-option-btn {
+      width:100%;background:#fff;border:1.5px solid var(--cream-deep);
+      border-radius:12px;padding:14px 18px;
+      font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;
+      color:var(--espresso);text-align:left;cursor:pointer;
+      transition:all 0.15s;box-shadow:0 1px 4px var(--shadow);
+    }
+    .race-option-btn:active { transform:scale(0.97); }
+    .race-option-btn.selected { background:var(--terracotta);color:#fff;border-color:var(--terracotta); }
+    .race-option-btn.disabled { opacity:0.5;cursor:not-allowed; }
+
+    /* text answer */
+    .race-text-input {
+      width:100%;background:var(--cream);border:1.5px solid var(--cream-deep);
+      border-radius:12px;padding:14px 16px;font-size:16px;
+      color:var(--espresso);font-family:'DM Sans',sans-serif;outline:none;
+      transition:border-color 0.2s,background 0.2s;
+    }
+    .race-text-input:focus { border-color:var(--terracotta);background:#fff; }
+    .race-text-input::placeholder { color:rgba(44,26,14,0.3); }
+    .race-text-input:disabled { opacity:0.5; }
+    .race-submit-btn {
+      width:100%;background:linear-gradient(135deg,var(--terracotta),var(--espresso-md));
+      color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:16px;
+      border:none;border-radius:12px;padding:15px 20px;cursor:pointer;
+      transition:transform 0.15s,opacity 0.2s;box-shadow:0 4px 16px rgba(196,98,45,0.35);
+    }
+    .race-submit-btn:disabled { opacity:0.45;cursor:not-allowed; }
+    .race-submit-btn:active:not(:disabled) { transform:scale(0.97); }
+
+    /* submitted / waiting state */
+    .race-submitted-badge {
+      display:flex;align-items:center;gap:8px;
+      background:rgba(107,124,92,0.1);border:1px solid rgba(107,124,92,0.3);
+      border-radius:10px;padding:12px 16px;font-size:14px;color:var(--sage);font-weight:500;
+    }
+    .race-waiting-msg { text-align:center;font-size:14px;color:rgba(44,26,14,0.45);margin-top:4px; }
+
+    /* reveal / result */
+    .race-reveal-card {
+      background:linear-gradient(135deg,#FFF8EC,#FFF1D4);
+      border:1.5px solid rgba(184,134,11,0.3);
+      border-radius:16px;padding:20px 22px;
+      box-shadow:0 4px 20px rgba(184,134,11,0.12);
+    }
+    .race-reveal-label { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px; }
+    .race-reveal-answer { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--espresso); }
+
+    /* done state */
+    .race-done-card {
+      background:#fff;border:1px solid var(--border);border-radius:20px;
+      padding:32px 24px;text-align:center;box-shadow:0 4px 20px var(--shadow);
+    }
+    .race-spectator { text-align:center;padding:24px 0; }
+
     /* ── COMPATIBILITY GAME ── */
     .compat-screen { background: linear-gradient(135deg, #F0F4FF 0%, #FFF8F0 100%); }
     .compat-wrap {
@@ -766,7 +859,7 @@
       <div class="ornament">Game Night</div>
       <div class="welcome-card">
         <span class="welcome-emoji">🎉</span>
-        <h1 class="welcome-title">Only 23 days to go for the special day!</h1>
+        <h1 class="welcome-title">Only 25 days to go for the special day!</h1>
         <p class="welcome-sub">Enter your name to join the fun</p>
 
         <div class="input-wrap">
@@ -940,11 +1033,22 @@
     </div>
   </div>
 
+  <!-- ═══ SCREEN: ANSWER RACE ═══ -->
+  <div class="screen race-screen" id="screen-race">
+    <div class="race-wrap">
+      <div class="race-header">
+        <div class="race-title">⚡ Answer Race</div>
+        <div class="race-sub" id="race-pair-label">Loading…</div>
+      </div>
+      <div class="race-body" id="race-body"></div>
+    </div>
+  </div>
+
   <!-- ═══ SCREEN: COMPATIBILITY GAME ═══ -->
   <div class="screen compat-screen" id="screen-compat">
     <div class="compat-wrap">
       <div class="compat-header">
-        <div class="compat-title">❤️ Compatibility Game</div>
+        <div class="compat-title">💑 Compatibility Game</div>
         <div class="compat-pair-label" id="compat-pair-label">Loading…</div>
       </div>
       <div class="compat-body" id="compat-body">
@@ -1128,6 +1232,12 @@ case 'buzzer':
           }
           lastPhase = 'letter_fall';
           showScreen('screen-letterfall');
+          break;
+
+        case 'race':
+          initRaceGame(state);
+          lastPhase = 'race';
+          showScreen('screen-race');
           break;
 
         case 'compat':
@@ -1690,6 +1800,172 @@ if (!r.ok) {
       } catch (e) { /* ignore */ }
     }
 
+    // ─── ANSWER RACE GAME ─────────────────────────────────────────────────────────
+    let raceLastSnapshot = '';
+    let raceSubmitted = {};   // { qIndex: true }
+    let raceInPair = false;
+
+    function initRaceGame(state) {
+      const pair  = state.racePair      || {};
+      const qIdx  = state.raceCurrentQ  || 0;
+      const qs    = state.raceQuestions || [];
+      const ans   = state.raceAnswers   || {};
+      const scores= state.raceScores    || {};
+      const status= state.raceStatus    || 'question';
+
+      raceInPair = (myName === pair.player1 || myName === pair.player2);
+
+      // Update header
+      if (pair.player1 && pair.player2)
+        document.getElementById('race-pair-label').textContent =
+          pair.player1 + ' ⚡ ' + pair.player2;
+
+      // Snapshot — skip re-render if nothing changed and user is typing
+      const myAns = (ans[qIdx] || {})[myName];
+      const snap  = qIdx + '|' + status + '|' + (myAns ? myAns.answer : '') ;
+      const inputEl = document.getElementById('race-text-input');
+      const typing  = inputEl && document.activeElement === inputEl;
+      if (snap === raceLastSnapshot && typing) return;
+      raceLastSnapshot = snap;
+
+      renderRaceBody(qs, qIdx, ans, scores, pair, status);
+    }
+
+    function renderRaceBody(qs, qIdx, ans, scores, pair, status) {
+      const body = document.getElementById('race-body');
+
+      // Scores strip — always shown
+      const p1 = pair.player1 || '—';
+      const p2 = pair.player2 || '—';
+      const s1 = (scores[p1] || 0);
+      const s2 = (scores[p2] || 0);
+      let scoresHtml = '<div class="race-scores-row">'
+        + makeScoreCard(p1, s1, myName === p1)
+        + makeScoreCard(p2, s2, myName === p2)
+        + '</div>';
+
+      if (!raceInPair) {
+        body.innerHTML = scoresHtml + '<div class="race-spectator">'
+          + '<div style="font-size:48px;margin-bottom:12px;">👀</div>'
+          + '<div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;">Watching!</div>'
+          + '<div style="font-size:13px;color:rgba(44,26,14,0.5);margin-top:6px;">'
+          + p1 + ' & ' + p2 + ' are racing</div></div>';
+        return;
+      }
+
+      if (status === 'done' || qIdx >= qs.length) {
+        const winner = s1 > s2 ? p1 : s2 > s1 ? p2 : null;
+        body.innerHTML = scoresHtml + '<div class="race-done-card">'
+          + '<div style="font-size:52px;margin-bottom:12px;">' + (winner ? '🏆' : '🤝') + '</div>'
+          + '<div style="font-family:\'Playfair Display\',serif;font-size:22px;font-weight:900;margin-bottom:8px;">'
+          + (winner ? esc(winner) + ' wins!' : 'It\'s a tie!') + '</div>'
+          + '<div style="font-size:14px;color:rgba(44,26,14,0.5);">Final: '
+          + esc(p1) + ' ' + s1 + ' — ' + s2 + ' ' + esc(p2) + '</div>'
+          + '</div>';
+        return;
+      }
+
+      const q      = qs[qIdx] || {};
+      const myAns  = (ans[qIdx] || {})[myName];
+      const submitted = myAns != null || !!raceSubmitted[qIdx];
+
+      // Question card
+      let qHtml = '<div class="race-q-card">'
+        + '<div class="race-q-num">Question ' + (qIdx + 1) + ' of ' + qs.length + '</div>'
+        + '<div class="race-q-text">' + esc(q.text || '') + '</div>';
+
+      // Images
+      if (q.imageUrl || q.imageUrl2) {
+        qHtml += '<div class="race-q-images">';
+        if (q.imageUrl)  qHtml += '<img class="race-q-img" src="' + q.imageUrl  + '" alt=""/>';
+        if (q.imageUrl2) qHtml += '<img class="race-q-img" src="' + q.imageUrl2 + '" alt=""/>';
+        qHtml += '</div>';
+      }
+      qHtml += '</div>';
+
+      // Answer area
+      let ansHtml = '';
+      if (status === 'reveal') {
+        // Show the correct answer
+        ansHtml = '<div class="race-reveal-card">'
+          + '<div class="race-reveal-label">✅ Correct Answer</div>'
+          + '<div class="race-reveal-answer">' + esc(q.answer || '—') + '</div>'
+          + '</div>';
+        if (submitted) {
+          ansHtml += '<div class="race-submitted-badge">Your answer: <strong>'
+            + esc(myAns ? myAns.answer : '—') + '</strong></div>';
+        }
+      } else if (submitted) {
+        ansHtml = '<div class="race-submitted-badge">✅ Submitted: <strong>'
+          + esc(myAns ? myAns.answer : '—') + '</strong></div>'
+          + '<div class="race-waiting-msg">Waiting for host to reveal…</div>';
+      } else if (q.type === 'choice' && q.options && q.options.length) {
+        // Multiple choice
+        ansHtml = '<div class="race-options">'
+          + q.options.map((opt, i) =>
+              '<button class="race-option-btn" onclick="submitRaceOption(' + qIdx + ',\'' + esc(opt) + '\')">'
+              + esc(opt) + '</button>'
+            ).join('')
+          + '</div>';
+      } else {
+        // Free text
+        ansHtml = '<input class="race-text-input" id="race-text-input" type="text"'
+          + ' placeholder="Type your answer fast…" maxlength="100"'
+          + ' autocomplete="off" autocorrect="off" spellcheck="false"'
+          + ' onkeyup="if(event.key===\'Enter\') submitRaceText(' + qIdx + ')"/>'
+          + '<button class="race-submit-btn" onclick="submitRaceText(' + qIdx + ')">Submit Answer ⚡</button>';
+      }
+
+      body.innerHTML = scoresHtml + qHtml + ansHtml;
+
+      // Focus text input if free-text and not submitted
+      if (!submitted && q.type !== 'choice') {
+        setTimeout(() => {
+          const inp = document.getElementById('race-text-input');
+          if (inp && document.activeElement === document.body) inp.focus();
+        }, 80);
+      }
+    }
+
+    function makeScoreCard(name, score, isMe) {
+      return '<div class="race-score-card' + (isMe ? ' me' : '') + '">'
+        + '<div class="race-score-name">' + esc(name) + (isMe ? ' (you)' : '') + '</div>'
+        + '<div class="race-score-num">' + score + '</div>'
+        + '</div>';
+    }
+
+    async function submitRaceOption(qIdx, option) {
+      if (raceSubmitted[qIdx]) return;
+      // Visually select
+      document.querySelectorAll('.race-option-btn').forEach(b => b.classList.add('disabled'));
+      const clicked = [...document.querySelectorAll('.race-option-btn')]
+        .find(b => b.textContent.trim() === option);
+      if (clicked) clicked.classList.add('selected');
+      await doRaceSubmit(qIdx, option);
+    }
+
+    async function submitRaceText(qIdx) {
+      const inp = document.getElementById('race-text-input');
+      if (!inp) return;
+      const val = inp.value.trim();
+      if (!val) { inp.style.borderColor = 'var(--terracotta)'; inp.focus(); return; }
+      inp.disabled = true;
+      const btn = inp.nextElementSibling;
+      if (btn) btn.disabled = true;
+      await doRaceSubmit(qIdx, val);
+    }
+
+    async function doRaceSubmit(qIdx, answer) {
+      raceSubmitted[qIdx] = true;
+      raceLastSnapshot = '';  // force re-render on next poll
+      try {
+        await fetch(API + '/api/race-answer', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, answer, qIndex: qIdx })
+        });
+      } catch (e) { raceSubmitted[qIdx] = false; }
+    }
+
     // ─── COMPATIBILITY GAME ───────────────────────────────────────────────────────
     let compatLastQ = -1;
     let compatAnswered = {};   // { qIndex: true } — questions this player answered
@@ -1707,7 +1983,7 @@ if (!r.ok) {
       // Update pair label (safe — not inside the input area)
       if (pair.player1 && pair.player2) {
         document.getElementById('compat-pair-label').textContent =
-          `❤️ ${pair.player1} & ${pair.player2}`;
+          `💑 ${pair.player1} & ${pair.player2}`;
       }
 
       // Work out whether THIS player has already answered this question

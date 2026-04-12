@@ -43,7 +43,6 @@ const GameStateSchema = new mongoose.Schema({
   raceAnswers: { type: mongoose.Schema.Types.Mixed, default: {} },
   raceScores: { type: mongoose.Schema.Types.Mixed, default: {} },
   updatedAt: { type: Date, default: Date.now }
-  updatedAt: { type: Date, default: Date.now }
 });
 
 const PlayerSchema = new mongoose.Schema({
@@ -300,13 +299,6 @@ app.get('/api/compat-state', async (req, res) => {
 app.get('/api/player/:sessionId', async (req, res) => {
   try {
     const player = await Player.findOne({ sessionId: req.params.sessionId });
-    if (!player) return res.status(404).json({ error: 'Not found' });
-    res.json(player);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
     if (!player) return res.status(404).json({ error: 'Not found' });
     res.json(player);
   } catch (e) {

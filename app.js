@@ -49,13 +49,15 @@ const GameStateSchema = new mongoose.Schema({
   glassHiddenIn: { type: Number, default: null },
   glassGuess: { type: Number, default: null },
   glassScores: { type: mongoose.Schema.Types.Mixed, default: {} },
-  wordPair: { type: mongoose.Schema.Types.Mixed, default: {} },
-  wordStartLetter: { type: String, default: '' },
-  wordEndLetter: { type: String, default: '' },
-  wordStatus: { type: String, default: 'idle' },
-  wordSubmissions: { type: mongoose.Schema.Types.Mixed, default: {} },
+  hintQuestions: { type: mongoose.Schema.Types.Mixed, default: [] },
+  hintPair: { type: mongoose.Schema.Types.Mixed, default: {} },
+  hintCurrentQ: { type: Number, default: 0 },
+  hintStatus: { type: String, default: 'idle' },
+  hintAnswer: { type: String, default: '' },
+  hintGuess: { type: String, default: '' },
+  hintRevealed: { type: Number, default: 0 },
+  hintScores: { type: mongoose.Schema.Types.Mixed, default: {} },
   updatedAt: { type: Date, default: Date.now }
-  
 });
 
 const PlayerSchema = new mongoose.Schema({
@@ -204,186 +206,28 @@ app.post('/api/buzzer', async (req, res) => {
   }
 });
 
-// POST /api/scratch — player scratched their card
-app.post('/api/scratch', async (req, res) => {
+// POST /api/hint-answer
+app.post('/api/hint-answer', async (req, res) => {
   try {
-    const { sessionId } = req.body;
+    const { sessionId, answer } = req.body;
     const state = await getState();
-    if (state.phase !== 'scratch') return res.status(400).json({ error: 'Not scratch phase' });
-
-    const now = new Date();
-    const player = await Player.findOneAndUpdate(
-      { sessionId },
-      { hasScratched: true, scratchedAt: now },
-      { new: true }
-    );
-    if (!player) return res.status(404).json({ error: 'Player not found' });
-
-    // Check if all players scratched
-    const total = await Player.countDocuments();
-    const scratched = await Player.countDocuments({ hasScratched: true });
-
-    res.json({ success: true, allScratched: scratched >= total, scratched, total });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// POST /api/letter-fall-done — player completed letter fall game
-app.post('/api/letter-fall-done', async (req, res) => {
-  try {
-    const { sessionId } = req.body;
-    const player = await Player.findOneAndUpdate(
-      { sessionId },
-      { letterFallDone: true, letterFallTime: new Date() },
-      { new: true }
-    );
-    if (!player) return res.status(404).json({ error: 'Player not found' });
-    res.json({ success: true });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// POST /api/heart-pop-tap — player tapped a heart box
-app.post('/api/heart-pop-tap', async (req, res) => {
-  try {
-    const { sessionId, boxIndex, round } = req.body;
-    const state = await getState();
-    if (state.phase !== 'heart_pop') return res.status(400).json({ error: 'Not in heart pop phase' });
-
+    if (state.phase !== 'hint' || state.hintStatus !== 'answering') return res.status(400).json({ error: 'Not answering phase' });
     const player = await Player.findOne({ sessionId });
-    if (!player) return res.status(404).json({ error: 'Player not found' });
-
-    // Get the message for this box/round from state
-    const heartMessages = state.heartMessages || [];
-    const roundMessages = heartMessages[round] || {};
-    const message = roundMessages[boxIndex] || '';
-
-    res.json({ success: true, message, playerName: player.name });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// POST /api/compat-answer — player submits their answer for current compat question
-app.post('/api/compat-answer', async (req, res) => {
-  try {
-    const { sessionId, answer, qIndex } = req.body;
-    const state = await getState();
-    if (state.phase !== 'compat') return res.status(400).json({ error: 'Not in compat phase' });
-
-    const player = await Player.findOne({ sessionId });
-    if (!player) return res.status(404).json({ error: 'Player not found' });
-
-    // Only allow players in the pair
-    const pair = state.compatPair || {};
-    if (player.name !== pair.player1 && player.name !== pair.player2) {
-      return res.status(403).json({ error: 'You are not in this round' });
-    }
-
-    // Store answer: compatAnswers[qIndex][playerName] = answer
-    const answers = state.compatAnswers || {};
-    if (!answers[qIndex]) answers[qIndex] = {};
-    answers[qIndex][player.name] = answer.trim();
-
-    await GameState.updateOne({ key: 'main' }, { compatAnswers: answers, updatedAt: new Date() });
-    res.json({ success: true });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// GET /api/compat-state — get compat game state for a player
-app.get('/api/compat-state', async (req, res) => {
-  try {
-    const state = await getState();
-    res.json({
-      phase: state.phase,
-      compatQuestions: state.compatQuestions || [],
-      compatPair: state.compatPair || {},
-      compatCurrentQ: state.compatCurrentQ || 0,
-      compatAnswers: state.compatAnswers || {}
-    });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-app.get('/api/player/:sessionId', async (req, res) => {
-  try {
-    const player = await Player.findOne({ sessionId: req.params.sessionId });
-    if (!player) return res.status(404).json({ error: 'Not found' });
-    res.json(player);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// POST /api/race-answer — player submits race answer
-app.post('/api/race-answer', async (req, res) => {
-  try {
-    const { sessionId, answer, qIndex } = req.body;
-    const state = await getState();
-    if (state.phase !== 'race') return res.status(400).json({ error: 'Not in race phase' });
-    if (state.raceStatus !== 'question') return res.status(400).json({ error: 'Not accepting answers' });
-    const player = await Player.findOne({ sessionId });
-    if (!player) return res.status(404).json({ error: 'Player not found' });
-    const pair = state.racePair || {};
-    if (player.name !== pair.player1 && player.name !== pair.player2)
-      return res.status(403).json({ error: 'Not in this game' });
-    const answers = state.raceAnswers || {};
-    if (!answers[qIndex]) answers[qIndex] = {};
-    if (!answers[qIndex][player.name]) {
-      answers[qIndex][player.name] = { answer: (answer || '').trim(), time: new Date() };
-    }
-    await GameState.updateOne({ key: 'main' }, { raceAnswers: answers, updatedAt: new Date() });
+    if (!player || player.name !== state.hintPair.player1) return res.status(403).json({ error: 'Not the answerer' });
+    await GameState.updateOne({ key: 'main' }, { hintAnswer: (answer || '').trim(), updatedAt: new Date() });
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-
-// POST /api/glass-hide
-app.post('/api/glass-hide', async (req, res) => {
+// POST /api/hint-guess
+app.post('/api/hint-guess', async (req, res) => {
   try {
-    const { sessionId, glassIndex } = req.body;
+    const { sessionId, guess } = req.body;
     const state = await getState();
-    if (state.phase !== 'glass' || state.glassStatus !== 'hiding') return res.status(400).json({ error: 'Not hiding phase' });
+    if (state.phase !== 'hint' || state.hintStatus !== 'guessing') return res.status(400).json({ error: 'Not guessing phase' });
     const player = await Player.findOne({ sessionId });
-    if (!player || player.name !== state.glassPair.player1) return res.status(403).json({ error: 'Not the hider' });
-    await GameState.updateOne({ key: 'main' }, { glassHiddenIn: glassIndex, glassStatus: 'guessing', updatedAt: new Date() });
-    res.json({ success: true });
-  } catch (e) { res.status(500).json({ error: e.message }); }
-});
-
-// POST /api/glass-guess
-app.post('/api/glass-guess', async (req, res) => {
-  try {
-    const { sessionId, glassIndex } = req.body;
-    const state = await getState();
-    if (state.phase !== 'glass' || state.glassStatus !== 'guessing') return res.status(400).json({ error: 'Not guessing phase' });
-    const player = await Player.findOne({ sessionId });
-    if (!player || player.name !== state.glassPair.player2) return res.status(403).json({ error: 'Not the guesser' });
-    const correct = (glassIndex === state.glassHiddenIn);
-    const scores = state.glassScores || {};
-    if (correct) scores[player.name] = (scores[player.name] || 0) + 1;
-    await GameState.updateOne({ key: 'main' }, { glassGuess: glassIndex, glassStatus: 'result', glassScores: scores, updatedAt: new Date() });
-    res.json({ success: true, correct });
-  } catch (e) { res.status(500).json({ error: e.message }); }
-});
-
-// POST /api/word-submit
-app.post('/api/word-submit', async (req, res) => {
-  try {
-    const { sessionId, word } = req.body;
-    const state = await getState();
-    if (state.phase !== 'word' || state.wordStatus !== 'playing') return res.status(400).json({ error: 'Not playing' });
-    const player = await Player.findOne({ sessionId });
-    if (!player) return res.status(404).json({ error: 'Player not found' });
-    const pair = state.wordPair || {};
-    if (player.name !== pair.player1 && player.name !== pair.player2) return res.status(403).json({ error: 'Not in game' });
-    const subs = state.wordSubmissions || {};
-    subs[player.name] = (word || '').trim().toUpperCase();
-    await GameState.updateOne({ key: 'main' }, { wordSubmissions: subs, updatedAt: new Date() });
+    if (!player || player.name !== state.hintPair.player2) return res.status(403).json({ error: 'Not the guesser' });
+    await GameState.updateOne({ key: 'main' }, { hintGuess: (guess || '').trim(), updatedAt: new Date() });
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

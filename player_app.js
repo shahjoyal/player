@@ -42,7 +42,20 @@ const GameStateSchema = new mongoose.Schema({
   raceStatus: { type: String, default: 'idle' },
   raceAnswers: { type: mongoose.Schema.Types.Mixed, default: {} },
   raceScores: { type: mongoose.Schema.Types.Mixed, default: {} },
+  glassPair: { type: mongoose.Schema.Types.Mixed, default: {} },
+  glassRound: { type: Number, default: 1 },
+  glassTotalRounds: { type: Number, default: 2 },
+  glassStatus: { type: String, default: 'idle' },
+  glassHiddenIn: { type: Number, default: null },
+  glassGuess: { type: Number, default: null },
+  glassScores: { type: mongoose.Schema.Types.Mixed, default: {} },
+  wordPair: { type: mongoose.Schema.Types.Mixed, default: {} },
+  wordStartLetter: { type: String, default: '' },
+  wordEndLetter: { type: String, default: '' },
+  wordStatus: { type: String, default: 'idle' },
+  wordSubmissions: { type: mongoose.Schema.Types.Mixed, default: {} },
   updatedAt: { type: Date, default: Date.now }
+  
 });
 
 const PlayerSchema = new mongoose.Schema({
@@ -324,6 +337,53 @@ app.post('/api/race-answer', async (req, res) => {
       answers[qIndex][player.name] = { answer: (answer || '').trim(), time: new Date() };
     }
     await GameState.updateOne({ key: 'main' }, { raceAnswers: answers, updatedAt: new Date() });
+    res.json({ success: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+
+// POST /api/glass-hide
+app.post('/api/glass-hide', async (req, res) => {
+  try {
+    const { sessionId, glassIndex } = req.body;
+    const state = await getState();
+    if (state.phase !== 'glass' || state.glassStatus !== 'hiding') return res.status(400).json({ error: 'Not hiding phase' });
+    const player = await Player.findOne({ sessionId });
+    if (!player || player.name !== state.glassPair.player1) return res.status(403).json({ error: 'Not the hider' });
+    await GameState.updateOne({ key: 'main' }, { glassHiddenIn: glassIndex, glassStatus: 'guessing', updatedAt: new Date() });
+    res.json({ success: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// POST /api/glass-guess
+app.post('/api/glass-guess', async (req, res) => {
+  try {
+    const { sessionId, glassIndex } = req.body;
+    const state = await getState();
+    if (state.phase !== 'glass' || state.glassStatus !== 'guessing') return res.status(400).json({ error: 'Not guessing phase' });
+    const player = await Player.findOne({ sessionId });
+    if (!player || player.name !== state.glassPair.player2) return res.status(403).json({ error: 'Not the guesser' });
+    const correct = (glassIndex === state.glassHiddenIn);
+    const scores = state.glassScores || {};
+    if (correct) scores[player.name] = (scores[player.name] || 0) + 1;
+    await GameState.updateOne({ key: 'main' }, { glassGuess: glassIndex, glassStatus: 'result', glassScores: scores, updatedAt: new Date() });
+    res.json({ success: true, correct });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// POST /api/word-submit
+app.post('/api/word-submit', async (req, res) => {
+  try {
+    const { sessionId, word } = req.body;
+    const state = await getState();
+    if (state.phase !== 'word' || state.wordStatus !== 'playing') return res.status(400).json({ error: 'Not playing' });
+    const player = await Player.findOne({ sessionId });
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+    const pair = state.wordPair || {};
+    if (player.name !== pair.player1 && player.name !== pair.player2) return res.status(403).json({ error: 'Not in game' });
+    const subs = state.wordSubmissions || {};
+    subs[player.name] = (word || '').trim().toUpperCase();
+    await GameState.updateOne({ key: 'main' }, { wordSubmissions: subs, updatedAt: new Date() });
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

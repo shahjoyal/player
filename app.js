@@ -29,9 +29,6 @@ const GameStateSchema = new mongoose.Schema({
   buzzerLockedAt: { type: Date, default: null },
   scratchRevealedAt: { type: Date, default: null },
   giftImageUrl: { type: String, default: null },
-  heartMessages: { type: mongoose.Schema.Types.Mixed, default: {} },
-  heartPopRound: { type: Number, default: 0 },
-  heartPopTotalRounds: { type: Number, default: 2 },
   compatQuestions: { type: [String], default: [] },
   compatPair: { type: mongoose.Schema.Types.Mixed, default: {} }, // { player1: name, player2: name }
   compatCurrentQ: { type: Number, default: 0 },
@@ -57,6 +54,9 @@ const GameStateSchema = new mongoose.Schema({
   hintGuess: { type: String, default: '' },
   hintRevealed: { type: Number, default: 0 },
   hintScores: { type: mongoose.Schema.Types.Mixed, default: {} },
+  wsFoundWords: { type: mongoose.Schema.Types.Mixed, default: {} },
+  wsStatus: { type: String, default: 'idle' },
+  wsScores: { type: mongoose.Schema.Types.Mixed, default: {} },
   updatedAt: { type: Date, default: Date.now }
 });
 
@@ -229,6 +229,33 @@ app.post('/api/hint-guess', async (req, res) => {
     if (!player || player.name !== state.hintPair.player2) return res.status(403).json({ error: 'Not the guesser' });
     await GameState.updateOne({ key: 'main' }, { hintGuess: (guess || '').trim(), updatedAt: new Date() });
     res.json({ success: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+
+// POST /api/ws-found — player submits a found word
+app.post('/api/ws-found', async (req, res) => {
+  try {
+    const { sessionId, word, cells } = req.body;
+    const state = await getState();
+    if (state.phase !== 'wordsearch' || state.wsStatus !== 'playing')
+      return res.status(400).json({ error: 'Game not active' });
+    const player = await Player.findOne({ sessionId });
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+    const TARGET_WORDS = ['JOYAL','NISARG','NEELAM','CHIRAG','PRAFUL','PREMILA','CNJN'];
+    const w = (word || '').toUpperCase().trim();
+    if (!TARGET_WORDS.includes(w)) return res.json({ correct: false, message: 'Not a target word' });
+    const found = state.wsFoundWords || {};
+    if (found[w]) return res.json({ correct: false, alreadyFound: true, message: 'Already found!' });
+    const GRID = [["Z","D","O","C","E","Y","H","V","X","V","M","Z","R"],["N","J","N","C","L","C","Z","M","A","I","R","D","O"],["L","V","X","V","I","S","N","E","E","L","A","M","M"],["U","P","A","L","I","M","E","R","P","L","J","D","V"],["H","R","P","A","T","R","K","T","H","O","U","C","U"],["O","A","W","J","U","N","D","E","Y","B","B","C","J"],["P","F","D","D","H","R","E","A","M","G","O","H","L"],["V","U","X","W","R","N","L","S","X","R","X","I","E"],["N","L","U","D","P","T","N","I","B","A","W","R","L"],["G","O","O","H","L","D","V","L","R","S","U","A","L"],["B","M","I","G","D","O","C","V","G","I","U","G","U"],["T","A","B","Z","K","H","E","Z","S","N","G","C","Y"],["R","G","S","G","H","K","Y","E","Z","T","A","I","E"]];
+    const spelled = (cells || []).map(([r,c]) => GRID[r] && GRID[r][c] ? GRID[r][c] : '').join('');
+    if (spelled !== w && spelled !== w.split('').reverse().join(''))
+      return res.json({ correct: false, message: 'Incorrect selection' });
+    found[w] = { playerName: player.name, cells };
+    const scores = state.wsScores || {};
+    scores[player.name] = (scores[player.name] || 0) + 1;
+    await GameState.updateOne({ key: 'main' }, { wsFoundWords: found, wsScores: scores, updatedAt: new Date() });
+    res.json({ correct: true, playerName: player.name, word: w });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 

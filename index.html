@@ -400,42 +400,6 @@
     }
     .race-spectator { text-align:center;padding:24px 0; }
 
-    /* ── GLASS & HEART GAME ── */
-    .glass-screen { background: linear-gradient(135deg, #F0F8FF 0%, #FFF0F8 100%); }
-    .glass-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;overflow-y:auto; }
-    .glass-header { width:100%;padding:16px 20px 12px;background:rgba(255,255,255,0.92);border-bottom:1px solid var(--border);text-align:center;flex-shrink:0; }
-    .glass-title { font-family:'Playfair Display',serif;font-size:19px;font-weight:900;color:var(--espresso); }
-    .glass-sub { font-size:12px;color:var(--terracotta);font-weight:500;margin-top:2px; }
-    .glass-body { flex:1;width:100%;max-width:420px;padding:20px 18px 32px;display:flex;flex-direction:column;gap:18px;align-items:center; }
-    .glass-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%; }
-    .glass-item {
-      aspect-ratio:1;border-radius:20px;background:#fff;
-      border:2px solid var(--cream-deep);
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      font-size:52px;cursor:pointer;
-      box-shadow:0 4px 16px var(--shadow);
-      transition:transform 0.15s,border-color 0.2s,box-shadow 0.2s;
-      position:relative;
-    }
-    .glass-item:active { transform:scale(0.94); }
-    .glass-item.selected { border-color:var(--terracotta);box-shadow:0 0 0 3px rgba(196,98,45,0.2),0 4px 20px rgba(196,98,45,0.25); }
-    .glass-item.correct { border-color:#2E7D32;background:rgba(46,125,50,0.08);box-shadow:0 0 0 3px rgba(46,125,50,0.25); }
-    .glass-item.wrong { border-color:#D64040;background:rgba(214,64,64,0.06);opacity:0.7; }
-    .glass-item.has-heart::after { content:'❤️';position:absolute;top:6px;right:8px;font-size:18px; }
-    .glass-item.disabled { cursor:not-allowed;opacity:0.6; }
-    .glass-role-badge {
-      background:var(--cream-dark);border:1px solid var(--cream-deep);border-radius:12px;
-      padding:12px 20px;text-align:center;width:100%;
-    }
-    .glass-role-label { font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--sage);margin-bottom:4px; }
-    .glass-role-text { font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--espresso); }
-    .glass-scores-row { display:flex;gap:10px;width:100%; }
-    .glass-score-card { flex:1;background:#fff;border:1.5px solid var(--cream-deep);border-radius:12px;padding:10px 14px;text-align:center; }
-    .glass-score-card.me { border-color:var(--terracotta); }
-    .glass-score-name { font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--espresso-lt); }
-    .glass-score-num { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--terracotta); }
-    .glass-result-card { background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:20px;text-align:center;width:100%;box-shadow:0 4px 16px var(--shadow); }
-
     /* ── HINT GAME ── */
     .hint-screen { background: linear-gradient(135deg, #FFF8F0 0%, #F8F0FF 100%); }
     .hint-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;overflow-y:auto; }
@@ -480,6 +444,39 @@
     .hint-guess-btn:disabled { opacity:0.45;cursor:not-allowed; }
     .hint-result-card { background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:20px;text-align:center;box-shadow:0 4px 16px var(--shadow); }
     .hint-spectator { text-align:center;padding:20px 0; }
+
+    /* ── WORD SEARCH GAME ── */
+    .ws-screen { background: #1a1a2e; padding:0 !important; }
+    .ws-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;background:#1a1a2e; }
+    .ws-header { width:100%;padding:12px 16px 10px;background:rgba(0,0,0,0.4);border-bottom:1px solid rgba(255,255,255,0.1);flex-shrink:0; }
+    .ws-header-top { display:flex;align-items:center;justify-content:space-between;margin-bottom:8px; }
+    .ws-title { font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:#fff; }
+    .ws-score-badge { background:rgba(196,98,45,0.8);color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;padding:4px 12px;border-radius:100px; }
+    .ws-words-row { display:flex;gap:6px;flex-wrap:wrap; }
+    .ws-word-chip { font-size:11px;font-weight:700;letter-spacing:0.05em;padding:3px 10px;border-radius:100px;border:1.5px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.7); }
+    .ws-word-chip.found { background:rgba(46,125,50,0.6);border-color:#4CAF50;color:#A5D6A7;text-decoration:line-through; }
+    .ws-game-area { flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;overflow:hidden; }
+    .ws-grid-container { position:relative;touch-action:none;user-select:none; }
+    .ws-grid { display:grid;gap:2px; }
+    .ws-cell {
+      width:100%;aspect-ratio:1;border-radius:6px;background:rgba(255,255,255,0.08);
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);
+      cursor:pointer;transition:background 0.1s,color 0.1s;position:relative;
+      border:1.5px solid transparent;
+    }
+    .ws-cell.selected { background:rgba(196,98,45,0.7);color:#fff;border-color:rgba(196,98,45,0.9); }
+    .ws-cell.found-highlight { background:rgba(46,125,50,0.5);color:#A5D6A7;border-color:#4CAF50; }
+    .ws-cell.found-mine { background:rgba(184,134,11,0.6);color:#FFD54F;border-color:#FFD54F; }
+    .ws-submit-bar { width:100%;padding:10px 16px;background:rgba(0,0,0,0.4);border-top:1px solid rgba(255,255,255,0.1);display:flex;gap:10px;align-items:center;flex-shrink:0; }
+    .ws-selection-text { flex:1;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.1em; }
+    .ws-selection-text.has-sel { color:#fff; }
+    .ws-submit-btn { background:var(--terracotta);color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:15px;border:none;border-radius:10px;padding:10px 20px;cursor:pointer;transition:opacity 0.2s; }
+    .ws-submit-btn:disabled { opacity:0.4;cursor:not-allowed; }
+    .ws-clear-btn { background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);font-size:13px;border:none;border-radius:8px;padding:8px 14px;cursor:pointer; }
+    .ws-toast { position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(46,125,50,0.95);color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:15px;padding:10px 22px;border-radius:100px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap; }
+    .ws-toast.error { background:rgba(214,64,64,0.95); }
+    .ws-toast.show { opacity:1; }
 
     /* ── COMPATIBILITY GAME ── */
     .compat-screen { background: linear-gradient(135deg, #F0F4FF 0%, #FFF8F0 100%); }
@@ -559,146 +556,7 @@
       background: rgba(255,255,255,0.8); border: 1px solid var(--border);
       border-radius: 16px; padding: 24px 20px; text-align: center;
     }
-    /* ── HEART POP GAME ── */
-    .hp-screen {
-      padding: 0 !important;
-      background: linear-gradient(135deg, #FFF0F5 0%, #FFF8F0 100%);
-    }
-    .hp-wrap {
-      position: relative; z-index: 2;
-      width: 100%; height: 100%;
-      display: flex; flex-direction: column;
-      align-items: center;
-    }
-    .hp-header {
-      width: 100%; padding: 18px 20px 14px;
-      background: rgba(255,255,255,0.9);
-      border-bottom: 1px solid var(--border);
-      text-align: center; flex-shrink: 0;
-    }
-    .hp-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px; font-weight: 900; color: var(--espresso);
-      margin-bottom: 4px;
-    }
-    .hp-round-label {
-      font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--terracotta);
-    }
-    .hp-sub {
-      font-size: 13px; color: rgba(44,26,14,0.5); margin-top: 6px;
-    }
-    .hp-game-area {
-      flex: 1; width: 100%; max-width: 420px;
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-    }
-    .hp-boxes {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      width: 100%;
-    }
-    .hp-box {
-      aspect-ratio: 1;
-      border-radius: 24px;
-      background: #fff;
-      border: 2px solid var(--cream-deep);
-      box-shadow: 0 4px 16px var(--shadow);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s;
-      position: relative; overflow: hidden;
-    }
-    .hp-box:active { transform: scale(0.93); }
-    .hp-box.hp-active {
-      border-color: #E84393;
-      box-shadow: 0 0 0 4px rgba(232,67,147,0.2), 0 8px 32px rgba(232,67,147,0.3);
-      animation: hp-box-pulse 0.8s ease-in-out infinite;
-    }
-    @keyframes hp-box-pulse {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.04); }
-    }
-    .hp-box.hp-miss {
-      animation: hp-miss-shake 0.4s ease;
-    }
-    @keyframes hp-miss-shake {
-      0%,100% { transform: translateX(0); }
-      20% { transform: translateX(-8px); }
-      40% { transform: translateX(8px); }
-      60% { transform: translateX(-6px); }
-      80% { transform: translateX(6px); }
-    }
-    .hp-box-inner { display: flex; align-items: center; justify-content: center; }
-    .hp-box-emoji {
-      font-size: 52px;
-      transition: font-size 0.2s;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-    }
-    .hp-active .hp-box-emoji {
-      font-size: 58px;
-      animation: hp-heart-bounce 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
-    }
-    @keyframes hp-heart-bounce {
-      0% { transform: scale(0.4) rotate(-15deg); }
-      60% { transform: scale(1.15) rotate(5deg); }
-      100% { transform: scale(1) rotate(0deg); }
-    }
 
-    /* Heart pop card overlay */
-    .hp-card-overlay {
-      position: fixed; inset: 0;
-      background: rgba(44,26,14,0.55);
-      backdrop-filter: blur(6px);
-      z-index: 200;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.35s;
-    }
-    .hp-card-overlay.show { opacity: 1; pointer-events: all; }
-    .hp-card {
-      background: #fff;
-      border: 2px solid rgba(232,67,147,0.3);
-      border-radius: 28px;
-      padding: 40px 32px 32px;
-      max-width: 340px; width: 88%;
-      text-align: center;
-      box-shadow: 0 24px 80px rgba(232,67,147,0.2);
-      animation: hp-card-pop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-      position: relative; overflow: hidden;
-    }
-    .hp-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 5px;
-      background: linear-gradient(90deg, #E84393, #FF8DC7, #E84393);
-      border-radius: 28px 28px 0 0;
-    }
-    @keyframes hp-card-pop {
-      from { opacity: 0; transform: scale(0.7) translateY(30px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .hp-card-emoji { font-size: 56px; display: block; margin-bottom: 14px; animation: gentle-float 3s ease-in-out infinite; }
-    .hp-card-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #E84393; margin-bottom: 10px; }
-    .hp-card-message {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px; font-weight: 700;
-      color: var(--espresso); line-height: 1.45;
-      margin-bottom: 28px;
-    }
-    .hp-card-ok-btn {
-      width: 100%;
-      background: linear-gradient(135deg, #E84393, #C4622D);
-      color: #fff;
-      font-family: 'Playfair Display', serif;
-      font-weight: 700; font-size: 17px;
-      border: none; border-radius: 14px;
-      padding: 16px 24px;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(232,67,147,0.35);
-      transition: transform 0.15s;
-    }
-    .hp-card-ok-btn:active { transform: scale(0.96); }
   </style>
 </head>
 <body>
@@ -711,7 +569,7 @@
       <div class="ornament">Game Night</div>
       <div class="welcome-card">
         <span class="welcome-emoji">🎉</span>
-        <h1 class="welcome-title">Only 21 days to go for the special day!</h1>
+        <h1 class="welcome-title">Only 20 days to go for the special day!</h1>
         <p class="welcome-sub">Enter your name to join the fun</p>
 
         <div class="input-wrap">
@@ -807,16 +665,29 @@
     </div>
   </div>
 
-  <!-- ═══ SCREEN: GLASS & HEART ═══ -->
-  <div class="screen glass-screen" id="screen-glass">
-    <div class="glass-wrap">
-      <div class="glass-header">
-        <div class="glass-title">🥂 Glass & Heart</div>
-        <div class="glass-sub" id="glass-sub-label">Loading…</div>
+  <!-- ═══ SCREEN: WORD SEARCH ═══ -->
+  <div class="screen ws-screen" id="screen-wordsearch">
+    <div class="ws-wrap">
+      <div class="ws-header">
+        <div class="ws-header-top">
+          <div class="ws-title">🔍 Word Search</div>
+          <div class="ws-score-badge" id="ws-score-badge">0 pts</div>
+        </div>
+        <div class="ws-words-row" id="ws-words-row"></div>
       </div>
-      <div class="glass-body" id="glass-body"></div>
+      <div class="ws-game-area" id="ws-game-area">
+        <div class="ws-grid-container" id="ws-grid-container">
+          <div class="ws-grid" id="ws-grid"></div>
+        </div>
+      </div>
+      <div class="ws-submit-bar">
+        <div class="ws-selection-text" id="ws-selection-text">Tap letters to select</div>
+        <button class="ws-clear-btn" onclick="wsClearSelection()">Clear</button>
+        <button class="ws-submit-btn" id="ws-submit-btn" onclick="wsSubmit()" disabled>Submit</button>
+      </div>
     </div>
   </div>
+  <div class="ws-toast" id="ws-toast"></div>
 
   <!-- ═══ SCREEN: HINT GAME ═══ -->
   <div class="screen hint-screen" id="screen-hint">
@@ -829,40 +700,14 @@
     </div>
   </div>
 
-  <!-- ═══ SCREEN: COMPATIBILITY GAME ═══ -->
+  <!-- ═══ SCREEN: COMPAT ═══ -->
   <div class="screen compat-screen" id="screen-compat">
     <div class="compat-wrap">
       <div class="compat-header">
-        <div class="compat-title">💑 Compatibility Game</div>
+        <div class="compat-title">❤️ Compatibility Game</div>
         <div class="compat-pair-label" id="compat-pair-label">Loading…</div>
       </div>
-      <div class="compat-body" id="compat-body">
-        <!-- Rendered dynamically -->
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: HEART POP ═══ -->
-  <div class="screen hp-screen" id="screen-heartpop">
-    <div class="hp-wrap">
-      <div class="hp-header">
-        <div class="hp-title">💝 Heart Pop!</div>
-        <div class="hp-round-label" id="hp-round-label">Round 1 of 2</div>
-        <div class="hp-sub">Tap the box when the heart appears!</div>
-      </div>
-      <div class="hp-game-area">
-        <div class="hp-boxes" id="hp-boxes"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Heart Pop Card Overlay -->
-  <div class="hp-card-overlay" id="hp-card-overlay">
-    <div class="hp-card">
-      <span class="hp-card-emoji">💝</span>
-      <div class="hp-card-label">A message for you</div>
-      <div class="hp-card-message" id="hp-card-message">✨ A special surprise awaits!</div>
-      <button class="hp-card-ok-btn" onclick="dismissHeartCard()">Okay 💕</button>
+      <div class="compat-body" id="compat-body"></div>
     </div>
   </div>
 
@@ -979,6 +824,12 @@ case 'buzzer':
   showScreen('screen-buzzer');
   break;
 
+        case 'wordsearch':
+          initWordSearch(state);
+          lastPhase = 'wordsearch';
+          showScreen('screen-wordsearch');
+          break;
+
         case 'race':
           initRaceGame(state);
           lastPhase = 'race';
@@ -991,22 +842,10 @@ case 'buzzer':
           showScreen('screen-compat');
           break;
 
-        case 'glass':
-          initGlassGame(state);
-          lastPhase = 'glass';
-          showScreen('screen-glass');
-          break;
-
         case 'hint':
           initHintGame(state);
           lastPhase = 'hint';
           showScreen('screen-hint');
-          break;
-
-        case 'heart_pop':
-          initHeartPop(state);
-          lastPhase = 'heart_pop';
-          showScreen('screen-heartpop');
           break;
 
         case 'ended':
@@ -1097,6 +936,267 @@ if (!r.ok) {
         buzzerLocked = false;
         btn.className = 'buzzer-btn'; btn.textContent = 'BUZZ!';
       }
+    }
+
+    // ─── WORD SEARCH GAME ─────────────────────────────────────────────────────────
+    const WS_GRID = [
+      ["Z","D","O","C","E","Y","H","V","X","V","M","Z","R"],
+      ["N","J","N","C","L","C","Z","M","A","I","R","D","O"],
+      ["L","V","X","V","I","S","N","E","E","L","A","M","M"],
+      ["U","P","A","L","I","M","E","R","P","L","J","D","V"],
+      ["H","R","P","A","T","R","K","T","H","O","U","C","U"],
+      ["O","A","W","J","U","N","D","E","Y","B","B","C","J"],
+      ["P","F","D","D","H","R","E","A","M","G","O","H","L"],
+      ["V","U","X","W","R","N","L","S","X","R","X","I","E"],
+      ["N","L","U","D","P","T","N","I","B","A","W","R","L"],
+      ["G","O","O","H","L","D","V","L","R","S","U","A","L"],
+      ["B","M","I","G","D","O","C","V","G","I","U","G","U"],
+      ["T","A","B","Z","K","H","E","Z","S","N","G","C","Y"],
+      ["R","G","S","G","H","K","Y","E","Z","T","A","I","E"]
+    ];
+    const WS_WORDS   = ['JOYAL','NISARG','NEELAM','CHIRAG','PRAFUL','PREMILA','CNJN'];
+    const WS_COLS    = 13;
+    const WS_ROWS    = 13;
+
+    let wsSelection  = [];   // [{r,c}]
+    let wsFoundLocal = {};   // words found by anyone this session (from state)
+    let wsMyFound    = {};   // words found by this player
+    let wsDragging   = false;
+    let wsLastSnap   = '';
+
+    function initWordSearch(state) {
+      const found  = state.wsFoundWords || {};
+      const scores = state.wsScores     || {};
+      const snap   = JSON.stringify(found) + JSON.stringify(scores);
+      if (snap === wsLastSnap) return;
+      wsLastSnap = snap;
+      wsFoundLocal = found;
+
+      // Score badge
+      const myPts = scores[myName] || 0;
+      const el = document.getElementById('ws-score-badge');
+      if (el) el.textContent = myPts + ' pt' + (myPts !== 1 ? 's' : '');
+
+      // Words chips
+      const row = document.getElementById('ws-words-row');
+      if (row) {
+        row.innerHTML = WS_WORDS.map(w => {
+          const info = found[w];
+          const cls  = info ? 'ws-word-chip found' : 'ws-word-chip';
+          const lbl  = info ? w + ' (' + esc(info.playerName) + ')' : w;
+          return '<span class="' + cls + '">' + lbl + '</span>';
+        }).join('');
+      }
+
+      // Build grid only once (or when first shown)
+      const grid = document.getElementById('ws-grid');
+      if (grid && grid.children.length === 0) {
+        wsBuildGrid(found);
+      } else {
+        // Just update cell highlights
+        wsUpdateHighlights(found);
+      }
+    }
+
+    function wsBuildGrid(found) {
+      const area = document.getElementById('ws-game-area');
+      const grid = document.getElementById('ws-grid');
+      if (!grid) return;
+
+      // Calculate cell size to fit screen
+      const maxW = Math.min(area ? area.clientWidth - 20 : 380, 420);
+      const cellSize = Math.floor((maxW - (WS_COLS - 1) * 2) / WS_COLS);
+
+      grid.style.gridTemplateColumns = `repeat(${WS_COLS}, ${cellSize}px)`;
+      grid.innerHTML = '';
+
+      for (let r = 0; r < WS_ROWS; r++) {
+        for (let c = 0; c < WS_COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'ws-cell';
+          cell.id = 'wsc-' + r + '-' + c;
+          cell.style.width  = cellSize + 'px';
+          cell.style.height = cellSize + 'px';
+          cell.style.fontSize = Math.max(10, cellSize * 0.5) + 'px';
+          cell.textContent = WS_GRID[r][c];
+          cell.dataset.r   = r;
+          cell.dataset.c   = c;
+
+          // Tap to toggle selection
+          cell.addEventListener('pointerdown', wsPointerDown, { passive: true });
+          cell.addEventListener('pointermove', wsPointerMove, { passive: true });
+          cell.addEventListener('pointerup',   wsPointerUp,   { passive: true });
+          grid.appendChild(cell);
+        }
+      }
+      wsUpdateHighlights(found);
+    }
+
+    function wsPointerDown(e) {
+      wsDragging = true;
+      wsSelection = [];
+      wsAddCell(parseInt(e.currentTarget.dataset.r), parseInt(e.currentTarget.dataset.c));
+      e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+    }
+
+    function wsPointerMove(e) {
+      if (!wsDragging) return;
+      // Find which cell the pointer is over
+      const container = document.getElementById('ws-grid-container');
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      // Find cell under pointer
+      const allCells = document.querySelectorAll('.ws-cell');
+      for (const cell of allCells) {
+        const cr = cell.getBoundingClientRect();
+        if (e.clientX >= cr.left && e.clientX <= cr.right && e.clientY >= cr.top && e.clientY <= cr.bottom) {
+          wsAddCell(parseInt(cell.dataset.r), parseInt(cell.dataset.c));
+          break;
+        }
+      }
+    }
+
+    function wsPointerUp() {
+      wsDragging = false;
+      wsUpdateSelectionUI();
+    }
+
+    function wsAddCell(r, c) {
+      // Only add if not already in selection
+      if (wsSelection.some(s => s.r === r && s.c === c)) return;
+
+      // If >1 cell selected, enforce straight line
+      if (wsSelection.length >= 1) {
+        const first = wsSelection[0];
+        const dr = r - first.r;
+        const dc = c - first.c;
+        const len = Math.max(Math.abs(dr), Math.abs(dc));
+        if (len === 0) return;
+        // Direction must be consistent (8 directions)
+        const normDr = len ? Math.round(dr / len) : 0;
+        const normDc = len ? Math.round(dc / len) : 0;
+        if (Math.abs(normDr) > 1 || Math.abs(normDc) > 1) return;
+        // Rebuild selection as straight line from first to current
+        wsSelection = [];
+        for (let i = 0; i <= len; i++) {
+          wsSelection.push({ r: first.r + i * normDr, c: first.c + i * normDc });
+        }
+      } else {
+        wsSelection.push({ r, c });
+      }
+      wsUpdateSelectionUI();
+    }
+
+    function wsUpdateSelectionUI() {
+      // Update cell classes
+      document.querySelectorAll('.ws-cell').forEach(cell => {
+        const r = parseInt(cell.dataset.r);
+        const c = parseInt(cell.dataset.c);
+        const isSel = wsSelection.some(s => s.r === r && s.c === c);
+        if (wsMyFound[wsGetFoundWord(r, c)]) {
+          cell.className = 'ws-cell found-mine';
+        } else if (wsFoundLocal[wsGetFoundWord(r, c)]) {
+          cell.className = 'ws-cell found-highlight';
+        } else if (isSel) {
+          cell.className = 'ws-cell selected';
+        } else {
+          cell.className = 'ws-cell';
+        }
+      });
+
+      // Update text bar
+      const word = wsSelection.map(s => WS_GRID[s.r][s.c]).join('');
+      const textEl = document.getElementById('ws-selection-text');
+      const btnEl  = document.getElementById('ws-submit-btn');
+      if (textEl) {
+        textEl.textContent = word || 'Tap or drag to select letters';
+        textEl.className = 'ws-selection-text' + (word ? ' has-sel' : '');
+      }
+      if (btnEl) btnEl.disabled = word.length < 2;
+    }
+
+    function wsGetFoundWord(r, c) {
+      // Return which found word this cell belongs to (if any)
+      for (const [word, info] of Object.entries({...wsFoundLocal})) {
+        if (info.cells && info.cells.some(([fr, fc]) => fr === r && fc === c)) return word;
+      }
+      return null;
+    }
+
+    function wsUpdateHighlights(found) {
+      document.querySelectorAll('.ws-cell').forEach(cell => {
+        const r = parseInt(cell.dataset.r);
+        const c = parseInt(cell.dataset.c);
+        const foundWord = wsGetFoundWord(r, c);
+        if (!foundWord) {
+          if (!wsSelection.some(s => s.r === r && s.c === c)) {
+            cell.className = 'ws-cell';
+          }
+        } else if (wsMyFound[foundWord]) {
+          cell.className = 'ws-cell found-mine';
+        } else {
+          cell.className = 'ws-cell found-highlight';
+        }
+      });
+    }
+
+    function wsClearSelection() {
+      wsSelection = [];
+      wsUpdateSelectionUI();
+    }
+
+    async function wsSubmit() {
+      const word   = wsSelection.map(s => WS_GRID[s.r][s.c]).join('');
+      const wordRev= word.split('').reverse().join('');
+      const cells  = wsSelection.map(s => [s.r, s.c]);
+      if (!word || word.length < 2) return;
+
+      // Check if either direction matches a target word
+      const match = WS_WORDS.find(w => w === word || w === wordRev);
+      if (!match) {
+        wsShowToast('Not a target word!', true);
+        wsClearSelection();
+        return;
+      }
+      if (wsFoundLocal[match]) {
+        wsShowToast(match + ' already found by ' + wsFoundLocal[match].playerName + '!', true);
+        wsClearSelection();
+        return;
+      }
+
+      const btn = document.getElementById('ws-submit-btn');
+      if (btn) btn.disabled = true;
+
+      try {
+        const r = await fetch(API + '/api/ws-found', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, word: match, cells })
+        });
+        const d = await r.json();
+        if (d.correct) {
+          wsMyFound[match] = true;
+          wsFoundLocal[match] = { playerName: myName, cells };
+          wsShowToast('🎉 Found ' + match + '! +1 point');
+          wsLastSnap = ''; // force re-render
+        } else {
+          wsShowToast(d.message || 'Try again!', true);
+        }
+      } catch(e) {
+        wsShowToast('Network error', true);
+      }
+      wsClearSelection();
+      if (btn) btn.disabled = false;
+    }
+
+    function wsShowToast(msg, isError) {
+      const el = document.getElementById('ws-toast');
+      if (!el) return;
+      el.textContent = msg;
+      el.className   = 'ws-toast' + (isError ? ' error' : '') + ' show';
+      clearTimeout(window._wsToastTimer);
+      window._wsToastTimer = setTimeout(() => { el.className = 'ws-toast' + (isError ? ' error' : ''); }, 2500);
     }
 
     // ─── ANSWER RACE GAME ─────────────────────────────────────────────────────────
@@ -1279,317 +1379,6 @@ if (!r.ok) {
       } catch (e) { raceSubmitted[qIdx] = false; }
     }
 
-    // ─── GLASS & HEART GAME ──────────────────────────────────────────────────────
-    let glassLastSnap = '';
-
-    function initGlassGame(state) {
-      const pair    = state.glassPair    || {};
-      const round   = state.glassRound   || 1;
-      const total   = state.glassTotalRounds || 2;
-      const status  = state.glassStatus  || 'idle';
-      const hidden  = state.glassHiddenIn;
-      const guess   = state.glassGuess;
-      const scores  = state.glassScores  || {};
-      const snap    = round + '|' + status + '|' + hidden + '|' + guess;
-      if (snap === glassLastSnap) return;
-      glassLastSnap = snap;
-
-      const amHider   = myName === pair.player1;
-      const amGuesser = myName === pair.player2;
-      const inGame    = amHider || amGuesser;
-
-      // Sub label
-      document.getElementById('glass-sub-label').textContent =
-        'Round ' + round + ' of ' + total + ' — ' + esc(pair.player1 || '') + ' hides · ' + esc(pair.player2 || '') + ' guesses';
-
-      renderGlassBody(status, amHider, amGuesser, inGame, hidden, guess, scores, pair, round, total);
-    }
-
-    function renderGlassBody(status, amHider, amGuesser, inGame, hidden, guess, scores, pair, round, total) {
-      const body = document.getElementById('glass-body');
-      const p1 = pair.player1 || '—';
-      const p2 = pair.player2 || '—';
-
-      // Scores
-      const s1 = scores[p1] || 0;
-      const s2 = scores[p2] || 0;
-      let scoresHtml = '<div class="glass-scores-row">'
-        + '<div class="glass-score-card' + (myName===p1?' me':'') + '"><div class="glass-score-name">' + esc(p1) + '</div><div class="glass-score-num">' + s1 + '</div></div>'
-        + '<div class="glass-score-card' + (myName===p2?' me':'') + '"><div class="glass-score-name">' + esc(p2) + '</div><div class="glass-score-num">' + s2 + '</div></div>'
-        + '</div>';
-
-      if (!inGame) {
-        body.innerHTML = scoresHtml + '<div style="text-align:center;padding:24px 0;"><div style="font-size:48px;margin-bottom:12px;">👀</div><div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;">Watching!</div></div>';
-        return;
-      }
-
-      if (status === 'done') {
-        const winner = s1 > s2 ? p1 : s2 > s1 ? p2 : null;
-        body.innerHTML = scoresHtml + '<div class="glass-result-card"><div style="font-size:52px;margin-bottom:10px;">' + (winner?'🏆':'🤝') + '</div><div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:900;">' + (winner ? esc(winner) + ' wins!' : "It's a tie!") + '</div></div>';
-        return;
-      }
-
-      let roleHtml = '';
-      let gridHtml = '<div class="glass-grid">';
-      const emojis = ['🥂','🥂'];
-
-      if (status === 'hiding' && amHider) {
-        roleHtml = '<div class="glass-role-badge"><div class="glass-role-label">Your role</div><div class="glass-role-text">🫣 Hide the heart in a glass!</div></div>';
-        for (let i = 0; i < 2; i++) {
-          gridHtml += '<div class="glass-item" onclick="submitGlassHide(' + i + ')">' + emojis[i] + '</div>';
-        }
-      } else if (status === 'hiding' && amGuesser) {
-        roleHtml = '<div class="glass-role-badge"><div class="glass-role-label">Wait…</div><div class="glass-role-text">⏳ ' + esc(pair.player1) + ' is hiding the heart…</div></div>';
-        for (let i = 0; i < 2; i++) {
-          gridHtml += '<div class="glass-item disabled">' + emojis[i] + '</div>';
-        }
-      } else if (status === 'guessing' && amGuesser) {
-        roleHtml = '<div class="glass-role-badge"><div class="glass-role-label">Your turn</div><div class="glass-role-text">🔍 Which glass hides the heart?</div></div>';
-        for (let i = 0; i < 2; i++) {
-          gridHtml += '<div class="glass-item" onclick="submitGlassGuess(' + i + ')">' + emojis[i] + '</div>';
-        }
-      } else if (status === 'guessing' && amHider) {
-        roleHtml = '<div class="glass-role-badge"><div class="glass-role-label">Wait…</div><div class="glass-role-text">⏳ ' + esc(pair.player2) + ' is guessing…</div></div>';
-        for (let i = 0; i < 2; i++) {
-          const hasHeart = (i === hidden);
-          gridHtml += '<div class="glass-item' + (hasHeart?' has-heart selected':'') + ' disabled">' + emojis[i] + '</div>';
-        }
-      } else if (status === 'result') {
-        const correct = (guess === hidden);
-        roleHtml = '<div class="glass-result-card"><div style="font-size:52px;margin-bottom:8px;">' + (correct?'🎉':'😅') + '</div>'
-          + '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;">' + (correct?esc(p2)+' guessed right!':'Wrong guess!') + '</div>'
-          + '<div style="font-size:14px;color:rgba(44,26,14,0.5);margin-top:6px;">Heart was in glass ' + (hidden+1) + '</div></div>';
-        for (let i = 0; i < 2; i++) {
-          const isHidden  = (i === hidden);
-          const isGuessed = (i === guess);
-          let cls = '';
-          if (isHidden && isGuessed) cls = 'correct has-heart';
-          else if (isHidden) cls = 'has-heart selected';
-          else if (isGuessed) cls = 'wrong';
-          gridHtml += '<div class="glass-item ' + cls + ' disabled">' + emojis[i] + '</div>';
-        }
-      }
-
-      gridHtml += '</div>';
-      body.innerHTML = scoresHtml + roleHtml + gridHtml;
-    }
-
-    async function submitGlassHide(glassIndex) {
-      // Disable all immediately
-      document.querySelectorAll('.glass-item').forEach((el, i) => {
-        el.classList.add('disabled');
-        if (i === glassIndex) el.classList.add('selected');
-      });
-      glassLastSnap = '';
-      try {
-        await fetch(API + '/api/glass-hide', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ sessionId, glassIndex })
-        });
-      } catch(e) { glassLastSnap = ''; }
-    }
-
-    async function submitGlassGuess(glassIndex) {
-      document.querySelectorAll('.glass-item').forEach((el, i) => {
-        el.classList.add('disabled');
-        if (i === glassIndex) el.classList.add('selected');
-      });
-      glassLastSnap = '';
-      try {
-        await fetch(API + '/api/glass-guess', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ sessionId, glassIndex })
-        });
-      } catch(e) { glassLastSnap = ''; }
-    }
-
-    // ─── HINT GAME ───────────────────────────────────────────────────────────────
-    // One player answers the question → their answer becomes the hint (revealed letter by letter)
-    // The other player guesses the answer from the hints
-    let hintLastSnap = '';
-    let hintAnswerSubmitted = false;
-    let hintGuessSubmitted = false;
-
-    function initHintGame(state) {
-      const pair     = state.hintPair     || {};
-      const qs       = state.hintQuestions || [];
-      const qIdx     = state.hintCurrentQ  || 0;
-      const status   = state.hintStatus    || 'idle';   // idle|answering|guessing|result|done
-      const revealed = state.hintRevealed  || 0;        // how many letters host has revealed
-      const answer   = state.hintAnswer    || '';       // the answer submitted by answerer
-      const guess    = state.hintGuess     || '';
-      const scores   = state.hintScores    || {};
-
-      const amAnswerer = myName === pair.player1;
-      const amGuesser  = myName === pair.player2;
-      const inGame     = amAnswerer || amGuesser;
-
-      const snap = qIdx + '|' + status + '|' + revealed + '|' + answer + '|' + guess;
-
-      // Don't re-render if user is actively typing in an input
-      const activeId = document.activeElement && document.activeElement.id;
-      const typing   = activeId === 'hint-answer-input' || activeId === 'hint-guess-input';
-      if (snap === hintLastSnap && typing) return;
-      hintLastSnap = snap;
-
-      // Reset submission flags on new question
-      if (qIdx !== (window.hintLastQIdx || 0)) {
-        hintAnswerSubmitted = false;
-        hintGuessSubmitted  = false;
-        window.hintLastQIdx = qIdx;
-      }
-
-      document.getElementById('hint-sub-label').textContent =
-        'Q' + (qIdx + 1) + ' of ' + qs.length + '  ·  ' + esc(pair.player1 || '') + ' answers · ' + esc(pair.player2 || '') + ' guesses';
-
-      renderHintBody(qs, qIdx, status, revealed, answer, guess, scores, pair, amAnswerer, amGuesser, inGame);
-    }
-
-    function buildHintTiles(answer, revealed) {
-      // Split answer into words, show blank/letter tiles
-      if (!answer) return '';
-      const words = answer.split(' ');
-      let tiles = '<div class="hint-tiles">';
-      let letterCount = 0;
-      words.forEach((word, wi) => {
-        word.split('').forEach((ch, ci) => {
-          const show = letterCount < revealed;
-          tiles += '<div class="hint-tile' + (show ? ' revealed' : '') + '">' + (show ? esc(ch.toUpperCase()) : '') + '</div>';
-          letterCount++;
-        });
-        if (wi < words.length - 1) tiles += '<div class="hint-tile space"></div>';
-      });
-      tiles += '</div>';
-      // Word length hints
-      const wordLengths = words.map(w => w.length).join(' · ');
-      tiles += '<div style="font-size:11px;color:rgba(44,26,14,0.4);text-align:center;margin-top:4px;">Word lengths: ' + wordLengths + '</div>';
-      return tiles;
-    }
-
-    function renderHintBody(qs, qIdx, status, revealed, answer, guess, scores, pair, amAnswerer, amGuesser, inGame) {
-      const body = document.getElementById('hint-body');
-      const p1 = pair.player1 || '—';
-      const p2 = pair.player2 || '—';
-
-      // Scores
-      const s1 = scores[p1] || 0;
-      const s2 = scores[p2] || 0;
-      let html = '<div class="hint-scores-row">'
-        + '<div class="hint-score-card' + (myName===p1?' me':'') + '"><div class="hint-score-name">' + esc(p1) + '</div><div class="hint-score-num">' + s1 + '</div></div>'
-        + '<div class="hint-score-card' + (myName===p2?' me':'') + '"><div class="hint-score-name">' + esc(p2) + '</div><div class="hint-score-num">' + s2 + '</div></div>'
-        + '</div>';
-
-      if (!inGame) {
-        html += '<div class="hint-spectator"><div style="font-size:48px;margin-bottom:10px;">👀</div><div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;">Watching!</div></div>';
-        body.innerHTML = html;
-        return;
-      }
-
-      if (status === 'done' || qIdx >= qs.length) {
-        const winner = s1 > s2 ? p1 : s2 > s1 ? p2 : null;
-        html += '<div class="hint-result-card"><div style="font-size:52px;margin-bottom:10px;">' + (winner?'🏆':'🤝') + '</div>'
-          + '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:900;">' + (winner?esc(winner)+' wins!':"It's a tie!") + '</div>'
-          + '<div style="font-size:14px;color:rgba(44,26,14,0.5);margin-top:6px;">Final: ' + esc(p1) + ' ' + s1 + ' – ' + s2 + ' ' + esc(p2) + '</div></div>';
-        body.innerHTML = html;
-        return;
-      }
-
-      const q = qs[qIdx] || {};
-
-      // Question card
-      html += '<div class="hint-q-card">'
-        + '<div class="hint-q-num">Question ' + (qIdx + 1) + ' of ' + qs.length + '</div>'
-        + '<div class="hint-q-text">' + esc(q.text || '') + '</div>'
-        + '</div>';
-
-      if (status === 'answering') {
-        if (amAnswerer) {
-          if (hintAnswerSubmitted || answer) {
-            html += '<div class="hint-submitted-badge">✅ Answer submitted! Waiting for hints to be revealed…</div>';
-          } else {
-            html += '<div class="hint-role-badge"><div class="hint-role-lbl">Your role</div><div class="hint-role-txt">✍️ Type the answer to the question</div></div>'
-              + '<input class="hint-answer-input" id="hint-answer-input" type="text" placeholder="Type your answer…" maxlength="60" autocomplete="off" autocorrect="off" spellcheck="false"'
-              + ' onkeyup="if(event.key===\'Enter\')submitHintAnswer(' + qIdx + ')"/>'
-              + '<button class="hint-submit-btn" onclick="submitHintAnswer(' + qIdx + ')">Submit Answer ✅</button>';
-          }
-        } else if (amGuesser) {
-          html += '<div class="hint-role-badge"><div class="hint-role-lbl">Waiting…</div><div class="hint-role-txt">⏳ ' + esc(p1) + ' is writing the answer…</div></div>';
-        }
-      } else if (status === 'guessing') {
-        if (amAnswerer) {
-          html += '<div class="hint-role-badge"><div class="hint-role-lbl">Your answer</div><div class="hint-role-txt">' + esc(answer) + '</div></div>'
-            + '<div style="font-size:13px;color:rgba(44,26,14,0.45);text-align:center;">Waiting for ' + esc(p2) + ' to guess…</div>'
-            + buildHintTiles(answer, revealed);
-        } else if (amGuesser) {
-          html += '<div class="hint-role-badge"><div class="hint-role-lbl">Your role</div><div class="hint-role-txt">🔍 Guess the answer from the hints!</div></div>'
-            + buildHintTiles(answer, revealed);
-          if (hintGuessSubmitted || guess) {
-            html += '<div class="hint-submitted-badge">✅ Guess submitted: <strong>' + esc(guess) + '</strong></div>'
-              + '<div style="font-size:13px;color:rgba(44,26,14,0.45);text-align:center;margin-top:4px;">Waiting for host to reveal result…</div>';
-          } else {
-            html += '<input class="hint-guess-input" id="hint-guess-input" type="text" placeholder="What is the answer?" maxlength="60" autocomplete="off" autocorrect="off" spellcheck="false"'
-              + ' onkeyup="if(event.key===\'Enter\')submitHintGuess(' + qIdx + ')"/>'
-              + '<button class="hint-guess-btn" onclick="submitHintGuess(' + qIdx + ')">Submit Guess 🎯</button>';
-          }
-        }
-      } else if (status === 'result') {
-        const correct = guess && answer && guess.trim().toLowerCase() === answer.trim().toLowerCase();
-        html += buildHintTiles(answer, answer.replace(/ /g,'').length); // show all letters
-        html += '<div class="hint-result-card"><div style="font-size:40px;margin-bottom:8px;">' + (correct?'🎉':'😅') + '</div>'
-          + '<div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;">'
-          + (correct ? esc(p2) + ' guessed it!' : 'Not quite!') + '</div>'
-          + '<div style="font-size:14px;color:rgba(44,26,14,0.5);margin-top:6px;">Answer: <strong>' + esc(answer) + '</strong></div>'
-          + (guess ? '<div style="font-size:13px;color:rgba(44,26,14,0.4);margin-top:3px;">Guess: ' + esc(guess) + '</div>' : '')
-          + '</div>';
-      }
-
-      body.innerHTML = html;
-
-      // Auto-focus inputs
-      if (status === 'answering' && amAnswerer && !answer && !hintAnswerSubmitted) {
-        setTimeout(() => { const el=document.getElementById('hint-answer-input'); if(el && document.activeElement===document.body) el.focus(); }, 80);
-      }
-      if (status === 'guessing' && amGuesser && !guess && !hintGuessSubmitted) {
-        setTimeout(() => { const el=document.getElementById('hint-guess-input'); if(el && document.activeElement===document.body) el.focus(); }, 80);
-      }
-    }
-
-    async function submitHintAnswer(qIdx) {
-      const inp = document.getElementById('hint-answer-input');
-      if (!inp) return;
-      const answer = inp.value.trim();
-      if (!answer) { inp.style.borderColor='var(--terracotta)'; inp.focus(); return; }
-      inp.disabled = true;
-      const btn = document.querySelector('.hint-submit-btn');
-      if (btn) btn.disabled = true;
-      hintAnswerSubmitted = true;
-      hintLastSnap = '';
-      try {
-        await fetch(API + '/api/hint-answer', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ sessionId, answer, qIndex: qIdx })
-        });
-      } catch(e) { hintAnswerSubmitted = false; }
-    }
-
-    async function submitHintGuess(qIdx) {
-      const inp = document.getElementById('hint-guess-input');
-      if (!inp) return;
-      const guess = inp.value.trim();
-      if (!guess) { inp.style.borderColor='var(--sage)'; inp.focus(); return; }
-      inp.disabled = true;
-      const btn = document.querySelector('.hint-guess-btn');
-      if (btn) btn.disabled = true;
-      hintGuessSubmitted = true;
-      hintLastSnap = '';
-      try {
-        await fetch(API + '/api/hint-guess', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ sessionId, guess, qIndex: qIdx })
-        });
-      } catch(e) { hintGuessSubmitted = false; }
-    }
-
     // ─── COMPATIBILITY GAME ───────────────────────────────────────────────────────
     let compatLastQ = -1;
     let compatAnswered = {};   // { qIndex: true } — questions this player answered
@@ -1742,134 +1531,6 @@ if (!r.ok) {
         inp.focus();
       }
     }
-
-    // ─── HEART POP GAME ───────────────────────────────────────────────────────────
-    let hpCurrentRound = 1;
-    let hpTotalRounds = 2;
-    let hpMessages = {};        // { "1": {"0": "msg", "1": "msg", ...}, "2": {...} }
-    let hpActiveBox = null;     // which box has the heart popped
-    let hpShowingCard = false;
-    let hpHeartAnim = null;
-    let hpBoxPulseTimers = [];
-    let hpLastStateRound = -1;
-
-    function initHeartPop(state) {
-      hpCurrentRound = state.heartPopRound || 1;
-      hpTotalRounds = state.heartPopTotalRounds || 2;
-      hpMessages = state.heartMessages || {};
-
-      // Only reinit if round changed
-      if (hpLastStateRound === hpCurrentRound) return;
-      hpLastStateRound = hpCurrentRound;
-
-      hpActiveBox = null;
-      hpShowingCard = false;
-
-      renderHeartPop();
-    }
-
-    function renderHeartPop() {
-      const container = document.getElementById('hp-boxes');
-      if (!container) return;
-
-      document.getElementById('hp-round-label').textContent = `Round ${hpCurrentRound} of ${hpTotalRounds}`;
-
-      // Clear old pulse timers
-      hpBoxPulseTimers.forEach(clearTimeout);
-      hpBoxPulseTimers = [];
-
-      container.innerHTML = '';
-      for (let i = 0; i < 2; i++) {
-        const box = document.createElement('div');
-        box.className = 'hp-box';
-        box.id = `hp-box-${i}`;
-        box.innerHTML = `<div class="hp-box-inner"><span class="hp-box-emoji">📦</span></div>`;
-        box.addEventListener('click', () => onBoxTap(i));
-        box.addEventListener('touchend', (e) => { e.preventDefault(); onBoxTap(i); }, { passive: false });
-        container.appendChild(box);
-      }
-
-      // Start the heart pop animation — randomly show heart in one box at a time
-      startHeartPopAnimation();
-    }
-
-    function startHeartPopAnimation() {
-      if (hpHeartAnim) clearTimeout(hpHeartAnim);
-
-      function popNext() {
-        // Reset all boxes
-        for (let i = 0; i < 2; i++) {
-          const box = document.getElementById(`hp-box-${i}`);
-          if (!box) return;
-          box.classList.remove('hp-active');
-          box.querySelector('.hp-box-emoji').textContent = '📦';
-        }
-
-        // Pick random box to show heart
-        const idx = Math.floor(Math.random() * 4);
-        hpActiveBox = idx;
-
-        const box = document.getElementById(`hp-box-${idx}`);
-        if (!box || hpShowingCard) return;
-
-        box.classList.add('hp-active');
-        box.querySelector('.hp-box-emoji').textContent = '💝';
-
-        // Heart stays for 1.8s then moves to another box
-        hpHeartAnim = setTimeout(() => {
-          if (!hpShowingCard) popNext();
-        }, 1800);
-      }
-
-      // Small delay before first pop
-      hpHeartAnim = setTimeout(popNext, 600);
-    }
-
-    async function onBoxTap(boxIndex) {
-      if (hpShowingCard) return;
-
-      const box = document.getElementById(`hp-box-${boxIndex}`);
-      if (!box) return;
-
-      // Only react if this box has the heart
-      if (hpActiveBox !== boxIndex) {
-        // Wrong box — animate a miss
-        box.classList.add('hp-miss');
-        setTimeout(() => box.classList.remove('hp-miss'), 500);
-        return;
-      }
-
-      // Pause animation
-      if (hpHeartAnim) clearTimeout(hpHeartAnim);
-      hpShowingCard = true;
-
-      // Get message from state
-      const roundKey = String(hpCurrentRound);
-      const roundMessages = hpMessages[roundKey] || {};
-      const message = roundMessages[String(boxIndex)] || '✨ A special surprise awaits you!';
-
-      // Show the card
-      showHeartCard(message);
-    }
-
-    function showHeartCard(message) {
-      const overlay = document.getElementById('hp-card-overlay');
-      const msgEl = document.getElementById('hp-card-message');
-      msgEl.textContent = message;
-      overlay.classList.add('show');
-    }
-
-    function dismissHeartCard() {
-      const overlay = document.getElementById('hp-card-overlay');
-      overlay.classList.remove('show');
-      hpShowingCard = false;
-      hpActiveBox = null;
-
-      // Resume heart animation
-      startHeartPopAnimation();
-    }
-
-    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
     // ─── INIT ────────────────────────────────────────────────────────────────────
     // If we have a name from before, pre-fill and auto-start polling

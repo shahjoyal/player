@@ -699,6 +699,177 @@
       transition: transform 0.15s;
     }
     .hp-card-ok-btn:active { transform: scale(0.96); }
+   .word-screen {
+  background: linear-gradient(135deg, #F5F0FF 0%, #FFF8F0 100%);
+}
+
+.word-wrap {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.word-header {
+  text-align: center;
+  padding: 16px 10px 6px;
+}
+
+.word-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--espresso);
+}
+
+.word-sub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(44,26,14,0.55);
+  line-height: 1.5;
+}
+
+.word-stats {
+  display: flex;
+  gap: 10px;
+}
+
+.word-stat {
+  flex: 1;
+  background: #fff;
+  border: 1.5px solid var(--cream-deep);
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: center;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.word-stat-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 4px;
+}
+
+.word-stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--terracotta);
+}
+
+.ws-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 6px;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 10px;
+  box-shadow: 0 6px 24px var(--shadow);
+}
+
+.ws-cell {
+  aspect-ratio: 1;
+  border: 1.5px solid var(--cream-deep);
+  border-radius: 10px;
+  background: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--espresso);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+}
+
+.ws-cell.selected {
+  background: rgba(196,98,45,0.14);
+  border-color: var(--terracotta);
+}
+
+.ws-cell.found {
+  background: rgba(107,124,92,0.12);
+  border-color: var(--sage);
+  color: var(--sage);
+}
+
+.ws-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ws-selected-word {
+  background: #fff;
+  border: 1px solid var(--cream-deep);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--espresso);
+  text-align: center;
+}
+
+.ws-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ws-clear-btn,
+.ws-submit-btn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.ws-clear-btn {
+  background: var(--cream-dark);
+  color: var(--espresso);
+}
+
+.ws-submit-btn {
+  background: linear-gradient(135deg, var(--terracotta), var(--espresso-md));
+  color: #fff;
+}
+
+.ws-found-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ws-found-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid var(--cream-deep);
+  border-radius: 100px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--espresso);
+}
+
+.ws-msg {
+  min-height: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--sage);
+}
+
+
+
   </style>
 </head>
 <body>
@@ -806,6 +977,40 @@
       <div class="race-body" id="race-body"></div>
     </div>
   </div>
+
+<div class="screen word-screen" id="screen-word-search">
+  <div class="word-wrap">
+    <div class="word-header">
+      <div class="word-title">🔎 Word Search</div>
+      <div class="word-sub">Tap or drag in a straight line. Backwards also counts.</div>
+    </div>
+
+    <div class="word-stats">
+      <div class="word-stat">
+        <div class="word-stat-label">Found</div>
+        <div class="word-stat-value"><span id="ws-found-count">0</span>/<span id="ws-total-count">0</span></div>
+      </div>
+      <div class="word-stat">
+        <div class="word-stat-label">Your Score</div>
+        <div class="word-stat-value" id="ws-my-score">0</div>
+      </div>
+    </div>
+
+    <div id="ws-grid" class="ws-grid"></div>
+
+    <div class="ws-toolbar">
+      <div id="ws-selected-word" class="ws-selected-word">Select letters to form a word</div>
+      <div class="ws-actions">
+        <button class="ws-clear-btn" onclick="clearWordSearchSelection()">Clear</button>
+        <button class="ws-submit-btn" onclick="submitWordSearch()">Submit</button>
+      </div>
+    </div>
+
+    <div id="ws-found-list" class="ws-found-list"></div>
+    <div id="ws-msg" class="ws-msg"></div>
+  </div>
+</div>
+
 
   <!-- ═══ SCREEN: GLASS & HEART ═══ -->
   <div class="screen glass-screen" id="screen-glass">
@@ -1014,6 +1219,14 @@ case 'buzzer':
           document.getElementById('ended-score').textContent = myScore;
           showScreen('screen-ended');
           break;
+        
+          case 'word_search':
+  initWordSearch(state);
+  lastPhase = 'word_search';
+  showScreen('screen-word-search');
+  break;
+
+
       }
 
       // Update round badge
@@ -1465,6 +1678,210 @@ if (!r.ok) {
       tiles += '<div style="font-size:11px;color:rgba(44,26,14,0.4);text-align:center;margin-top:4px;">Word lengths: ' + wordLengths + '</div>';
       return tiles;
     }
+
+
+    let wsGridKey = '';
+let wsSelected = [];
+let wsSelectedEls = [];
+let wsDirection = null;
+let wsPointerDown = false;
+let wsCurrentState = null;
+
+function wsNorm(v = '') {
+  return String(v).replace(/\s+/g, '').trim().toLowerCase();
+}
+
+function setWsMsg(text) {
+  const el = document.getElementById('ws-msg');
+  if (el) el.textContent = text || '';
+}
+
+function clearWordSearchSelection() {
+  wsSelected = [];
+  wsSelectedEls = [];
+  wsDirection = null;
+  wsPointerDown = false;
+
+  document.querySelectorAll('.ws-cell.selected').forEach(el => {
+    el.classList.remove('selected');
+  });
+
+  const label = document.getElementById('ws-selected-word');
+  if (label) label.textContent = 'Select letters to form a word';
+}
+
+function canAddWordCell(r, c) {
+  if (wsSelected.length === 0) return true;
+
+  const last = wsSelected[wsSelected.length - 1];
+  const dr = r - last.r;
+  const dc = c - last.c;
+
+  if (Math.max(Math.abs(dr), Math.abs(dc)) !== 1) return false;
+
+  const step = [Math.sign(dr), Math.sign(dc)];
+
+  if (wsSelected.length === 1) {
+    wsDirection = step;
+    return true;
+  }
+
+  return wsDirection &&
+    wsDirection[0] === step[0] &&
+    wsDirection[1] === step[1];
+}
+
+function addWordCell(cell) {
+  const r = Number(cell.dataset.r);
+  const c = Number(cell.dataset.c);
+  const letter = cell.dataset.letter;
+
+  if (cell.classList.contains('found') || cell.classList.contains('selected')) return;
+  if (!canAddWordCell(r, c)) return;
+
+  wsSelected.push({ r, c, letter });
+  wsSelectedEls.push(cell);
+  cell.classList.add('selected');
+
+  const selectedWord = wsSelected.map(x => x.letter).join('');
+  document.getElementById('ws-selected-word').textContent = selectedWord;
+}
+
+function wireWordSearchCells() {
+  document.querySelectorAll('#ws-grid .ws-cell').forEach(cell => {
+    cell.onpointerdown = (e) => {
+      e.preventDefault();
+      wsPointerDown = true;
+
+      if (wsSelected.length === 0) {
+        clearWordSearchSelection();
+      }
+
+      addWordCell(cell);
+    };
+
+    cell.onpointerenter = () => {
+      if (!wsPointerDown) return;
+      addWordCell(cell);
+    };
+  });
+
+  window.onpointerup = () => {
+    wsPointerDown = false;
+  };
+}
+
+function renderWordSearchGrid(grid, found) {
+  const gridEl = document.getElementById('ws-grid');
+  if (!gridEl || !grid || !grid.length) return;
+
+  gridEl.style.gridTemplateColumns = `repeat(${grid[0].length}, 1fr)`;
+  gridEl.innerHTML = '';
+
+  const foundCells = new Set();
+  Object.values(found || {}).forEach(item => {
+    (item.cells || []).forEach(cell => foundCells.add(`${cell.r}:${cell.c}`));
+  });
+
+  grid.forEach((row, r) => {
+    row.forEach((letter, c) => {
+      const cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'ws-cell' + (foundCells.has(`${r}:${c}`) ? ' found' : '');
+      cell.dataset.r = r;
+      cell.dataset.c = c;
+      cell.dataset.letter = letter;
+      cell.textContent = letter;
+      gridEl.appendChild(cell);
+    });
+  });
+
+  wireWordSearchCells();
+}
+
+function paintFoundCells(found) {
+  document.querySelectorAll('#ws-grid .ws-cell').forEach(el => el.classList.remove('found'));
+
+  Object.values(found || {}).forEach(item => {
+    (item.cells || []).forEach(cell => {
+      const el = document.querySelector(`#ws-grid .ws-cell[data-r="${cell.r}"][data-c="${cell.c}"]`);
+      if (el) el.classList.add('found');
+    });
+  });
+}
+
+function renderWordSearchFoundList(found) {
+  const list = document.getElementById('ws-found-list');
+  if (!list) return;
+
+  const entries = Object.entries(found || {})
+    .sort((a, b) => new Date(b[1].time) - new Date(a[1].time));
+
+  list.innerHTML = entries.map(([word, data]) => {
+    return `<span class="ws-found-pill">${word} · ${data.playerName} · +${data.points}</span>`;
+  }).join('');
+}
+
+function initWordSearch(state) {
+  wsCurrentState = state;
+  const ws = state.wordSearch || {};
+  const grid = ws.grid || [];
+  const found = ws.found || {};
+
+  document.getElementById('ws-total-count').textContent = (ws.words || []).length;
+  document.getElementById('ws-found-count').textContent = Object.keys(found).length;
+  document.getElementById('ws-my-score').textContent = myScore;
+
+  const gridKey = JSON.stringify(grid);
+
+  if (gridKey !== wsGridKey) {
+    wsGridKey = gridKey;
+    renderWordSearchGrid(grid, found);
+    clearWordSearchSelection();
+  } else {
+    paintFoundCells(found);
+  }
+
+  renderWordSearchFoundList(found);
+
+  if (Object.keys(found).length >= (ws.words || []).length && (ws.words || []).length > 0) {
+    setWsMsg('All hidden words are found.');
+  } else {
+    setWsMsg('');
+  }
+}
+
+async function submitWordSearch() {
+  const word = wsSelected.map(x => x.letter).join('');
+  const cells = wsSelected.map(x => ({ r: x.r, c: x.c, letter: x.letter }));
+
+  if (!word) {
+    setWsMsg('Pick a word first.');
+    return;
+  }
+
+  try {
+    const r = await fetch(`${API}/api/word-search-submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId, word, cells })
+    });
+
+    const d = await r.json();
+    if (!r.ok || !d.success) {
+      setWsMsg(d.message || d.error || 'Wrong word.');
+      clearWordSearchSelection();
+      return;
+    }
+
+    setWsMsg(`✅ ${d.canonicalWord} found by ${d.playerName} (+${d.points})`);
+    clearWordSearchSelection();
+    poll(); // refresh scoreboard + found list immediately
+  } catch (e) {
+    setWsMsg('Network error.');
+    clearWordSearchSelection();
+  }
+}
 
     function renderHintBody(qs, qIdx, status, revealed, answer, guess, scores, pair, amAnswerer, amGuesser, inGame) {
       const body = document.getElementById('hint-body');

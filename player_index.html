@@ -436,54 +436,50 @@
     .glass-score-num { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--terracotta); }
     .glass-result-card { background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:20px;text-align:center;width:100%;box-shadow:0 4px 16px var(--shadow); }
 
-    /* ── MAKE-A-WORD GAME ── */
-    .word-screen { background: linear-gradient(135deg, #F0FFF4 0%, #FFF0F8 100%); }
-    .word-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;overflow-y:auto; }
-    .word-header { width:100%;padding:16px 20px 12px;background:rgba(255,255,255,0.92);border-bottom:1px solid var(--border);text-align:center;flex-shrink:0; }
-    .word-title { font-family:'Playfair Display',serif;font-size:19px;font-weight:900;color:var(--espresso); }
-    .word-body { flex:1;width:100%;max-width:420px;padding:20px 18px 32px;display:flex;flex-direction:column;gap:18px; }
-    .word-challenge-card {
-      background:linear-gradient(135deg,#fff,#FFF8EC);border:1.5px solid var(--cream-deep);
-      border-radius:16px;padding:20px 22px;text-align:center;
-      box-shadow:0 4px 16px var(--shadow);
-    }
-    .word-letters-row { display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 0; }
-    .word-letter-badge {
-      width:52px;height:52px;border-radius:14px;
-      font-family:'Playfair Display',serif;font-size:28px;font-weight:900;
-      display:flex;align-items:center;justify-content:center;
-      box-shadow:0 4px 12px var(--shadow);
-    }
-    .word-letter-start { background:var(--terracotta);color:#fff; }
-    .word-letter-end { background:var(--sage);color:#fff; }
-    .word-arrow { font-size:22px;color:var(--espresso-lt); }
-    .word-rule { font-size:13px;color:rgba(44,26,14,0.55);margin-top:4px;line-height:1.5; }
-    .word-input-wrap { display:flex;flex-direction:column;gap:10px; }
-    .word-input-label { font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--sage);font-weight:500; }
-    .word-text-input {
-      width:100%;background:var(--cream);border:1.5px solid var(--cream-deep);
-      border-radius:12px;padding:14px 16px;font-size:18px;font-weight:700;
-      color:var(--espresso);font-family:'Playfair Display',serif;outline:none;
-      letter-spacing:0.05em;text-transform:uppercase;
-      transition:border-color 0.2s,background 0.2s;
-    }
-    .word-text-input:focus { border-color:var(--sage);background:#fff; }
-    .word-text-input:disabled { opacity:0.5; }
-    .word-submit-btn {
-      width:100%;background:linear-gradient(135deg,var(--sage),#4A5E3A);
-      color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:16px;
-      border:none;border-radius:12px;padding:15px 20px;cursor:pointer;
-      transition:transform 0.15s,opacity 0.2s;box-shadow:0 4px 16px rgba(107,124,92,0.35);
-    }
-    .word-submit-btn:disabled { opacity:0.45;cursor:not-allowed; }
-    .word-submitted-badge { display:flex;align-items:center;gap:8px;background:rgba(107,124,92,0.1);border:1px solid rgba(107,124,92,0.3);border-radius:10px;padding:12px 16px;font-size:14px;color:var(--sage);font-weight:500; }
-    .word-reveal-card { background:linear-gradient(135deg,#FFF8EC,#FFF1D4);border:1.5px solid rgba(184,134,11,0.3);border-radius:16px;padding:20px;box-shadow:0 4px 16px rgba(184,134,11,0.12); }
-    .word-reveal-row { display:flex;gap:12px;margin-top:12px; }
-    .word-reveal-player { flex:1;background:#fff;border:1.5px solid var(--cream-deep);border-radius:12px;padding:14px;text-align:center; }
-    .word-reveal-player.valid { border-color:#2E7D32;background:rgba(46,125,50,0.06); }
-    .word-reveal-player.invalid { border-color:#D64040;background:rgba(214,64,64,0.04); }
-    .word-reveal-name { font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--espresso-lt);margin-bottom:4px; }
-    .word-reveal-word { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--espresso); }
+    /* ── HINT GAME ── */
+    .hint-screen { background: linear-gradient(135deg, #FFF8F0 0%, #F8F0FF 100%); }
+    .hint-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;overflow-y:auto; }
+    .hint-header { width:100%;padding:14px 20px 10px;background:rgba(255,255,255,0.93);border-bottom:1px solid var(--border);text-align:center;flex-shrink:0; }
+    .hint-title { font-family:'Playfair Display',serif;font-size:19px;font-weight:900;color:var(--espresso); }
+    .hint-sub { font-size:12px;color:var(--terracotta);font-weight:500;margin-top:2px; }
+    .hint-body { flex:1;width:100%;max-width:420px;padding:18px 18px 32px;display:flex;flex-direction:column;gap:16px; }
+
+    /* score strip */
+    .hint-scores-row { display:flex;gap:10px; }
+    .hint-score-card { flex:1;background:#fff;border:1.5px solid var(--cream-deep);border-radius:12px;padding:10px 14px;text-align:center; }
+    .hint-score-card.me { border-color:var(--terracotta); }
+    .hint-score-name { font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--espresso-lt); }
+    .hint-score-num { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--terracotta); }
+
+    /* question card */
+    .hint-q-card { background:#fff;border:1.5px solid var(--border);border-left:4px solid var(--terracotta);border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px var(--shadow); }
+    .hint-q-num { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--terracotta);margin-bottom:6px; }
+    .hint-q-text { font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--espresso);line-height:1.4; }
+    .hint-role-badge { background:var(--cream-dark);border:1px solid var(--cream-deep);border-radius:12px;padding:12px 18px;text-align:center; }
+    .hint-role-lbl { font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--sage);margin-bottom:4px; }
+    .hint-role-txt { font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--espresso); }
+
+    /* answerer */
+    .hint-answer-input { width:100%;background:var(--cream);border:1.5px solid var(--cream-deep);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--espresso);font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s,background 0.2s; }
+    .hint-answer-input:focus { border-color:var(--terracotta);background:#fff; }
+    .hint-answer-input::placeholder { color:rgba(44,26,14,0.3); }
+    .hint-answer-input:disabled { opacity:0.5; }
+    .hint-submit-btn { width:100%;background:linear-gradient(135deg,var(--terracotta),var(--espresso-md));color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:16px;border:none;border-radius:12px;padding:15px 20px;cursor:pointer;transition:transform 0.15s,opacity 0.2s;box-shadow:0 4px 16px rgba(196,98,45,0.35); }
+    .hint-submit-btn:disabled { opacity:0.45;cursor:not-allowed; }
+    .hint-submitted-badge { display:flex;align-items:center;gap:8px;background:rgba(107,124,92,0.1);border:1px solid rgba(107,124,92,0.3);border-radius:10px;padding:12px 16px;font-size:14px;color:var(--sage);font-weight:500; }
+
+    /* hint tiles (guesser) */
+    .hint-tiles { display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:8px 0; }
+    .hint-tile { width:38px;height:44px;border-radius:8px;background:#fff;border:2px solid var(--cream-deep);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--espresso);transition:all 0.3s;box-shadow:0 2px 6px var(--shadow); }
+    .hint-tile.revealed { border-color:var(--terracotta);background:rgba(196,98,45,0.06); }
+    .hint-tile.space { background:transparent;border-color:transparent;box-shadow:none;width:16px; }
+    .hint-guess-input { width:100%;background:var(--cream);border:1.5px solid var(--cream-deep);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--espresso);font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s,background 0.2s; }
+    .hint-guess-input:focus { border-color:var(--sage);background:#fff; }
+    .hint-guess-input::placeholder { color:rgba(44,26,14,0.3); }
+    .hint-guess-btn { width:100%;background:linear-gradient(135deg,var(--sage),#4A5E3A);color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:16px;border:none;border-radius:12px;padding:15px 20px;cursor:pointer;transition:transform 0.15s;box-shadow:0 4px 16px rgba(107,124,92,0.35); }
+    .hint-guess-btn:disabled { opacity:0.45;cursor:not-allowed; }
+    .hint-result-card { background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:20px;text-align:center;box-shadow:0 4px 16px var(--shadow); }
+    .hint-spectator { text-align:center;padding:20px 0; }
 
     /* ── COMPATIBILITY GAME ── */
     .compat-screen { background: linear-gradient(135deg, #F0F4FF 0%, #FFF8F0 100%); }
@@ -703,6 +699,177 @@
       transition: transform 0.15s;
     }
     .hp-card-ok-btn:active { transform: scale(0.96); }
+   .word-screen {
+  background: linear-gradient(135deg, #F5F0FF 0%, #FFF8F0 100%);
+}
+
+.word-wrap {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.word-header {
+  text-align: center;
+  padding: 16px 10px 6px;
+}
+
+.word-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--espresso);
+}
+
+.word-sub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(44,26,14,0.55);
+  line-height: 1.5;
+}
+
+.word-stats {
+  display: flex;
+  gap: 10px;
+}
+
+.word-stat {
+  flex: 1;
+  background: #fff;
+  border: 1.5px solid var(--cream-deep);
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: center;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.word-stat-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 4px;
+}
+
+.word-stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--terracotta);
+}
+
+.ws-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 6px;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 10px;
+  box-shadow: 0 6px 24px var(--shadow);
+}
+
+.ws-cell {
+  aspect-ratio: 1;
+  border: 1.5px solid var(--cream-deep);
+  border-radius: 10px;
+  background: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--espresso);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+}
+
+.ws-cell.selected {
+  background: rgba(196,98,45,0.14);
+  border-color: var(--terracotta);
+}
+
+.ws-cell.found {
+  background: rgba(107,124,92,0.12);
+  border-color: var(--sage);
+  color: var(--sage);
+}
+
+.ws-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ws-selected-word {
+  background: #fff;
+  border: 1px solid var(--cream-deep);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--espresso);
+  text-align: center;
+}
+
+.ws-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ws-clear-btn,
+.ws-submit-btn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.ws-clear-btn {
+  background: var(--cream-dark);
+  color: var(--espresso);
+}
+
+.ws-submit-btn {
+  background: linear-gradient(135deg, var(--terracotta), var(--espresso-md));
+  color: #fff;
+}
+
+.ws-found-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ws-found-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid var(--cream-deep);
+  border-radius: 100px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--espresso);
+}
+
+.ws-msg {
+  min-height: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--sage);
+}
+
+
+
   </style>
 </head>
 <body>
@@ -715,7 +882,7 @@
       <div class="ornament">Game Night</div>
       <div class="welcome-card">
         <span class="welcome-emoji">🎉</span>
-        <h1 class="welcome-title">Only 22 days to go for the special day!</h1>
+        <h1 class="welcome-title">Only 20 days to go for the special day!</h1>
         <p class="welcome-sub">Enter your name to join the fun</p>
 
         <div class="input-wrap">
@@ -811,6 +978,40 @@
     </div>
   </div>
 
+<div class="screen word-screen" id="screen-word-search">
+  <div class="word-wrap">
+    <div class="word-header">
+      <div class="word-title">🔎 Word Search</div>
+      <div class="word-sub">Tap or drag in a straight line. Backwards also counts.</div>
+    </div>
+
+    <div class="word-stats">
+      <div class="word-stat">
+        <div class="word-stat-label">Found</div>
+        <div class="word-stat-value"><span id="ws-found-count">0</span>/<span id="ws-total-count">0</span></div>
+      </div>
+      <div class="word-stat">
+        <div class="word-stat-label">Your Score</div>
+        <div class="word-stat-value" id="ws-my-score">0</div>
+      </div>
+    </div>
+
+    <div id="ws-grid" class="ws-grid"></div>
+
+    <div class="ws-toolbar">
+      <div id="ws-selected-word" class="ws-selected-word">Select letters to form a word</div>
+      <div class="ws-actions">
+        <button class="ws-clear-btn" onclick="clearWordSearchSelection()">Clear</button>
+        <button class="ws-submit-btn" onclick="submitWordSearch()">Submit</button>
+      </div>
+    </div>
+
+    <div id="ws-found-list" class="ws-found-list"></div>
+    <div id="ws-msg" class="ws-msg"></div>
+  </div>
+</div>
+
+
   <!-- ═══ SCREEN: GLASS & HEART ═══ -->
   <div class="screen glass-screen" id="screen-glass">
     <div class="glass-wrap">
@@ -822,13 +1023,14 @@
     </div>
   </div>
 
-  <!-- ═══ SCREEN: MAKE-A-WORD ═══ -->
-  <div class="screen word-screen" id="screen-word">
-    <div class="word-wrap">
-      <div class="word-header">
-        <div class="word-title">🔤 Make a Word</div>
+  <!-- ═══ SCREEN: HINT GAME ═══ -->
+  <div class="screen hint-screen" id="screen-hint">
+    <div class="hint-wrap">
+      <div class="hint-header">
+        <div class="hint-title">💡 Hint Game</div>
+        <div class="hint-sub" id="hint-sub-label">Loading…</div>
       </div>
-      <div class="word-body" id="word-body"></div>
+      <div class="hint-body" id="hint-body"></div>
     </div>
   </div>
 
@@ -836,7 +1038,7 @@
   <div class="screen compat-screen" id="screen-compat">
     <div class="compat-wrap">
       <div class="compat-header">
-        <div class="compat-title">💝 Compatibility Game</div>
+        <div class="compat-title">💑 Compatibility Game</div>
         <div class="compat-pair-label" id="compat-pair-label">Loading…</div>
       </div>
       <div class="compat-body" id="compat-body">
@@ -1000,10 +1202,10 @@ case 'buzzer':
           showScreen('screen-glass');
           break;
 
-        case 'word':
-          initWordGame(state);
-          lastPhase = 'word';
-          showScreen('screen-word');
+        case 'hint':
+          initHintGame(state);
+          lastPhase = 'hint';
+          showScreen('screen-hint');
           break;
 
         case 'heart_pop':
@@ -1017,6 +1219,14 @@ case 'buzzer':
           document.getElementById('ended-score').textContent = myScore;
           showScreen('screen-ended');
           break;
+        
+          case 'word_search':
+  initWordSearch(state);
+  lastPhase = 'word_search';
+  showScreen('screen-word-search');
+  break;
+
+
       }
 
       // Update round badge
@@ -1328,32 +1538,32 @@ if (!r.ok) {
 
       if (status === 'done') {
         const winner = s1 > s2 ? p1 : s2 > s1 ? p2 : null;
-        body.innerHTML = scoresHtml + '<div class="glass-result-card"><div style="font-size:52px;margin-bottom:10px;">' + (winner?'🏆':'🤝') + '</div><div style="font-family:\'Playfair Display\'serif;font-size:20px;font-weight:900;">' + (winner ? esc(winner) + ' wins!' : "It's a tie!") + '</div></div>';
+        body.innerHTML = scoresHtml + '<div class="glass-result-card"><div style="font-size:52px;margin-bottom:10px;">' + (winner?'🏆':'🤝') + '</div><div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:900;">' + (winner ? esc(winner) + ' wins!' : "It's a tie!") + '</div></div>';
         return;
       }
 
       let roleHtml = '';
       let gridHtml = '<div class="glass-grid">';
-      const emojis = ['🥂','🥂','🥂','🥂'];
+      const emojis = ['🥂','🥂'];
 
       if (status === 'hiding' && amHider) {
         roleHtml = '<div class="glass-role-badge"><div class="glass-role-label">Your role</div><div class="glass-role-text">🫣 Hide the heart in a glass!</div></div>';
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 2; i++) {
           gridHtml += '<div class="glass-item" onclick="submitGlassHide(' + i + ')">' + emojis[i] + '</div>';
         }
       } else if (status === 'hiding' && amGuesser) {
         roleHtml = '<div class="glass-role-badge"><div class="glass-role-label">Wait…</div><div class="glass-role-text">⏳ ' + esc(pair.player1) + ' is hiding the heart…</div></div>';
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 2; i++) {
           gridHtml += '<div class="glass-item disabled">' + emojis[i] + '</div>';
         }
       } else if (status === 'guessing' && amGuesser) {
         roleHtml = '<div class="glass-role-badge"><div class="glass-role-label">Your turn</div><div class="glass-role-text">🔍 Which glass hides the heart?</div></div>';
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 2; i++) {
           gridHtml += '<div class="glass-item" onclick="submitGlassGuess(' + i + ')">' + emojis[i] + '</div>';
         }
       } else if (status === 'guessing' && amHider) {
         roleHtml = '<div class="glass-role-badge"><div class="glass-role-label">Wait…</div><div class="glass-role-text">⏳ ' + esc(pair.player2) + ' is guessing…</div></div>';
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 2; i++) {
           const hasHeart = (i === hidden);
           gridHtml += '<div class="glass-item' + (hasHeart?' has-heart selected':'') + ' disabled">' + emojis[i] + '</div>';
         }
@@ -1362,7 +1572,7 @@ if (!r.ok) {
         roleHtml = '<div class="glass-result-card"><div style="font-size:52px;margin-bottom:8px;">' + (correct?'🎉':'😅') + '</div>'
           + '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;">' + (correct?esc(p2)+' guessed right!':'Wrong guess!') + '</div>'
           + '<div style="font-size:14px;color:rgba(44,26,14,0.5);margin-top:6px;">Heart was in glass ' + (hidden+1) + '</div></div>';
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 2; i++) {
           const isHidden  = (i === hidden);
           const isGuessed = (i === guess);
           let cls = '';
@@ -1406,116 +1616,395 @@ if (!r.ok) {
       } catch(e) { glassLastSnap = ''; }
     }
 
-    // ─── MAKE-A-WORD GAME ─────────────────────────────────────────────────────────
-    let wordLastSnap = '';
-    let wordSubmitted = false;
+    // ─── HINT GAME ───────────────────────────────────────────────────────────────
+    // One player answers the question → their answer becomes the hint (revealed letter by letter)
+    // The other player guesses the answer from the hints
+    let hintLastSnap = '';
+    let hintAnswerSubmitted = false;
+    let hintGuessSubmitted = false;
 
-    function initWordGame(state) {
-      const pair   = state.wordPair   || {};
-      const start  = state.wordStartLetter || '?';
-      const end    = state.wordEndLetter   || '?';
-      const status = state.wordStatus || 'playing';
-      const subs   = state.wordSubmissions || {};
-      const myWord = subs[myName];
-      const snap   = status + '|' + (myWord||'') + '|' + start + '|' + end;
-      if (snap === wordLastSnap) return;
-      wordLastSnap = snap;
+    function initHintGame(state) {
+      const pair     = state.hintPair     || {};
+      const qs       = state.hintQuestions || [];
+      const qIdx     = state.hintCurrentQ  || 0;
+      const status   = state.hintStatus    || 'idle';   // idle|answering|guessing|result|done
+      const revealed = state.hintRevealed  || 0;        // how many letters host has revealed
+      const answer   = state.hintAnswer    || '';       // the answer submitted by answerer
+      const guess    = state.hintGuess     || '';
+      const scores   = state.hintScores    || {};
 
-      const inGame = myName === pair.player1 || myName === pair.player2;
-      renderWordBody(pair, start, end, status, subs, inGame, myWord);
+      const amAnswerer = myName === pair.player1;
+      const amGuesser  = myName === pair.player2;
+      const inGame     = amAnswerer || amGuesser;
+
+      const snap = qIdx + '|' + status + '|' + revealed + '|' + answer + '|' + guess;
+
+      // Don't re-render if user is actively typing in an input
+      const activeId = document.activeElement && document.activeElement.id;
+      const typing   = activeId === 'hint-answer-input' || activeId === 'hint-guess-input';
+      if (snap === hintLastSnap && typing) return;
+      hintLastSnap = snap;
+
+      // Reset submission flags on new question
+      if (qIdx !== (window.hintLastQIdx || 0)) {
+        hintAnswerSubmitted = false;
+        hintGuessSubmitted  = false;
+        window.hintLastQIdx = qIdx;
+      }
+
+      document.getElementById('hint-sub-label').textContent =
+        'Q' + (qIdx + 1) + ' of ' + qs.length + '  ·  ' + esc(pair.player1 || '') + ' answers · ' + esc(pair.player2 || '') + ' guesses';
+
+      renderHintBody(qs, qIdx, status, revealed, answer, guess, scores, pair, amAnswerer, amGuesser, inGame);
     }
 
-    function renderWordBody(pair, start, end, status, subs, inGame, myWord) {
-      const body = document.getElementById('word-body');
+    function buildHintTiles(answer, revealed) {
+      // Split answer into words, show blank/letter tiles
+      if (!answer) return '';
+      const words = answer.split(' ');
+      let tiles = '<div class="hint-tiles">';
+      let letterCount = 0;
+      words.forEach((word, wi) => {
+        word.split('').forEach((ch, ci) => {
+          const show = letterCount < revealed;
+          tiles += '<div class="hint-tile' + (show ? ' revealed' : '') + '">' + (show ? esc(ch.toUpperCase()) : '') + '</div>';
+          letterCount++;
+        });
+        if (wi < words.length - 1) tiles += '<div class="hint-tile space"></div>';
+      });
+      tiles += '</div>';
+      // Word length hints
+      const wordLengths = words.map(w => w.length).join(' · ');
+      tiles += '<div style="font-size:11px;color:rgba(44,26,14,0.4);text-align:center;margin-top:4px;">Word lengths: ' + wordLengths + '</div>';
+      return tiles;
+    }
+
+
+    let wsGridKey = '';
+let wsSelected = [];
+let wsSelectedEls = [];
+let wsDirection = null;
+let wsPointerDown = false;
+let wsCurrentState = null;
+
+function wsNorm(v = '') {
+  return String(v).replace(/\s+/g, '').trim().toLowerCase();
+}
+
+function setWsMsg(text) {
+  const el = document.getElementById('ws-msg');
+  if (el) el.textContent = text || '';
+}
+
+function clearWordSearchSelection() {
+  wsSelected = [];
+  wsSelectedEls = [];
+  wsDirection = null;
+  wsPointerDown = false;
+
+  document.querySelectorAll('.ws-cell.selected').forEach(el => {
+    el.classList.remove('selected');
+  });
+
+  const label = document.getElementById('ws-selected-word');
+  if (label) label.textContent = 'Select letters to form a word';
+}
+
+function canAddWordCell(r, c) {
+  if (wsSelected.length === 0) return true;
+
+  const last = wsSelected[wsSelected.length - 1];
+  const dr = r - last.r;
+  const dc = c - last.c;
+
+  if (Math.max(Math.abs(dr), Math.abs(dc)) !== 1) return false;
+
+  const step = [Math.sign(dr), Math.sign(dc)];
+
+  if (wsSelected.length === 1) {
+    wsDirection = step;
+    return true;
+  }
+
+  return wsDirection &&
+    wsDirection[0] === step[0] &&
+    wsDirection[1] === step[1];
+}
+
+function addWordCell(cell) {
+  const r = Number(cell.dataset.r);
+  const c = Number(cell.dataset.c);
+  const letter = cell.dataset.letter;
+
+  if (cell.classList.contains('found') || cell.classList.contains('selected')) return;
+  if (!canAddWordCell(r, c)) return;
+
+  wsSelected.push({ r, c, letter });
+  wsSelectedEls.push(cell);
+  cell.classList.add('selected');
+
+  const selectedWord = wsSelected.map(x => x.letter).join('');
+  document.getElementById('ws-selected-word').textContent = selectedWord;
+}
+
+function wireWordSearchCells() {
+  document.querySelectorAll('#ws-grid .ws-cell').forEach(cell => {
+    cell.onpointerdown = (e) => {
+      e.preventDefault();
+      wsPointerDown = true;
+
+      if (wsSelected.length === 0) {
+        clearWordSearchSelection();
+      }
+
+      addWordCell(cell);
+    };
+
+    cell.onpointerenter = () => {
+      if (!wsPointerDown) return;
+      addWordCell(cell);
+    };
+  });
+
+  window.onpointerup = () => {
+    wsPointerDown = false;
+  };
+}
+
+function renderWordSearchGrid(grid, found) {
+  const gridEl = document.getElementById('ws-grid');
+  if (!gridEl || !grid || !grid.length) return;
+
+  gridEl.style.gridTemplateColumns = `repeat(${grid[0].length}, 1fr)`;
+  gridEl.innerHTML = '';
+
+  const foundCells = new Set();
+  Object.values(found || {}).forEach(item => {
+    (item.cells || []).forEach(cell => foundCells.add(`${cell.r}:${cell.c}`));
+  });
+
+  grid.forEach((row, r) => {
+    row.forEach((letter, c) => {
+      const cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'ws-cell' + (foundCells.has(`${r}:${c}`) ? ' found' : '');
+      cell.dataset.r = r;
+      cell.dataset.c = c;
+      cell.dataset.letter = letter;
+      cell.textContent = letter;
+      gridEl.appendChild(cell);
+    });
+  });
+
+  wireWordSearchCells();
+}
+
+function paintFoundCells(found) {
+  document.querySelectorAll('#ws-grid .ws-cell').forEach(el => el.classList.remove('found'));
+
+  Object.values(found || {}).forEach(item => {
+    (item.cells || []).forEach(cell => {
+      const el = document.querySelector(`#ws-grid .ws-cell[data-r="${cell.r}"][data-c="${cell.c}"]`);
+      if (el) el.classList.add('found');
+    });
+  });
+}
+
+function renderWordSearchFoundList(found) {
+  const list = document.getElementById('ws-found-list');
+  if (!list) return;
+
+  const entries = Object.entries(found || {})
+    .sort((a, b) => new Date(b[1].time) - new Date(a[1].time));
+
+  list.innerHTML = entries.map(([word, data]) => {
+    return `<span class="ws-found-pill">${word} · ${data.playerName} · +${data.points}</span>`;
+  }).join('');
+}
+
+function initWordSearch(state) {
+  wsCurrentState = state;
+  const ws = state.wordSearch || {};
+  const grid = ws.grid || [];
+  const found = ws.found || {};
+
+  document.getElementById('ws-total-count').textContent = (ws.words || []).length;
+  document.getElementById('ws-found-count').textContent = Object.keys(found).length;
+  document.getElementById('ws-my-score').textContent = myScore;
+
+  const gridKey = JSON.stringify(grid);
+
+  if (gridKey !== wsGridKey) {
+    wsGridKey = gridKey;
+    renderWordSearchGrid(grid, found);
+    clearWordSearchSelection();
+  } else {
+    paintFoundCells(found);
+  }
+
+  renderWordSearchFoundList(found);
+
+  if (Object.keys(found).length >= (ws.words || []).length && (ws.words || []).length > 0) {
+    setWsMsg('All hidden words are found.');
+  } else {
+    setWsMsg('');
+  }
+}
+
+async function submitWordSearch() {
+  const word = wsSelected.map(x => x.letter).join('');
+  const cells = wsSelected.map(x => ({ r: x.r, c: x.c, letter: x.letter }));
+
+  if (!word) {
+    setWsMsg('Pick a word first.');
+    return;
+  }
+
+  try {
+    const r = await fetch(`${API}/api/word-search-submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId, word, cells })
+    });
+
+    const d = await r.json();
+    if (!r.ok || !d.success) {
+      setWsMsg(d.message || d.error || 'Wrong word.');
+      clearWordSearchSelection();
+      return;
+    }
+
+    setWsMsg(`✅ ${d.canonicalWord} found by ${d.playerName} (+${d.points})`);
+    clearWordSearchSelection();
+    poll(); // refresh scoreboard + found list immediately
+  } catch (e) {
+    setWsMsg('Network error.');
+    clearWordSearchSelection();
+  }
+}
+
+    function renderHintBody(qs, qIdx, status, revealed, answer, guess, scores, pair, amAnswerer, amGuesser, inGame) {
+      const body = document.getElementById('hint-body');
       const p1 = pair.player1 || '—';
       const p2 = pair.player2 || '—';
 
-      // Challenge card (always shown)
-      let html = '<div class="word-challenge-card">'
-        + '<div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--terracotta);margin-bottom:8px;">The Challenge</div>'
-        + '<div class="word-letters-row">'
-          + '<div class="word-letter-badge word-letter-start">' + esc(start) + '</div>'
-          + '<div class="word-arrow">→ word →</div>'
-          + '<div class="word-letter-badge word-letter-end">' + esc(end) + '</div>'
-        + '</div>'
-        + '<div class="word-rule">Make a word that starts with <strong>' + esc(start) + '</strong> and ends with <strong>' + esc(end) + '</strong></div>'
+      // Scores
+      const s1 = scores[p1] || 0;
+      const s2 = scores[p2] || 0;
+      let html = '<div class="hint-scores-row">'
+        + '<div class="hint-score-card' + (myName===p1?' me':'') + '"><div class="hint-score-name">' + esc(p1) + '</div><div class="hint-score-num">' + s1 + '</div></div>'
+        + '<div class="hint-score-card' + (myName===p2?' me':'') + '"><div class="hint-score-name">' + esc(p2) + '</div><div class="hint-score-num">' + s2 + '</div></div>'
         + '</div>';
 
       if (!inGame) {
-        html += '<div style="text-align:center;padding:24px 0;"><div style="font-size:48px;margin-bottom:12px;">👀</div><div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;">Watching!</div></div>';
+        html += '<div class="hint-spectator"><div style="font-size:48px;margin-bottom:10px;">👀</div><div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;">Watching!</div></div>';
         body.innerHTML = html;
         return;
       }
 
-      if (status === 'reveal') {
-        // Show both words
-        html += '<div class="word-reveal-card"><div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Results</div>'
-          + '<div class="word-reveal-row">';
-        [p1, p2].forEach(name => {
-          const w = subs[name] || '—';
-          const valid = w !== '—' && w.startsWith(start) && w.endsWith(end) && w.length > 1;
-          html += '<div class="word-reveal-player' + (valid?' valid':' invalid') + '">'
-            + '<div class="word-reveal-name">' + esc(name) + '</div>'
-            + '<div class="word-reveal-word">' + esc(w) + '</div>'
-            + '<div style="font-size:18px;margin-top:4px;">' + (valid?'✅':'❌') + '</div>'
-            + '</div>';
-        });
-        html += '</div></div>';
+      if (status === 'done' || qIdx >= qs.length) {
+        const winner = s1 > s2 ? p1 : s2 > s1 ? p2 : null;
+        html += '<div class="hint-result-card"><div style="font-size:52px;margin-bottom:10px;">' + (winner?'🏆':'🤝') + '</div>'
+          + '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:900;">' + (winner?esc(winner)+' wins!':"It's a tie!") + '</div>'
+          + '<div style="font-size:14px;color:rgba(44,26,14,0.5);margin-top:6px;">Final: ' + esc(p1) + ' ' + s1 + ' – ' + s2 + ' ' + esc(p2) + '</div></div>';
         body.innerHTML = html;
         return;
       }
 
-      // Playing state
-      if (myWord) {
-        html += '<div class="word-submitted-badge">✅ Submitted: <strong>' + esc(myWord) + '</strong></div>'
-          + '<div style="text-align:center;font-size:14px;color:rgba(44,26,14,0.45);margin-top:4px;">Waiting for the other player…</div>';
-      } else {
-        const inputId = 'word-text-input';
-        const inputEl = document.getElementById(inputId);
-        const typing = inputEl && document.activeElement === inputEl;
-        if (!typing) {
-          html += '<div class="word-input-wrap">'
-            + '<div class="word-input-label">Type your word</div>'
-            + '<input class="word-text-input" id="' + inputId + '" type="text" maxlength="30"'
-              + ' placeholder="' + esc(start) + '___' + esc(end) + '" autocomplete="off" autocorrect="off" spellcheck="false"'
-              + ' style="text-transform:uppercase;"'
-              + ' onkeyup="if(event.key===\'Enter\')submitWord()"/>'
-            + '<button class="word-submit-btn" onclick="submitWord()">Submit Word ✅</button>'
-            + '</div>';
-        } else {
-          // Don't replace DOM while typing — only update the challenge card above
-          body.innerHTML = html;
-          return;
+      const q = qs[qIdx] || {};
+
+      // Question card
+      html += '<div class="hint-q-card">'
+        + '<div class="hint-q-num">Question ' + (qIdx + 1) + ' of ' + qs.length + '</div>'
+        + '<div class="hint-q-text">' + esc(q.text || '') + '</div>'
+        + '</div>';
+
+      if (status === 'answering') {
+        if (amAnswerer) {
+          if (hintAnswerSubmitted || answer) {
+            html += '<div class="hint-submitted-badge">✅ Answer submitted! Waiting for hints to be revealed…</div>';
+          } else {
+            html += '<div class="hint-role-badge"><div class="hint-role-lbl">Your role</div><div class="hint-role-txt">✍️ Type the answer to the question</div></div>'
+              + '<input class="hint-answer-input" id="hint-answer-input" type="text" placeholder="Type your answer…" maxlength="60" autocomplete="off" autocorrect="off" spellcheck="false"'
+              + ' onkeyup="if(event.key===\'Enter\')submitHintAnswer(' + qIdx + ')"/>'
+              + '<button class="hint-submit-btn" onclick="submitHintAnswer(' + qIdx + ')">Submit Answer ✅</button>';
+          }
+        } else if (amGuesser) {
+          html += '<div class="hint-role-badge"><div class="hint-role-lbl">Waiting…</div><div class="hint-role-txt">⏳ ' + esc(p1) + ' is writing the answer…</div></div>';
         }
+      } else if (status === 'guessing') {
+        if (amAnswerer) {
+          html += '<div class="hint-role-badge"><div class="hint-role-lbl">Your answer</div><div class="hint-role-txt">' + esc(answer) + '</div></div>'
+            + '<div style="font-size:13px;color:rgba(44,26,14,0.45);text-align:center;">Waiting for ' + esc(p2) + ' to guess…</div>'
+            + buildHintTiles(answer, revealed);
+        } else if (amGuesser) {
+          html += '<div class="hint-role-badge"><div class="hint-role-lbl">Your role</div><div class="hint-role-txt">🔍 Guess the answer from the hints!</div></div>'
+            + buildHintTiles(answer, revealed);
+          if (hintGuessSubmitted || guess) {
+            html += '<div class="hint-submitted-badge">✅ Guess submitted: <strong>' + esc(guess) + '</strong></div>'
+              + '<div style="font-size:13px;color:rgba(44,26,14,0.45);text-align:center;margin-top:4px;">Waiting for host to reveal result…</div>';
+          } else {
+            html += '<input class="hint-guess-input" id="hint-guess-input" type="text" placeholder="What is the answer?" maxlength="60" autocomplete="off" autocorrect="off" spellcheck="false"'
+              + ' onkeyup="if(event.key===\'Enter\')submitHintGuess(' + qIdx + ')"/>'
+              + '<button class="hint-guess-btn" onclick="submitHintGuess(' + qIdx + ')">Submit Guess 🎯</button>';
+          }
+        }
+      } else if (status === 'result') {
+        const correct = guess && answer && guess.trim().toLowerCase() === answer.trim().toLowerCase();
+        html += buildHintTiles(answer, answer.replace(/ /g,'').length); // show all letters
+        html += '<div class="hint-result-card"><div style="font-size:40px;margin-bottom:8px;">' + (correct?'🎉':'😅') + '</div>'
+          + '<div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;">'
+          + (correct ? esc(p2) + ' guessed it!' : 'Not quite!') + '</div>'
+          + '<div style="font-size:14px;color:rgba(44,26,14,0.5);margin-top:6px;">Answer: <strong>' + esc(answer) + '</strong></div>'
+          + (guess ? '<div style="font-size:13px;color:rgba(44,26,14,0.4);margin-top:3px;">Guess: ' + esc(guess) + '</div>' : '')
+          + '</div>';
       }
 
       body.innerHTML = html;
 
-      // Auto-focus if not yet submitted
-      if (!myWord) {
-        setTimeout(() => {
-          const inp = document.getElementById('word-text-input');
-          if (inp && document.activeElement === document.body) inp.focus();
-        }, 80);
+      // Auto-focus inputs
+      if (status === 'answering' && amAnswerer && !answer && !hintAnswerSubmitted) {
+        setTimeout(() => { const el=document.getElementById('hint-answer-input'); if(el && document.activeElement===document.body) el.focus(); }, 80);
+      }
+      if (status === 'guessing' && amGuesser && !guess && !hintGuessSubmitted) {
+        setTimeout(() => { const el=document.getElementById('hint-guess-input'); if(el && document.activeElement===document.body) el.focus(); }, 80);
       }
     }
 
-    async function submitWord() {
-      const inp = document.getElementById('word-text-input');
+    async function submitHintAnswer(qIdx) {
+      const inp = document.getElementById('hint-answer-input');
       if (!inp) return;
-      const word = inp.value.trim().toUpperCase();
-      if (!word) { inp.style.borderColor='var(--sage)'; inp.focus(); return; }
+      const answer = inp.value.trim();
+      if (!answer) { inp.style.borderColor='var(--terracotta)'; inp.focus(); return; }
       inp.disabled = true;
-      const btn = document.querySelector('.word-submit-btn');
+      const btn = document.querySelector('.hint-submit-btn');
       if (btn) btn.disabled = true;
-      wordLastSnap = '';
-      wordSubmitted = true;
+      hintAnswerSubmitted = true;
+      hintLastSnap = '';
       try {
-        await fetch(API + '/api/word-submit', {
+        await fetch(API + '/api/hint-answer', {
           method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ sessionId, word })
+          body: JSON.stringify({ sessionId, answer, qIndex: qIdx })
         });
-      } catch(e) { wordSubmitted = false; }
+      } catch(e) { hintAnswerSubmitted = false; }
+    }
+
+    async function submitHintGuess(qIdx) {
+      const inp = document.getElementById('hint-guess-input');
+      if (!inp) return;
+      const guess = inp.value.trim();
+      if (!guess) { inp.style.borderColor='var(--sage)'; inp.focus(); return; }
+      inp.disabled = true;
+      const btn = document.querySelector('.hint-guess-btn');
+      if (btn) btn.disabled = true;
+      hintGuessSubmitted = true;
+      hintLastSnap = '';
+      try {
+        await fetch(API + '/api/hint-guess', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ sessionId, guess, qIndex: qIdx })
+        });
+      } catch(e) { hintGuessSubmitted = false; }
     }
 
     // ─── COMPATIBILITY GAME ───────────────────────────────────────────────────────
@@ -1707,7 +2196,7 @@ if (!r.ok) {
       hpBoxPulseTimers = [];
 
       container.innerHTML = '';
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 2; i++) {
         const box = document.createElement('div');
         box.className = 'hp-box';
         box.id = `hp-box-${i}`;
@@ -1726,7 +2215,7 @@ if (!r.ok) {
 
       function popNext() {
         // Reset all boxes
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 2; i++) {
           const box = document.getElementById(`hp-box-${i}`);
           if (!box) return;
           box.classList.remove('hp-active');

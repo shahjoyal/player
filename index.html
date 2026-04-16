@@ -782,7 +782,7 @@
       <div class="ornament">Game Night</div>
       <div class="welcome-card">
         <span class="welcome-emoji">🎉</span>
-        <h1 class="welcome-title">Only 20 days to go for the special day!</h1>
+        <h1 class="welcome-title">Only 18 days to go for the special day!</h1>
         <p class="welcome-sub">Enter your name to join the fun</p>
 
         <div class="input-wrap">
@@ -1560,6 +1560,7 @@ if (!r.ok) {
     // ─── EMOJI PICK GAME ─────────────────────────────────────────────────────────
     let epLastSnap = '';
     let epSelectedOption = null;
+    let epLastQIdx = -1;       // track last rendered question index
     let epSubmitted = {};  // { qIndex: true }
 
     function initEmojiPick(state) {
@@ -1567,12 +1568,18 @@ if (!r.ok) {
       window.__epState = ep;   // cache for quick re-renders
       const qIdx  = ep.currentQ  || 0;
       const total = ep.totalRounds || (ep.questions || []).length || 5;
-      const snap  = qIdx + '|' + (ep.status||'') + '|' + JSON.stringify((ep.answers||{})[qIdx]||{});
+
+      // Reset selection ONLY when the question index changes (new round)
+      // Never reset mid-question — that's what was wiping the player's tap
+      if (qIdx !== epLastQIdx) {
+        epSelectedOption = null;
+        epLastQIdx = qIdx;
+      }
+
+      // Include epSelectedOption in the snapshot so a tap always triggers a re-render
+      const snap  = qIdx + '|' + (ep.status||'') + '|' + JSON.stringify((ep.answers||{})[qIdx]||{}) + '|sel:' + epSelectedOption;
       if (snap === epLastSnap) return;
       epLastSnap = snap;
-
-      // Reset selection when question changes
-      if (!epSubmitted[qIdx]) epSelectedOption = null;
 
       document.getElementById('ep-sub-label').textContent =
         'Round ' + (qIdx + 1) + ' of ' + total + '  ·  ' + esc((ep.pair||{}).player1||'') + ' & ' + esc((ep.pair||{}).player2||'');
@@ -1706,16 +1713,15 @@ if (!r.ok) {
 
     function selectEmojiOption(idx) {
       epSelectedOption = idx;
-      epLastSnap = ''; // force re-render
-      const ep = window.__epState;
-      if (ep) renderEmojiPickBody(ep);
-      else { epLastSnap = ''; }
-      // Quick local re-render without waiting for poll
+      // Update snapshot key so the next poll doesn't think nothing changed
+      // Do a lightweight DOM-only update — no full re-render needed
       document.querySelectorAll('.ep-option').forEach((el, i) => {
         el.classList.toggle('selected', i === idx);
       });
       const btn = document.getElementById('ep-submit-btn');
       if (btn) btn.disabled = false;
+      // Invalidate snap so next poll re-renders with the new selection persisted
+      epLastSnap = '';
     }
 
     async function submitEmojiPick(qIdx) {

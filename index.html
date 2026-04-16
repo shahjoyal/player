@@ -699,94 +699,77 @@
       transition: transform 0.15s;
     }
     .hp-card-ok-btn:active { transform: scale(0.96); }
-/* ── WALL STACK GAME ── */
-.wall-screen { background: linear-gradient(135deg, #F0F5FF 0%, #FFF5F0 100%); }
-.wall-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;overflow-y:auto; }
-.wall-header { width:100%;padding:14px 20px 10px;background:rgba(255,255,255,0.93);border-bottom:1px solid var(--border);text-align:center;flex-shrink:0; }
-.wall-title { font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--espresso); }
-.wall-sub { font-size:12px;color:var(--terracotta);font-weight:500;margin-top:2px; }
-.wall-body { flex:1;width:100%;max-width:420px;padding:16px 16px 32px;display:flex;flex-direction:column;gap:14px;align-items:center; }
+/* ── EMOJI PICK GAME ── */
+.emoji-screen { background: linear-gradient(135deg, #FFF0FA 0%, #F0F5FF 100%); }
+.emoji-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;overflow-y:auto; }
+.emoji-header { width:100%;padding:14px 20px 10px;background:rgba(255,255,255,0.93);border-bottom:1px solid var(--border);text-align:center;flex-shrink:0; }
+.emoji-title { font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--espresso); }
+.emoji-sub { font-size:12px;color:var(--terracotta);font-weight:500;margin-top:2px; }
+.emoji-body { flex:1;width:100%;max-width:500px;padding:14px 14px 32px;display:flex;flex-direction:column;gap:12px;align-items:center; }
 
-/* The building visual */
-.wall-building {
-  width:100%;background:#fff;border:1.5px solid var(--border);border-radius:20px;
-  padding:16px 16px 8px;box-shadow:0 6px 24px var(--shadow);
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  min-height:200px;position:relative;overflow:hidden;
-}
-.wall-building::before {
-  content:'';position:absolute;bottom:0;left:0;right:0;height:8px;
-  background:linear-gradient(135deg,var(--terracotta),var(--espresso-md));border-radius:0 0 18px 18px;
-}
-.wall-storey {
-  width:100%;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:600;position:relative;transition:all 0.4s ease;
-  box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-.wall-storey.correct { background:linear-gradient(135deg,var(--sage),#5a7a4a);color:#fff; }
-.wall-storey.tilted { background:linear-gradient(135deg,#E8A56A,var(--terracotta));color:#fff; }
-.wall-storey.empty { background:var(--cream-dark);border:2px dashed var(--cream-deep);color:rgba(44,26,14,0.3); }
-.wall-storey-label { font-size:11px;font-weight:600; }
-.wall-storey-name { font-size:10px;opacity:0.75;margin-left:6px; }
+/* Scores row */
+.ep-scores-row { display:flex;gap:10px;width:100%; }
+.ep-score-card { flex:1;background:#fff;border:1.5px solid var(--cream-deep);border-radius:14px;padding:10px 12px;text-align:center;box-shadow:0 2px 8px var(--shadow); }
+.ep-score-card.me { border-color:var(--terracotta); }
+.ep-score-name { font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--espresso-lt);margin-bottom:3px; }
+.ep-score-num { font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--terracotta); }
 
-/* Slider placer */
-.wall-placer {
-  width:100%;background:#fff;border:1.5px solid var(--border);border-radius:18px;
-  padding:20px 20px 16px;box-shadow:0 4px 16px var(--shadow);text-align:center;
-}
-.wall-placer-title { font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:4px; }
-.wall-placer-sub { font-size:13px;color:rgba(44,26,14,0.5);margin-bottom:20px; }
-.wall-crane { font-size:36px;margin-bottom:8px;animation:crane-swing 2s ease-in-out infinite; display:block; }
-@keyframes crane-swing { 0%,100%{transform:translateX(-12px)} 50%{transform:translateX(12px)} }
+/* Question card */
+.ep-q-card { width:100%;background:#fff;border:1.5px solid var(--border);border-left:4px solid var(--terracotta);border-radius:16px;padding:16px 18px;box-shadow:0 4px 16px var(--shadow); }
+.ep-q-num { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--terracotta);margin-bottom:5px; }
+.ep-q-text { font-family:'Playfair Display',serif;font-size:clamp(16px,4.5vw,20px);font-weight:700;color:var(--espresso);line-height:1.4; }
+.ep-q-img { width:100%;border-radius:12px;margin-top:10px;max-height:160px;object-fit:cover;box-shadow:0 4px 12px var(--shadow); }
 
-.wall-slider-area { position:relative;height:72px;background:var(--cream);border:1.5px solid var(--cream-deep);border-radius:14px;overflow:hidden;margin-bottom:16px;cursor:pointer;touch-action:none; }
-.wall-slider-track { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:4px;height:60%;background:rgba(44,26,14,0.12);border-radius:4px; }
-.wall-slider-block {
-  position:absolute;top:50%;transform:translateY(-50%);
-  width:60px;height:48px;border-radius:10px;
-  background:linear-gradient(135deg,var(--terracotta),var(--espresso-md));
-  color:#fff;font-weight:700;font-size:22px;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 12px rgba(196,98,45,0.4);
-  cursor:grab;user-select:none;touch-action:none;
-  transition:box-shadow 0.2s;
+/* Options grid — 2 cols always on mobile, up to 3 cols if many options */
+.ep-options { display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%; }
+@media(min-width:480px) { .ep-options.cols-3 { grid-template-columns:1fr 1fr 1fr; } }
+
+.ep-option {
+  background:#fff;border:2px solid var(--cream-deep);border-radius:14px;
+  padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;
+  cursor:pointer;transition:all 0.18s;box-shadow:0 2px 8px var(--shadow);
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:80px;
+  position:relative;
 }
-.wall-slider-block:active { cursor:grabbing;box-shadow:0 6px 20px rgba(196,98,45,0.5); }
-.wall-drop-btn {
+.ep-option:active { transform:scale(0.94); }
+.ep-option.selected { border-color:var(--terracotta);background:rgba(196,98,45,0.07);box-shadow:0 0 0 3px rgba(196,98,45,0.2),0 4px 14px rgba(196,98,45,0.15); }
+.ep-option.match { border-color:#2E7D32;background:rgba(46,125,50,0.09);box-shadow:0 0 0 3px rgba(46,125,50,0.2); }
+.ep-option.no-match { border-color:rgba(214,64,64,0.4);background:rgba(214,64,64,0.04);opacity:0.65; }
+.ep-option.other-picked { border-color:var(--gold);background:rgba(184,134,11,0.07); }
+.ep-option.disabled { pointer-events:none; }
+.ep-option-emoji { font-size:clamp(28px,8vw,40px);line-height:1; }
+.ep-option-img { width:100%;height:clamp(60px,18vw,88px);object-fit:cover;border-radius:9px; }
+.ep-option-num { font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--terracotta);font-weight:600; }
+.ep-option-label { font-size:clamp(11px,3.2vw,13px);font-weight:600;color:var(--espresso);text-align:center;line-height:1.3; }
+.ep-option-label-sm { font-size:clamp(10px,2.8vw,12px); }
+
+/* Submit button */
+.ep-submit-btn {
   width:100%;background:linear-gradient(135deg,var(--terracotta),var(--espresso-md));
   color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:16px;
   border:none;border-radius:12px;padding:15px 20px;cursor:pointer;
   box-shadow:0 4px 16px rgba(196,98,45,0.35);transition:transform 0.15s,opacity 0.2s;
 }
-.wall-drop-btn:active { transform:scale(0.97); }
+.ep-submit-btn:disabled { opacity:0.4;cursor:not-allowed; }
+.ep-submit-btn:active:not(:disabled) { transform:scale(0.97); }
 
-/* Question card */
-.wall-question-card {
-  width:100%;background:linear-gradient(135deg,#FFF8EC,#FFF1D4);
-  border:1.5px solid rgba(184,134,11,0.3);border-radius:18px;
-  padding:20px;box-shadow:0 4px 20px rgba(184,134,11,0.12);
-}
-.wall-q-label { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px; }
-.wall-q-text { font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--espresso);margin-bottom:10px; }
-.wall-q-media { width:100%;border-radius:12px;margin-bottom:10px;max-height:200px;object-fit:cover;box-shadow:0 4px 12px var(--shadow); }
-.wall-q-audio { width:100%;margin-bottom:12px; }
+/* Submitted badge */
+.ep-submitted-badge { display:flex;align-items:center;gap:8px;background:rgba(107,124,92,0.1);border:1px solid rgba(107,124,92,0.3);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--sage);font-weight:500;width:100%; }
 
-/* Status cards */
-.wall-waiting-card { text-align:center;padding:24px 16px; }
-.wall-result-card { width:100%;background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:24px;text-align:center;box-shadow:0 4px 16px var(--shadow); }
-.wall-my-turn-badge {
-  width:100%;background:linear-gradient(135deg,rgba(196,98,45,0.1),rgba(184,134,11,0.08));
-  border:1.5px solid rgba(196,98,45,0.3);border-radius:14px;
-  padding:14px 20px;text-align:center;
-}
-.wall-turn-label { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--terracotta);margin-bottom:4px; }
-.wall-turn-text { font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--espresso); }
+/* Reveal card */
+.ep-reveal-card { width:100%;border-radius:18px;padding:18px 16px; }
+.ep-reveal-card.match { background:linear-gradient(135deg,#F0FFF0,#E8F5E9);border:1.5px solid rgba(46,125,50,0.3); }
+.ep-reveal-card.no-match { background:linear-gradient(135deg,#FFF5F5,#FDE8E8);border:1.5px solid rgba(214,64,64,0.25); }
+.ep-reveal-title { font-family:'Playfair Display',serif;font-size:clamp(16px,4.5vw,20px);font-weight:900;margin-bottom:4px;text-align:center; }
+.ep-reveal-answers { display:flex;gap:10px;margin-top:10px; }
+.ep-reveal-player { flex:1;background:rgba(255,255,255,0.75);border-radius:12px;padding:10px 8px;text-align:center; }
+.ep-reveal-pname { font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--espresso-lt);margin-bottom:4px; }
+.ep-reveal-pans { font-size:clamp(20px,6vw,28px); }
+.ep-reveal-plabel { font-size:clamp(10px,2.8vw,12px);font-weight:600;color:var(--espresso);margin-top:3px;line-height:1.3; }
 
-/* Score strip */
-.wall-score-strip { display:flex;align-items:center;justify-content:space-between;background:var(--cream);border:1px solid var(--cream-deep);border-radius:12px;padding:12px 16px; }
-.wall-score-label { font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage); }
-.wall-score-value { font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--terracotta); }
-
+/* Waiting / spectator */
+.ep-waiting { text-align:center;padding:20px 0; }
+.ep-done-card { width:100%;background:#fff;border:1px solid var(--border);border-radius:20px;padding:24px 18px;text-align:center;box-shadow:0 4px 20px var(--shadow); }
   </style>
 </head>
 <body>
@@ -799,7 +782,7 @@
       <div class="ornament">Game Night</div>
       <div class="welcome-card">
         <span class="welcome-emoji">🎉</span>
-        <h1 class="welcome-title">Only 19 days to go for the special day!</h1>
+        <h1 class="welcome-title">Only 20 days to go for the special day!</h1>
         <p class="welcome-sub">Enter your name to join the fun</p>
 
         <div class="input-wrap">
@@ -895,13 +878,13 @@
     </div>
   </div>
 
-<div class="screen wall-screen" id="screen-wall-stack">
-  <div class="wall-wrap">
-    <div class="wall-header">
-      <div class="wall-title">🏗️ Wall Stack</div>
-      <div class="wall-sub" id="wall-sub-label">Building the wall…</div>
+<div class="screen emoji-screen" id="screen-emoji-pick">
+  <div class="emoji-wrap">
+    <div class="emoji-header">
+      <div class="emoji-title">🎭 Emoji Pick</div>
+      <div class="emoji-sub" id="ep-sub-label">Loading…</div>
     </div>
-    <div class="wall-body" id="wall-body"></div>
+    <div class="emoji-body" id="ep-body"></div>
   </div>
 </div>
 
@@ -1114,10 +1097,10 @@ case 'buzzer':
           showScreen('screen-ended');
           break;
         
-        case 'wall_stack':
-          initWallStack(state);
-          lastPhase = 'wall_stack';
-          showScreen('screen-wall-stack');
+        case 'emoji_pick':
+          initEmojiPick(state);
+          lastPhase = 'emoji_pick';
+          showScreen('screen-emoji-pick');
           break;
 
 
@@ -1574,193 +1557,184 @@ if (!r.ok) {
     }
 
 
-    // ─── WALL STACK GAME ─────────────────────────────────────────────────────────
-    let wallLastSnap = '';
-    let wallBlockX = 50; // percentage 0-100
-    let wallDragging = false;
-    let wallDragStartX = 0;
-    let wallDragStartBlockX = 50;
-    let wallPlaced = false;
+    // ─── EMOJI PICK GAME ─────────────────────────────────────────────────────────
+    let epLastSnap = '';
+    let epSelectedOption = null;
+    let epSubmitted = {};  // { qIndex: true }
 
-    function initWallStack(state) {
-      const ws = state.wallStack || {};
-      const snap = (ws.status||'')+'|'+(ws.currentPlayer||'')+'|'+(ws.storeys||[]).length+'|'+(ws.questionActive?'q':'');
-      if (snap === wallLastSnap) return;
-      wallLastSnap = snap;
+    function initEmojiPick(state) {
+      const ep = state.emojiPick || {};
+      window.__epState = ep;   // cache for quick re-renders
+      const qIdx  = ep.currentQ  || 0;
+      const total = ep.totalRounds || (ep.questions || []).length || 5;
+      const snap  = qIdx + '|' + (ep.status||'') + '|' + JSON.stringify((ep.answers||{})[qIdx]||{});
+      if (snap === epLastSnap) return;
+      epLastSnap = snap;
 
-      document.getElementById('wall-sub-label').textContent =
-        'Storey ' + ((ws.storeys||[]).length + 1) + ' of ' + (ws.totalStoreys||5);
+      // Reset selection when question changes
+      if (!epSubmitted[qIdx]) epSelectedOption = null;
 
-      renderWallBody(ws);
+      document.getElementById('ep-sub-label').textContent =
+        'Round ' + (qIdx + 1) + ' of ' + total + '  ·  ' + esc((ep.pair||{}).player1||'') + ' & ' + esc((ep.pair||{}).player2||'');
+
+      renderEmojiPickBody(ep);
     }
 
-    function renderWallBody(ws) {
-      const body = document.getElementById('wall-body');
-      const storeys = ws.storeys || [];
-      const total = ws.totalStoreys || 5;
-      const isMyTurn = ws.currentPlayer === myName;
-      const status = ws.status || 'idle';
+    function renderEmojiPickBody(ep) {
+      const body = document.getElementById('ep-body');
+      const qIdx   = ep.currentQ  || 0;
+      const qs     = ep.questions  || [];
+      const pair   = ep.pair       || {};
+      const status = ep.status     || 'idle';
+      const answers= ep.answers    || {};
+      const scores = ep.scores     || {};
+      const p1 = pair.player1 || '—';
+      const p2 = pair.player2 || '—';
+      const inGame = (myName === p1 || myName === p2);
 
-      // Building visual
-      let buildingHtml = '<div class="wall-building">';
-      // Show storeys bottom to top
-      const allStoreys = [];
-      for (let i = 0; i < total; i++) {
-        allStoreys.push(storeys[i] || null);
-      }
-      // reverse for visual (top floors first in DOM, foundation at bottom)
-      for (let i = total - 1; i >= 0; i--) {
-        const s = allStoreys[i];
-        if (s) {
-          const tilt = s.correct ? 0 : (s.offset * 18);
-          buildingHtml += `<div class="wall-storey ${s.correct ? 'correct' : 'tilted'}" style="transform:rotate(${tilt}deg)">
-            <span class="wall-storey-label">${s.correct ? '✅' : '↗️'} Floor ${i+1}</span>
-            <span class="wall-storey-name">${esc(s.playerName)}</span>
-          </div>`;
-        } else {
-          buildingHtml += `<div class="wall-storey empty"><span class="wall-storey-label">Floor ${i+1}</span></div>`;
-        }
-      }
-      buildingHtml += '</div>';
+      // Scores row
+      let html = '<div class="ep-scores-row">'
+        + '<div class="ep-score-card' + (myName===p1?' me':'') + '"><div class="ep-score-name">' + esc(p1) + (myName===p1?' (you)':'') + '</div><div class="ep-score-num">' + (scores[p1]||0) + '</div></div>'
+        + '<div class="ep-score-card' + (myName===p2?' me':'') + '"><div class="ep-score-name">' + esc(p2) + (myName===p2?' (you)':'') + '</div><div class="ep-score-num">' + (scores[p2]||0) + '</div></div>'
+        + '</div>';
 
-      // Score strip
-      const scoreHtml = `<div class="wall-score-strip">
-        <div><div class="wall-score-label">Your Score</div><div class="wall-score-value">${myScore}</div></div>
-        <div style="text-align:right"><div class="wall-score-label">Storey</div><div class="wall-score-value">${storeys.length}/${total}</div></div>
-      </div>`;
-
-      if (status === 'done') {
-        body.innerHTML = buildingHtml + `<div class="wall-result-card">
-          <div style="font-size:52px;margin-bottom:12px;">🏗️</div>
-          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:8px;">Wall Complete!</div>
-          <div style="font-size:14px;color:rgba(44,26,14,0.5);">All ${total} storeys built!</div>
-        </div>` + scoreHtml;
+      if (!inGame) {
+        html += '<div class="ep-waiting"><div style="font-size:48px;margin-bottom:12px;">👀</div>'
+          + '<div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;">Watching!</div>'
+          + '<div style="font-size:13px;color:rgba(44,26,14,0.45);margin-top:6px;">' + esc(p1) + ' & ' + esc(p2) + ' are picking</div></div>';
+        body.innerHTML = html;
         return;
       }
 
-      if (status === 'question' || ws.questionActive) {
-        const q = ws;
-        let questionHtml = `<div class="wall-question-card">
-          <div class="wall-q-label">🎯 Question Time!</div>`;
-        if (q.questionText) questionHtml += `<div class="wall-q-text">${esc(q.questionText)}</div>`;
-        if (q.questionImage) questionHtml += `<img class="wall-q-media" src="${q.questionImage}" alt="Question image"/>`;
-        if (q.questionAudio) questionHtml += `<audio class="wall-q-audio" controls src="${q.questionAudio}"></audio>`;
-        questionHtml += `<div style="font-size:13px;color:rgba(44,26,14,0.45);margin-top:8px;text-align:center;">Host will advance when ready</div></div>`;
-        body.innerHTML = buildingHtml + questionHtml + scoreHtml;
+      if (status === 'done' || qIdx >= qs.length) {
+        const s1 = scores[p1]||0, s2 = scores[p2]||0;
+        const winner = s1 > s2 ? p1 : s2 > s1 ? p2 : null;
+        html += '<div class="ep-done-card"><div style="font-size:52px;margin-bottom:12px;">' + (winner?'🏆':'🤝') + '</div>'
+          + '<div style="font-family:\'Playfair Display\',serif;font-size:22px;font-weight:900;margin-bottom:8px;">' + (winner ? esc(winner)+' wins!' : "It's a tie!") + '</div>'
+          + '<div style="font-size:14px;color:rgba(44,26,14,0.5);">Matched answers score 10pts each</div></div>';
+        body.innerHTML = html;
         return;
       }
 
-      if (status === 'placed') {
-        // Placed, waiting for host to advance
-        const last = storeys[storeys.length - 1];
-        const correct = last && last.correct;
-        body.innerHTML = buildingHtml + `<div class="wall-result-card">
-          <div style="font-size:48px;margin-bottom:10px;">${correct ? '🎉' : '↗️'}</div>
-          <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">
-            ${correct ? 'Perfect placement! +15pts' : 'A bit off — keep going!'}
-          </div>
-          <div style="font-size:13px;color:rgba(44,26,14,0.45);margin-top:6px;">Waiting for host…</div>
-        </div>` + scoreHtml;
-        return;
-      }
+      const q = qs[qIdx] || {};
+      const myAns = (answers[qIdx] || {})[myName];
+      const submitted = myAns !== undefined || !!epSubmitted[qIdx];
 
-      if (isMyTurn && status === 'placing') {
-        wallPlaced = false;
-        wallBlockX = 50; // reset to center
-        body.innerHTML = buildingHtml
-          + `<div class="wall-my-turn-badge"><div class="wall-turn-label">Your Turn!</div><div class="wall-turn-text">📍 Place Floor ${storeys.length + 1}</div></div>`
-          + `<div class="wall-placer">
-              <div class="wall-placer-title">Drop the Block</div>
-              <div class="wall-placer-sub">Drag to aim, release to drop — get it in the centre!</div>
-              <span class="wall-crane" id="wall-crane-emoji">🏗️</span>
-              <div class="wall-slider-area" id="wall-slider-area">
-                <div class="wall-slider-track"></div>
-                <div class="wall-slider-block" id="wall-slider-block">🧱</div>
-              </div>
-              <button class="wall-drop-btn" onclick="dropWallBlock()">Drop It! 🧱</button>
-            </div>`
-          + scoreHtml;
+      // Question card
+      html += '<div class="ep-q-card">'
+        + '<div class="ep-q-num">Round ' + (qIdx+1) + ' of ' + qs.length + '</div>'
+        + '<div class="ep-q-text">' + esc(q.text||'Choose your answer') + '</div>';
+      if (q.imageUrl) html += '<img class="ep-q-img" src="' + q.imageUrl + '" alt=""/>';
+      html += '</div>';
 
-        // Wire up dragging
-        setTimeout(() => wireWallSlider(), 50);
-        return;
-      }
-
-      // Not my turn — waiting
-      body.innerHTML = buildingHtml
-        + `<div class="wall-waiting-card">
-            <div style="font-size:48px;margin-bottom:10px;">⏳</div>
-            <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">
-              ${ws.currentPlayer ? esc(ws.currentPlayer) + '\'s turn' : 'Waiting…'}
-            </div>
-            <div style="font-size:13px;color:rgba(44,26,14,0.45);margin-top:6px;">Building Floor ${storeys.length + 1}</div>
-          </div>`
-        + scoreHtml;
-    }
-
-    function wireWallSlider() {
-      const area = document.getElementById('wall-slider-area');
-      const block = document.getElementById('wall-slider-block');
-      if (!area || !block) return;
-
-      function setBlockPos(pct) {
-        pct = Math.max(5, Math.min(95, pct));
-        wallBlockX = pct;
-        block.style.left = `calc(${pct}% - 30px)`;
-      }
-
-      setBlockPos(50);
-
-      function onMove(clientX) {
-        if (!wallDragging) return;
-        const rect = area.getBoundingClientRect();
-        const pct = ((clientX - rect.left) / rect.width) * 100;
-        setBlockPos(pct);
-      }
-
-      block.addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        wallDragging = true;
-        block.setPointerCapture(e.pointerId);
-      });
-      block.addEventListener('pointermove', (e) => { e.preventDefault(); onMove(e.clientX); });
-      block.addEventListener('pointerup', () => { wallDragging = false; });
-
-      // Also allow clicking anywhere in the area
-      area.addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        wallDragging = true;
-        const rect = area.getBoundingClientRect();
-        const pct = ((e.clientX - rect.left) / rect.width) * 100;
-        setBlockPos(pct);
-      });
-      area.addEventListener('pointermove', (e) => { if (wallDragging) { e.preventDefault(); onMove(e.clientX); } });
-      area.addEventListener('pointerup', () => { wallDragging = false; });
-    }
-
-    async function dropWallBlock() {
-      if (wallPlaced) return;
-      wallPlaced = true;
-      // Convert blockX (0-100%) to offset from center (-1 to 1)
-      const offset = (wallBlockX - 50) / 50;
-      try {
-        const r = await fetch('/api/wall-place', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sessionId, offset })
+      // Options grid
+      const opts = q.options || [];
+      if (status === 'revealed') {
+        const qAnswers = answers[qIdx] || {};
+        const a1 = qAnswers[p1]; const a2 = qAnswers[p2];
+        const matched = (a1 !== undefined && a2 !== undefined && a1 === a2);
+        html += '<div class="ep-reveal-card ' + (matched?'match':'no-match') + '">'
+          + '<div class="ep-reveal-title">' + (matched ? '🎉 Perfect Match! +10 pts each' : '😅 Different choices!') + '</div>'
+          + '<div class="ep-reveal-answers">';
+        [p1, p2].forEach(pname => {
+          const ans = qAnswers[pname];
+          const opt = (ans !== undefined && opts[ans]) ? opts[ans] : null;
+          const numLabel = opt && opt.imageUrl ? 'Image ' + (ans+1) : null;
+          html += '<div class="ep-reveal-player">'
+            + '<div class="ep-reveal-pname">' + esc(pname) + '</div>'
+            + (opt && opt.imageUrl ? '<img src="'+opt.imageUrl+'" style="width:100%;height:60px;object-fit:cover;border-radius:8px;margin:4px 0;"/>' : '')
+            + '<div class="ep-reveal-pans">' + (opt ? (opt.emoji || (!opt.imageUrl ? '✔️' : '')) : '❓') + '</div>'
+            + '<div class="ep-reveal-plabel">' + esc(numLabel || (opt ? opt.label : 'No answer')) + '</div>'
+            + '</div>';
         });
-        const d = await r.json();
-        if (!r.ok) { wallPlaced = false; return; }
-        wallLastSnap = '';
-        poll();
-      } catch(e) { wallPlaced = false; }
+        html += '</div></div>';
+        // greyed options for context
+        html += '<div class="ep-options">';
+        opts.forEach((opt, i) => {
+          const pickedByMe    = (myAns === i);
+          const pickedByOther = ((myName===p1 ? qAnswers[p2] : qAnswers[p1]) === i);
+          let cls = 'disabled ';
+          if (pickedByMe && pickedByOther) cls += 'match';
+          else if (pickedByMe) cls += 'selected';
+          else if (pickedByOther) cls += 'other-picked';
+          html += renderOptionHTML(opt, i, cls);
+        });
+        html += '</div>';
+      } else if (submitted) {
+        const opt = opts[myAns];
+        html += '<div class="ep-submitted-badge">✅ Locked in: <strong>' + esc(opt ? opt.label : '#'+(myAns+1)) + '</strong> — waiting for host to reveal…</div>';
+        html += '<div class="ep-options">';
+        opts.forEach((opt, i) => {
+          const cls = 'disabled ' + (myAns === i ? 'selected' : '');
+          html += renderOptionHTML(opt, i, cls);
+        });
+        html += '</div>';
+      } else {
+        // Active picking
+        const colsClass = opts.length >= 5 ? ' cols-3' : '';
+        html += '<div class="ep-options' + colsClass + '" id="ep-opts-grid">';
+        opts.forEach((opt, i) => {
+          const cls = (epSelectedOption === i ? 'selected' : '');
+          html += renderOptionHTML(opt, i, cls, 'selectEmojiOption(' + i + ')');
+        });
+        html += '</div>';
+        html += '<button class="ep-submit-btn" id="ep-submit-btn" onclick="submitEmojiPick(' + qIdx + ')"'
+          + (epSelectedOption === null ? ' disabled' : '') + '>Lock In My Answer 🔒</button>';
+      }
+
+      body.innerHTML = html;
     }
 
-    let wsGridKey = '';
-let wsSelected = [];
-let wsSelectedEls = [];
-let wsDirection = null;
-let wsPointerDown = false;
-let wsCurrentState = null;
+    function renderOptionHTML(opt, i, extraClass, onclick) {
+      const hasImg   = opt && opt.imageUrl;
+      const hasEmoji = opt && opt.emoji && !hasImg;
+      // If image: player sees full image + "Image N" label
+      // If emoji only: show big emoji + label
+      // If text only: show label prominently
+      const displayLabel = esc((opt && opt.label) || ('Option ' + (i+1)));
+      return '<div class="ep-option ' + (extraClass||'') + '"'
+        + (onclick ? ' onclick="' + onclick + '"' : '')
+        + ' role="button" tabindex="0">'
+        + (hasImg
+            ? '<img class="ep-option-img" src="' + opt.imageUrl + '" alt="Image '+(i+1)+'"/>'
+              + '<div class="ep-option-num">Image ' + (i+1) + '</div>'
+            : '')
+        + (hasEmoji ? '<div class="ep-option-emoji">' + opt.emoji + '</div>' : '')
+        + '<div class="ep-option-label' + (hasImg ? ' ep-option-label-sm' : '') + '">' + displayLabel + '</div>'
+        + '</div>';
+    }
+
+    function selectEmojiOption(idx) {
+      epSelectedOption = idx;
+      epLastSnap = ''; // force re-render
+      const ep = window.__epState;
+      if (ep) renderEmojiPickBody(ep);
+      else { epLastSnap = ''; }
+      // Quick local re-render without waiting for poll
+      document.querySelectorAll('.ep-option').forEach((el, i) => {
+        el.classList.toggle('selected', i === idx);
+      });
+      const btn = document.getElementById('ep-submit-btn');
+      if (btn) btn.disabled = false;
+    }
+
+    async function submitEmojiPick(qIdx) {
+      if (epSelectedOption === null) return;
+      const btn = document.getElementById('ep-submit-btn');
+      if (btn) btn.disabled = true;
+      epSubmitted[qIdx] = true;
+      epLastSnap = '';
+      try {
+        const r = await fetch('/api/emoji-pick-answer', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ sessionId, optionIndex: epSelectedOption })
+        });
+        if (!r.ok) { epSubmitted[qIdx] = false; if (btn) btn.disabled = false; }
+        else poll();
+      } catch(e) { epSubmitted[qIdx] = false; if (btn) btn.disabled = false; }
+    }
+
+    // ─── HINT GAME ───────────────────────────────────────────────────────────────
 
     function renderHintBody(qs, qIdx, status, revealed, answer, guess, scores, pair, amAnswerer, amGuesser, inGame) {
       const body = document.getElementById('hint-body');

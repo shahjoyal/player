@@ -699,176 +699,93 @@
       transition: transform 0.15s;
     }
     .hp-card-ok-btn:active { transform: scale(0.96); }
-   .word-screen {
-  background: linear-gradient(135deg, #F5F0FF 0%, #FFF8F0 100%);
+/* ── WALL STACK GAME ── */
+.wall-screen { background: linear-gradient(135deg, #F0F5FF 0%, #FFF5F0 100%); }
+.wall-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;overflow-y:auto; }
+.wall-header { width:100%;padding:14px 20px 10px;background:rgba(255,255,255,0.93);border-bottom:1px solid var(--border);text-align:center;flex-shrink:0; }
+.wall-title { font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--espresso); }
+.wall-sub { font-size:12px;color:var(--terracotta);font-weight:500;margin-top:2px; }
+.wall-body { flex:1;width:100%;max-width:420px;padding:16px 16px 32px;display:flex;flex-direction:column;gap:14px;align-items:center; }
+
+/* The building visual */
+.wall-building {
+  width:100%;background:#fff;border:1.5px solid var(--border);border-radius:20px;
+  padding:16px 16px 8px;box-shadow:0 6px 24px var(--shadow);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  min-height:200px;position:relative;overflow:hidden;
 }
-
-.word-wrap {
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.wall-building::before {
+  content:'';position:absolute;bottom:0;left:0;right:0;height:8px;
+  background:linear-gradient(135deg,var(--terracotta),var(--espresso-md));border-radius:0 0 18px 18px;
 }
-
-.word-header {
-  text-align: center;
-  padding: 16px 10px 6px;
+.wall-storey {
+  width:100%;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;position:relative;transition:all 0.4s ease;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
+.wall-storey.correct { background:linear-gradient(135deg,var(--sage),#5a7a4a);color:#fff; }
+.wall-storey.tilted { background:linear-gradient(135deg,#E8A56A,var(--terracotta));color:#fff; }
+.wall-storey.empty { background:var(--cream-dark);border:2px dashed var(--cream-deep);color:rgba(44,26,14,0.3); }
+.wall-storey-label { font-size:11px;font-weight:600; }
+.wall-storey-name { font-size:10px;opacity:0.75;margin-left:6px; }
 
-.word-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--espresso);
+/* Slider placer */
+.wall-placer {
+  width:100%;background:#fff;border:1.5px solid var(--border);border-radius:18px;
+  padding:20px 20px 16px;box-shadow:0 4px 16px var(--shadow);text-align:center;
 }
+.wall-placer-title { font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:4px; }
+.wall-placer-sub { font-size:13px;color:rgba(44,26,14,0.5);margin-bottom:20px; }
+.wall-crane { font-size:36px;margin-bottom:8px;animation:crane-swing 2s ease-in-out infinite; display:block; }
+@keyframes crane-swing { 0%,100%{transform:translateX(-12px)} 50%{transform:translateX(12px)} }
 
-.word-sub {
-  margin-top: 4px;
-  font-size: 13px;
-  color: rgba(44,26,14,0.55);
-  line-height: 1.5;
+.wall-slider-area { position:relative;height:72px;background:var(--cream);border:1.5px solid var(--cream-deep);border-radius:14px;overflow:hidden;margin-bottom:16px;cursor:pointer;touch-action:none; }
+.wall-slider-track { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:4px;height:60%;background:rgba(44,26,14,0.12);border-radius:4px; }
+.wall-slider-block {
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:60px;height:48px;border-radius:10px;
+  background:linear-gradient(135deg,var(--terracotta),var(--espresso-md));
+  color:#fff;font-weight:700;font-size:22px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(196,98,45,0.4);
+  cursor:grab;user-select:none;touch-action:none;
+  transition:box-shadow 0.2s;
 }
-
-.word-stats {
-  display: flex;
-  gap: 10px;
+.wall-slider-block:active { cursor:grabbing;box-shadow:0 6px 20px rgba(196,98,45,0.5); }
+.wall-drop-btn {
+  width:100%;background:linear-gradient(135deg,var(--terracotta),var(--espresso-md));
+  color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:16px;
+  border:none;border-radius:12px;padding:15px 20px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(196,98,45,0.35);transition:transform 0.15s,opacity 0.2s;
 }
+.wall-drop-btn:active { transform:scale(0.97); }
 
-.word-stat {
-  flex: 1;
-  background: #fff;
-  border: 1.5px solid var(--cream-deep);
-  border-radius: 14px;
-  padding: 12px 14px;
-  text-align: center;
-  box-shadow: 0 2px 8px var(--shadow);
+/* Question card */
+.wall-question-card {
+  width:100%;background:linear-gradient(135deg,#FFF8EC,#FFF1D4);
+  border:1.5px solid rgba(184,134,11,0.3);border-radius:18px;
+  padding:20px;box-shadow:0 4px 20px rgba(184,134,11,0.12);
 }
+.wall-q-label { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px; }
+.wall-q-text { font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--espresso);margin-bottom:10px; }
+.wall-q-media { width:100%;border-radius:12px;margin-bottom:10px;max-height:200px;object-fit:cover;box-shadow:0 4px 12px var(--shadow); }
+.wall-q-audio { width:100%;margin-bottom:12px; }
 
-.word-stat-label {
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--sage);
-  margin-bottom: 4px;
+/* Status cards */
+.wall-waiting-card { text-align:center;padding:24px 16px; }
+.wall-result-card { width:100%;background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:24px;text-align:center;box-shadow:0 4px 16px var(--shadow); }
+.wall-my-turn-badge {
+  width:100%;background:linear-gradient(135deg,rgba(196,98,45,0.1),rgba(184,134,11,0.08));
+  border:1.5px solid rgba(196,98,45,0.3);border-radius:14px;
+  padding:14px 20px;text-align:center;
 }
+.wall-turn-label { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--terracotta);margin-bottom:4px; }
+.wall-turn-text { font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--espresso); }
 
-.word-stat-value {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  font-weight: 900;
-  color: var(--terracotta);
-}
-
-.ws-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 6px;
-  background: rgba(255,255,255,0.62);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 10px;
-  box-shadow: 0 6px 24px var(--shadow);
-}
-
-.ws-cell {
-  aspect-ratio: 1;
-  border: 1.5px solid var(--cream-deep);
-  border-radius: 10px;
-  background: #fff;
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  font-weight: 900;
-  color: var(--espresso);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  user-select: none;
-  touch-action: none;
-}
-
-.ws-cell.selected {
-  background: rgba(196,98,45,0.14);
-  border-color: var(--terracotta);
-}
-
-.ws-cell.found {
-  background: rgba(107,124,92,0.12);
-  border-color: var(--sage);
-  color: var(--sage);
-}
-
-.ws-toolbar {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.ws-selected-word {
-  background: #fff;
-  border: 1px solid var(--cream-deep);
-  border-radius: 12px;
-  padding: 12px 14px;
-  font-size: 14px;
-  color: var(--espresso);
-  text-align: center;
-}
-
-.ws-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.ws-clear-btn,
-.ws-submit-btn {
-  flex: 1;
-  border: none;
-  border-radius: 12px;
-  padding: 14px 16px;
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.ws-clear-btn {
-  background: var(--cream-dark);
-  color: var(--espresso);
-}
-
-.ws-submit-btn {
-  background: linear-gradient(135deg, var(--terracotta), var(--espresso-md));
-  color: #fff;
-}
-
-.ws-found-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.ws-found-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff;
-  border: 1px solid var(--cream-deep);
-  border-radius: 100px;
-  padding: 6px 12px;
-  font-size: 12px;
-  color: var(--espresso);
-}
-
-.ws-msg {
-  min-height: 18px;
-  text-align: center;
-  font-size: 13px;
-  color: var(--sage);
-}
-
-
+/* Score strip */
+.wall-score-strip { display:flex;align-items:center;justify-content:space-between;background:var(--cream);border:1px solid var(--cream-deep);border-radius:12px;padding:12px 16px; }
+.wall-score-label { font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage); }
+.wall-score-value { font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--terracotta); }
 
   </style>
 </head>
@@ -882,7 +799,7 @@
       <div class="ornament">Game Night</div>
       <div class="welcome-card">
         <span class="welcome-emoji">🎉</span>
-        <h1 class="welcome-title">Only 20 days to go for the special day!</h1>
+        <h1 class="welcome-title">Only 19 days to go for the special day!</h1>
         <p class="welcome-sub">Enter your name to join the fun</p>
 
         <div class="input-wrap">
@@ -978,36 +895,13 @@
     </div>
   </div>
 
-<div class="screen word-screen" id="screen-word-search">
-  <div class="word-wrap">
-    <div class="word-header">
-      <div class="word-title">🔎 Word Search</div>
-      <div class="word-sub">Tap or drag in a straight line. Backwards also counts.</div>
+<div class="screen wall-screen" id="screen-wall-stack">
+  <div class="wall-wrap">
+    <div class="wall-header">
+      <div class="wall-title">🏗️ Wall Stack</div>
+      <div class="wall-sub" id="wall-sub-label">Building the wall…</div>
     </div>
-
-    <div class="word-stats">
-      <div class="word-stat">
-        <div class="word-stat-label">Found</div>
-        <div class="word-stat-value"><span id="ws-found-count">0</span>/<span id="ws-total-count">0</span></div>
-      </div>
-      <div class="word-stat">
-        <div class="word-stat-label">Your Score</div>
-        <div class="word-stat-value" id="ws-my-score">0</div>
-      </div>
-    </div>
-
-    <div id="ws-grid" class="ws-grid"></div>
-
-    <div class="ws-toolbar">
-      <div id="ws-selected-word" class="ws-selected-word">Select letters to form a word</div>
-      <div class="ws-actions">
-        <button class="ws-clear-btn" onclick="clearWordSearchSelection()">Clear</button>
-        <button class="ws-submit-btn" onclick="submitWordSearch()">Submit</button>
-      </div>
-    </div>
-
-    <div id="ws-found-list" class="ws-found-list"></div>
-    <div id="ws-msg" class="ws-msg"></div>
+    <div class="wall-body" id="wall-body"></div>
   </div>
 </div>
 
@@ -1220,11 +1114,11 @@ case 'buzzer':
           showScreen('screen-ended');
           break;
         
-          case 'word_search':
-  initWordSearch(state);
-  lastPhase = 'word_search';
-  showScreen('screen-word-search');
-  break;
+        case 'wall_stack':
+          initWallStack(state);
+          lastPhase = 'wall_stack';
+          showScreen('screen-wall-stack');
+          break;
 
 
       }
@@ -1680,208 +1574,193 @@ if (!r.ok) {
     }
 
 
+    // ─── WALL STACK GAME ─────────────────────────────────────────────────────────
+    let wallLastSnap = '';
+    let wallBlockX = 50; // percentage 0-100
+    let wallDragging = false;
+    let wallDragStartX = 0;
+    let wallDragStartBlockX = 50;
+    let wallPlaced = false;
+
+    function initWallStack(state) {
+      const ws = state.wallStack || {};
+      const snap = (ws.status||'')+'|'+(ws.currentPlayer||'')+'|'+(ws.storeys||[]).length+'|'+(ws.questionActive?'q':'');
+      if (snap === wallLastSnap) return;
+      wallLastSnap = snap;
+
+      document.getElementById('wall-sub-label').textContent =
+        'Storey ' + ((ws.storeys||[]).length + 1) + ' of ' + (ws.totalStoreys||5);
+
+      renderWallBody(ws);
+    }
+
+    function renderWallBody(ws) {
+      const body = document.getElementById('wall-body');
+      const storeys = ws.storeys || [];
+      const total = ws.totalStoreys || 5;
+      const isMyTurn = ws.currentPlayer === myName;
+      const status = ws.status || 'idle';
+
+      // Building visual
+      let buildingHtml = '<div class="wall-building">';
+      // Show storeys bottom to top
+      const allStoreys = [];
+      for (let i = 0; i < total; i++) {
+        allStoreys.push(storeys[i] || null);
+      }
+      // reverse for visual (top floors first in DOM, foundation at bottom)
+      for (let i = total - 1; i >= 0; i--) {
+        const s = allStoreys[i];
+        if (s) {
+          const tilt = s.correct ? 0 : (s.offset * 18);
+          buildingHtml += `<div class="wall-storey ${s.correct ? 'correct' : 'tilted'}" style="transform:rotate(${tilt}deg)">
+            <span class="wall-storey-label">${s.correct ? '✅' : '↗️'} Floor ${i+1}</span>
+            <span class="wall-storey-name">${esc(s.playerName)}</span>
+          </div>`;
+        } else {
+          buildingHtml += `<div class="wall-storey empty"><span class="wall-storey-label">Floor ${i+1}</span></div>`;
+        }
+      }
+      buildingHtml += '</div>';
+
+      // Score strip
+      const scoreHtml = `<div class="wall-score-strip">
+        <div><div class="wall-score-label">Your Score</div><div class="wall-score-value">${myScore}</div></div>
+        <div style="text-align:right"><div class="wall-score-label">Storey</div><div class="wall-score-value">${storeys.length}/${total}</div></div>
+      </div>`;
+
+      if (status === 'done') {
+        body.innerHTML = buildingHtml + `<div class="wall-result-card">
+          <div style="font-size:52px;margin-bottom:12px;">🏗️</div>
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:8px;">Wall Complete!</div>
+          <div style="font-size:14px;color:rgba(44,26,14,0.5);">All ${total} storeys built!</div>
+        </div>` + scoreHtml;
+        return;
+      }
+
+      if (status === 'question' || ws.questionActive) {
+        const q = ws;
+        let questionHtml = `<div class="wall-question-card">
+          <div class="wall-q-label">🎯 Question Time!</div>`;
+        if (q.questionText) questionHtml += `<div class="wall-q-text">${esc(q.questionText)}</div>`;
+        if (q.questionImage) questionHtml += `<img class="wall-q-media" src="${q.questionImage}" alt="Question image"/>`;
+        if (q.questionAudio) questionHtml += `<audio class="wall-q-audio" controls src="${q.questionAudio}"></audio>`;
+        questionHtml += `<div style="font-size:13px;color:rgba(44,26,14,0.45);margin-top:8px;text-align:center;">Host will advance when ready</div></div>`;
+        body.innerHTML = buildingHtml + questionHtml + scoreHtml;
+        return;
+      }
+
+      if (status === 'placed') {
+        // Placed, waiting for host to advance
+        const last = storeys[storeys.length - 1];
+        const correct = last && last.correct;
+        body.innerHTML = buildingHtml + `<div class="wall-result-card">
+          <div style="font-size:48px;margin-bottom:10px;">${correct ? '🎉' : '↗️'}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">
+            ${correct ? 'Perfect placement! +15pts' : 'A bit off — keep going!'}
+          </div>
+          <div style="font-size:13px;color:rgba(44,26,14,0.45);margin-top:6px;">Waiting for host…</div>
+        </div>` + scoreHtml;
+        return;
+      }
+
+      if (isMyTurn && status === 'placing') {
+        wallPlaced = false;
+        wallBlockX = 50; // reset to center
+        body.innerHTML = buildingHtml
+          + `<div class="wall-my-turn-badge"><div class="wall-turn-label">Your Turn!</div><div class="wall-turn-text">📍 Place Floor ${storeys.length + 1}</div></div>`
+          + `<div class="wall-placer">
+              <div class="wall-placer-title">Drop the Block</div>
+              <div class="wall-placer-sub">Drag to aim, release to drop — get it in the centre!</div>
+              <span class="wall-crane" id="wall-crane-emoji">🏗️</span>
+              <div class="wall-slider-area" id="wall-slider-area">
+                <div class="wall-slider-track"></div>
+                <div class="wall-slider-block" id="wall-slider-block">🧱</div>
+              </div>
+              <button class="wall-drop-btn" onclick="dropWallBlock()">Drop It! 🧱</button>
+            </div>`
+          + scoreHtml;
+
+        // Wire up dragging
+        setTimeout(() => wireWallSlider(), 50);
+        return;
+      }
+
+      // Not my turn — waiting
+      body.innerHTML = buildingHtml
+        + `<div class="wall-waiting-card">
+            <div style="font-size:48px;margin-bottom:10px;">⏳</div>
+            <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">
+              ${ws.currentPlayer ? esc(ws.currentPlayer) + '\'s turn' : 'Waiting…'}
+            </div>
+            <div style="font-size:13px;color:rgba(44,26,14,0.45);margin-top:6px;">Building Floor ${storeys.length + 1}</div>
+          </div>`
+        + scoreHtml;
+    }
+
+    function wireWallSlider() {
+      const area = document.getElementById('wall-slider-area');
+      const block = document.getElementById('wall-slider-block');
+      if (!area || !block) return;
+
+      function setBlockPos(pct) {
+        pct = Math.max(5, Math.min(95, pct));
+        wallBlockX = pct;
+        block.style.left = `calc(${pct}% - 30px)`;
+      }
+
+      setBlockPos(50);
+
+      function onMove(clientX) {
+        if (!wallDragging) return;
+        const rect = area.getBoundingClientRect();
+        const pct = ((clientX - rect.left) / rect.width) * 100;
+        setBlockPos(pct);
+      }
+
+      block.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        wallDragging = true;
+        block.setPointerCapture(e.pointerId);
+      });
+      block.addEventListener('pointermove', (e) => { e.preventDefault(); onMove(e.clientX); });
+      block.addEventListener('pointerup', () => { wallDragging = false; });
+
+      // Also allow clicking anywhere in the area
+      area.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        wallDragging = true;
+        const rect = area.getBoundingClientRect();
+        const pct = ((e.clientX - rect.left) / rect.width) * 100;
+        setBlockPos(pct);
+      });
+      area.addEventListener('pointermove', (e) => { if (wallDragging) { e.preventDefault(); onMove(e.clientX); } });
+      area.addEventListener('pointerup', () => { wallDragging = false; });
+    }
+
+    async function dropWallBlock() {
+      if (wallPlaced) return;
+      wallPlaced = true;
+      // Convert blockX (0-100%) to offset from center (-1 to 1)
+      const offset = (wallBlockX - 50) / 50;
+      try {
+        const r = await fetch('/api/wall-place', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, offset })
+        });
+        const d = await r.json();
+        if (!r.ok) { wallPlaced = false; return; }
+        wallLastSnap = '';
+        poll();
+      } catch(e) { wallPlaced = false; }
+    }
+
     let wsGridKey = '';
 let wsSelected = [];
 let wsSelectedEls = [];
 let wsDirection = null;
 let wsPointerDown = false;
 let wsCurrentState = null;
-
-function wsNorm(v = '') {
-  return String(v).replace(/\s+/g, '').trim().toLowerCase();
-}
-
-function setWsMsg(text) {
-  const el = document.getElementById('ws-msg');
-  if (el) el.textContent = text || '';
-}
-
-function clearWordSearchSelection() {
-  wsSelected = [];
-  wsSelectedEls = [];
-  wsDirection = null;
-  wsPointerDown = false;
-
-  document.querySelectorAll('.ws-cell.selected').forEach(el => {
-    el.classList.remove('selected');
-  });
-
-  const label = document.getElementById('ws-selected-word');
-  if (label) label.textContent = 'Select letters to form a word';
-}
-
-function canAddWordCell(r, c) {
-  if (wsSelected.length === 0) return true;
-
-  const last = wsSelected[wsSelected.length - 1];
-  const dr = r - last.r;
-  const dc = c - last.c;
-
-  if (Math.max(Math.abs(dr), Math.abs(dc)) !== 1) return false;
-
-  const step = [Math.sign(dr), Math.sign(dc)];
-
-  if (wsSelected.length === 1) {
-    wsDirection = step;
-    return true;
-  }
-
-  return wsDirection &&
-    wsDirection[0] === step[0] &&
-    wsDirection[1] === step[1];
-}
-
-function addWordCell(cell) {
-  const r = Number(cell.dataset.r);
-  const c = Number(cell.dataset.c);
-  const letter = cell.dataset.letter;
-
-  if (cell.classList.contains('found') || cell.classList.contains('selected')) return;
-  if (!canAddWordCell(r, c)) return;
-
-  wsSelected.push({ r, c, letter });
-  wsSelectedEls.push(cell);
-  cell.classList.add('selected');
-
-  const selectedWord = wsSelected.map(x => x.letter).join('');
-  document.getElementById('ws-selected-word').textContent = selectedWord;
-}
-
-function wireWordSearchCells() {
-  document.querySelectorAll('#ws-grid .ws-cell').forEach(cell => {
-    cell.onpointerdown = (e) => {
-      e.preventDefault();
-      wsPointerDown = true;
-
-      if (wsSelected.length === 0) {
-        clearWordSearchSelection();
-      }
-
-      addWordCell(cell);
-    };
-
-    cell.onpointerenter = () => {
-      if (!wsPointerDown) return;
-      addWordCell(cell);
-    };
-  });
-
-  window.onpointerup = () => {
-    wsPointerDown = false;
-  };
-}
-
-function renderWordSearchGrid(grid, found) {
-  const gridEl = document.getElementById('ws-grid');
-  if (!gridEl || !grid || !grid.length) return;
-
-  gridEl.style.gridTemplateColumns = `repeat(${grid[0].length}, 1fr)`;
-  gridEl.innerHTML = '';
-
-  const foundCells = new Set();
-  Object.values(found || {}).forEach(item => {
-    (item.cells || []).forEach(cell => foundCells.add(`${cell.r}:${cell.c}`));
-  });
-
-  grid.forEach((row, r) => {
-    row.forEach((letter, c) => {
-      const cell = document.createElement('button');
-      cell.type = 'button';
-      cell.className = 'ws-cell' + (foundCells.has(`${r}:${c}`) ? ' found' : '');
-      cell.dataset.r = r;
-      cell.dataset.c = c;
-      cell.dataset.letter = letter;
-      cell.textContent = letter;
-      gridEl.appendChild(cell);
-    });
-  });
-
-  wireWordSearchCells();
-}
-
-function paintFoundCells(found) {
-  document.querySelectorAll('#ws-grid .ws-cell').forEach(el => el.classList.remove('found'));
-
-  Object.values(found || {}).forEach(item => {
-    (item.cells || []).forEach(cell => {
-      const el = document.querySelector(`#ws-grid .ws-cell[data-r="${cell.r}"][data-c="${cell.c}"]`);
-      if (el) el.classList.add('found');
-    });
-  });
-}
-
-function renderWordSearchFoundList(found) {
-  const list = document.getElementById('ws-found-list');
-  if (!list) return;
-
-  const entries = Object.entries(found || {})
-    .sort((a, b) => new Date(b[1].time) - new Date(a[1].time));
-
-  list.innerHTML = entries.map(([word, data]) => {
-    return `<span class="ws-found-pill">${word} · ${data.playerName} · +${data.points}</span>`;
-  }).join('');
-}
-
-function initWordSearch(state) {
-  wsCurrentState = state;
-  const ws = state.wordSearch || {};
-  const grid = ws.grid || [];
-  const found = ws.found || {};
-
-  document.getElementById('ws-total-count').textContent = (ws.words || []).length;
-  document.getElementById('ws-found-count').textContent = Object.keys(found).length;
-  document.getElementById('ws-my-score').textContent = myScore;
-
-  const gridKey = JSON.stringify(grid);
-
-  if (gridKey !== wsGridKey) {
-    wsGridKey = gridKey;
-    renderWordSearchGrid(grid, found);
-    clearWordSearchSelection();
-  } else {
-    paintFoundCells(found);
-  }
-
-  renderWordSearchFoundList(found);
-
-  if (Object.keys(found).length >= (ws.words || []).length && (ws.words || []).length > 0) {
-    setWsMsg('All hidden words are found.');
-  } else {
-    setWsMsg('');
-  }
-}
-
-async function submitWordSearch() {
-  const word = wsSelected.map(x => x.letter).join('');
-  const cells = wsSelected.map(x => ({ r: x.r, c: x.c, letter: x.letter }));
-
-  if (!word) {
-    setWsMsg('Pick a word first.');
-    return;
-  }
-
-  try {
-    const r = await fetch(`${API}/api/word-search-submit`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId, word, cells })
-    });
-
-    const d = await r.json();
-    if (!r.ok || !d.success) {
-      setWsMsg(d.message || d.error || 'Wrong word.');
-      clearWordSearchSelection();
-      return;
-    }
-
-    setWsMsg(`✅ ${d.canonicalWord} found by ${d.playerName} (+${d.points})`);
-    clearWordSearchSelection();
-    poll(); // refresh scoreboard + found list immediately
-  } catch (e) {
-    setWsMsg('Network error.');
-    clearWordSearchSelection();
-  }
-}
 
     function renderHintBody(qs, qIdx, status, revealed, answer, guess, scores, pair, amAnswerer, amGuesser, inGame) {
       const body = document.getElementById('hint-body');

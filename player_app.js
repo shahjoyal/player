@@ -57,12 +57,18 @@ const GameStateSchema = new mongoose.Schema({
   hintGuess: { type: String, default: '' },
   hintRevealed: { type: Number, default: 0 },
   hintScores: { type: mongoose.Schema.Types.Mixed, default: {} },
-  wordSearch: {
-  grid: { type: Array, default: [] },           // 2D array of letters
-  words: { type: [String], default: [] },       // hidden target words
-  found: { type: mongoose.Schema.Types.Mixed, default: {} }, // word -> { playerName, points, cells, time }
-  startedAt: { type: Date, default: null }
-},
+  // Wall Stack game
+  wallStack: {
+    storeys: { type: mongoose.Schema.Types.Mixed, default: [] }, // array of {playerName, offset, correct, timestamp}
+    currentPlayer: { type: String, default: null },              // whose turn it is
+    totalStoreys: { type: Number, default: 5 },
+    status: { type: String, default: 'idle' },                  // idle|placing|question|done
+    questionImage: { type: String, default: null },
+    questionAudio: { type: String, default: null },
+    questionText: { type: String, default: null },
+    questionActive: { type: Boolean, default: false },
+    questionResult: { type: mongoose.Schema.Types.Mixed, default: null }, // { correct: bool, playerName }
+  },
   updatedAt: { type: Date, default: Date.now }
 });
 
@@ -179,63 +185,49 @@ function normWord(v = '') {
   return String(v).replace(/\s+/g, '').trim().toLowerCase();
 }
 
-app.post('/api/word-search-submit', async (req, res) => {
+// POST /api/wall-place — player places a storey block
+app.post('/api/wall-place', async (req, res) => {
   try {
-    const { sessionId, word, cells = [] } = req.body;
-
+    const { sessionId, offset } = req.body; // offset: how far from center (-1 to 1, within tolerance = correct)
     const state = await getState();
-    if (state.phase !== 'word_search') {
-      return res.status(400).json({ success: false, message: 'Not in word search phase' });
+    if (state.phase !== 'wall_stack' || state.wallStack.status !== 'placing') {
+      return res.status(400).json({ error: 'Not in placing phase' });
     }
-
     const player = await Player.findOne({ sessionId });
     if (!player) return res.status(404).json({ error: 'Player not found' });
-
-    const ws = state.wordSearch || {};
-    const targetWords = (ws.words || []).map(normWord);
-    const submitted = normWord(word);
-    const reversed = submitted.split('').reverse().join('');
-
-    const canonical =
-      targetWords.includes(submitted) ? submitted :
-      targetWords.includes(reversed) ? reversed :
-      null;
-
-    if (!canonical) {
-      return res.status(400).json({ success: false, message: 'That is not one of the hidden words.' });
+    if (state.wallStack.currentPlayer !== player.name) {
+      return res.status(403).json({ error: 'Not your turn' });
     }
 
-    const found = ws.found || {};
-    if (found[canonical]) {
-      return res.status(400).json({ success: false, message: 'Already found by someone else.' });
-    }
-
-    const points = 10 + canonical.length;
-
-    found[canonical] = {
+    const absOffset = Math.abs(offset || 0);
+    const correct = absOffset <= 0.28; // within ~28% of center = acceptable
+    const storeys = state.wallStack.storeys || [];
+    storeys.push({
       playerName: player.name,
-      sessionId,
-      points,
-      cells,
-      time: new Date()
-    };
-
-    await GameState.updateOne(
-      { key: 'main' },
-      { $set: { 'wordSearch.found': found, updatedAt: new Date() } }
-    );
-
-    await Player.updateOne(
-      { sessionId },
-      { $inc: { score: points } }
-    );
-
-    res.json({
-      success: true,
-      canonicalWord: canonical,
-      points,
-      playerName: player.name
+      offset: offset || 0,
+      correct,
+      timestamp: new Date()
     });
+
+    const points = correct ? 15 : 0;
+    if (points > 0) {
+      await Player.updateOne({ sessionId }, { $inc: { score: points } });
+    }
+
+    // If correct and there's a question, move to question phase; else check if done
+    const hasQuestion = !!(state.wallStack.questionText || state.wallStack.questionImage || state.wallStack.questionAudio);
+    const allDone = storeys.length >= (state.wallStack.totalStoreys || 5);
+
+    let newStatus = allDone ? 'done' : (correct && hasQuestion ? 'question' : 'placing');
+    // Find next player — host controls this, but for now keep placing and wait for host to set next player
+
+    await GameState.updateOne({ key: 'main' }, {
+      'wallStack.storeys': storeys,
+      'wallStack.status': correct && hasQuestion && !allDone ? 'question' : (allDone ? 'done' : 'placed'),
+      updatedAt: new Date()
+    });
+
+    res.json({ success: true, correct, offset, points });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

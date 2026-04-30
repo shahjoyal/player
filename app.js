@@ -68,6 +68,17 @@ const GameStateSchema = new mongoose.Schema({
     answers: { type: mongoose.Schema.Types.Mixed, default: {} },// { qIndex: { playerName: optionIndex } }
     scores: { type: mongoose.Schema.Types.Mixed, default: {} }, // { playerName: points }
   },
+  // Music Mania game
+  musicMania: {
+    songs: { type: mongoose.Schema.Types.Mixed, default: [] },
+    currentSong: { type: Number, default: 0 },
+    totalSongs: { type: Number, default: 0 },
+    status: { type: String, default: 'idle' }, // idle|playing|buzzed|answered|judged|done
+    buzzerWinnerId: { type: String, default: null },
+    buzzerWinnerName: { type: String, default: null },
+    playerAnswer: { type: String, default: '' },
+    scores: { type: mongoose.Schema.Types.Mixed, default: {} },
+  },
   updatedAt: { type: Date, default: Date.now }
 });
 
@@ -273,6 +284,52 @@ app.post('/api/hint-guess', async (req, res) => {
     const player = await Player.findOne({ sessionId });
     if (!player || player.name !== state.hintPair.player2) return res.status(403).json({ error: 'Not the guesser' });
     await GameState.updateOne({ key: 'main' }, { hintGuess: (guess || '').trim(), updatedAt: new Date() });
+    res.json({ success: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ─── MUSIC MANIA ROUTES ──────────────────────────────────────────────────────
+
+// POST /api/music-mania-buzz — player presses buzzer during music mania
+app.post('/api/music-mania-buzz', async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    const state = await getState();
+    if (state.phase !== 'music_mania' || (state.musicMania || {}).status !== 'playing') {
+      return res.status(400).json({ error: 'Not in playing phase' });
+    }
+    if ((state.musicMania || {}).buzzerWinnerId) {
+      return res.status(400).json({ error: 'Buzzer already claimed' });
+    }
+    const player = await Player.findOne({ sessionId });
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+    await GameState.updateOne({ key: 'main' }, {
+      'musicMania.status': 'buzzed',
+      'musicMania.buzzerWinnerId': player._id.toString(),
+      'musicMania.buzzerWinnerName': player.name,
+      updatedAt: new Date()
+    });
+    res.json({ success: true, isWinner: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// POST /api/music-mania-answer — buzzer winner submits their song name
+app.post('/api/music-mania-answer', async (req, res) => {
+  try {
+    const { sessionId, answer } = req.body;
+    const state = await getState();
+    if (state.phase !== 'music_mania' || (state.musicMania || {}).status !== 'buzzed') {
+      return res.status(400).json({ error: 'Not in buzzed phase' });
+    }
+    const player = await Player.findOne({ sessionId });
+    if (!player || player._id.toString() !== (state.musicMania || {}).buzzerWinnerId) {
+      return res.status(403).json({ error: 'Not the buzzer winner' });
+    }
+    await GameState.updateOne({ key: 'main' }, {
+      'musicMania.playerAnswer': (answer || '').trim(),
+      'musicMania.status': 'answered',
+      updatedAt: new Date()
+    });
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

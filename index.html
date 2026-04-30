@@ -770,6 +770,65 @@
 /* Waiting / spectator */
 .ep-waiting { text-align:center;padding:20px 0; }
 .ep-done-card { width:100%;background:#fff;border:1px solid var(--border);border-radius:20px;padding:24px 18px;text-align:center;box-shadow:0 4px 20px var(--shadow); }
+
+/* ── MUSIC MANIA SCREEN ── */
+.mm-screen { background: linear-gradient(135deg, #0D1F12 0%, #1A3A1E 50%, #0D1F12 100%); }
+.mm-wrap { position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;padding:24px 18px; }
+.mm-card {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 24px; padding: 32px 26px; width: 100%; max-width: 420px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4); text-align: center;
+  backdrop-filter: blur(12px);
+}
+.mm-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+.mm-sub { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 24px; }
+.mm-badge { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #1DB954; font-weight: 600; margin-bottom: 16px; }
+.mm-hint { font-family: 'Playfair Display', serif; font-size: 15px; color: rgba(255,255,255,0.8); font-style: italic; margin-bottom: 20px; padding: 10px 14px; background: rgba(255,255,255,0.06); border-radius: 10px; }
+.mm-buzzer-btn {
+  width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #25D35F, #1DB954 50%, #158A3E);
+  border: 0; color: #fff;
+  font-family: 'Playfair Display', serif; font-weight: 900; font-size: 20px;
+  cursor: pointer; outline: none;
+  box-shadow: 0 0 0 10px rgba(29,185,84,0.18), 0 0 0 20px rgba(29,185,84,0.08), 0 12px 40px rgba(29,185,84,0.4);
+  transition: transform 0.12s, box-shadow 0.2s;
+  animation: mm-breathe 2.5s ease-in-out infinite;
+}
+@keyframes mm-breathe {
+  0%,100% { box-shadow: 0 0 0 10px rgba(29,185,84,0.18), 0 0 0 20px rgba(29,185,84,0.08), 0 12px 40px rgba(29,185,84,0.4); }
+  50% { box-shadow: 0 0 0 16px rgba(29,185,84,0.14), 0 0 0 32px rgba(29,185,84,0.05), 0 20px 60px rgba(29,185,84,0.5); }
+}
+.mm-buzzer-btn:active:not(:disabled) { transform: scale(0.91); }
+.mm-buzzer-btn.won { background: radial-gradient(circle at 35% 35%, #F0D060, var(--gold) 50%, #8B6800); box-shadow: 0 0 0 14px rgba(184,134,11,0.2), 0 20px 60px rgba(184,134,11,0.5); animation: winner-glow 0.8s ease 3; }
+.mm-buzzer-btn.lost { background: radial-gradient(circle at 35% 35%, #555, #333); box-shadow: none; animation: none; cursor: not-allowed; opacity: 0.5; }
+.mm-buzzer-btn.locked { cursor: not-allowed; animation: none; opacity: 0.65; }
+.mm-buzzer-btn:disabled { cursor: not-allowed; animation: none; opacity: 0.4; }
+.mm-buzzer-wrap { display: flex; justify-content: center; margin: 20px 0; }
+.mm-answer-input {
+  width: 100%; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 12px; padding: 14px 16px; font-size: 16px;
+  color: #fff; font-family: 'DM Sans', sans-serif; outline: none;
+  transition: border-color 0.2s; margin-bottom: 12px;
+}
+.mm-answer-input:focus { border-color: #1DB954; background: rgba(255,255,255,0.15); }
+.mm-answer-input::placeholder { color: rgba(255,255,255,0.35); }
+.mm-answer-input:disabled { opacity: 0.5; }
+.mm-submit-btn {
+  width: 100%; background: linear-gradient(135deg, #1DB954, #157A3B);
+  color: #fff; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16px;
+  border: none; border-radius: 12px; padding: 15px 20px; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(29,185,84,0.35); transition: transform 0.15s, opacity 0.2s;
+}
+.mm-submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.mm-submit-btn:active:not(:disabled) { transform: scale(0.97); }
+.mm-winner-toast { background: rgba(29,185,84,0.12); border: 1.5px solid rgba(29,185,84,0.3); border-radius: 14px; padding: 14px 18px; text-align: center; margin-top: 16px; }
+.mm-winner-name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #1DB954; }
+.mm-winner-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.mm-waiting-msg { font-size: 14px; color: rgba(255,255,255,0.45); padding: 16px 0; }
+.mm-submitted-badge { display:flex;align-items:center;gap:8px;background:rgba(29,185,84,0.1);border:1px solid rgba(29,185,84,0.3);border-radius:10px;padding:12px 14px;font-size:13px;color:#1DB954;font-weight:500;width:100%;margin-bottom:8px; }
+.mm-score-strip { display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 18px;margin-top:20px; }
+.mm-score-label { font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4); }
+.mm-score-value { font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff; }
   </style>
 </head>
 <body>
@@ -948,6 +1007,22 @@
     </div>
   </div>
 
+  <!-- ═══ SCREEN: MUSIC MANIA ═══ -->
+  <div class="screen mm-screen" id="screen-music-mania">
+    <div class="mm-wrap">
+      <div class="mm-card" id="mm-player-card">
+        <div class="mm-badge" id="mm-player-badge">Song 1 of 1</div>
+        <div class="mm-title">🎵 Music Mania</div>
+        <div class="mm-sub" id="mm-player-sub">Listen and buzz when you know the song!</div>
+        <div class="mm-hint" id="mm-player-hint" style="display:none;"></div>
+        <div id="mm-player-body"><!-- rendered by JS --></div>
+        <div class="mm-score-strip">
+          <div><div class="mm-score-label">Your Score</div><div class="mm-score-value" id="mm-player-score">0</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ─── CONFIG ─────────────────────────────────────────────────────────────────
     const API = '';  // Same origin — player app serves this HTML
@@ -1101,6 +1176,12 @@ case 'buzzer':
           initEmojiPick(state);
           lastPhase = 'emoji_pick';
           showScreen('screen-emoji-pick');
+          break;
+
+        case 'music_mania':
+          initMusicMania(state, players);
+          lastPhase = 'music_mania';
+          showScreen('screen-music-mania');
           break;
 
 
@@ -2143,6 +2224,154 @@ if (!r.ok) {
 
       // Resume heart animation
       startHeartPopAnimation();
+    }
+
+    // ─── MUSIC MANIA GAME ────────────────────────────────────────────────────────
+    let mmBuzzerLocked = false;
+    let mmAnswerSubmitted = false;
+    let mmLastSongIdx = null;
+    let mmLastStatus = null;
+
+    function initMusicMania(state, players) {
+      const mm = state.musicMania || {};
+      const songs = mm.songs || [];
+      const idx = mm.currentSong || 0;
+      const total = mm.totalSongs || songs.length;
+      const status = mm.status || 'idle';
+      const song = songs[idx] || {};
+
+      // Update score
+      const me = players.find(p => p.sessionId === sessionId);
+      if (me) document.getElementById('mm-player-score').textContent = me.score;
+
+      // Reset buzzer lock on new song
+      if (mmLastSongIdx !== idx) {
+        mmBuzzerLocked = false;
+        mmAnswerSubmitted = false;
+        mmLastSongIdx = idx;
+      }
+
+      // Badge
+      document.getElementById('mm-player-badge').textContent = `Song ${idx + 1} of ${total}`;
+
+      // Sub
+      const subEl = document.getElementById('mm-player-sub');
+      if (status === 'done') subEl.textContent = '🏁 All songs complete!';
+      else if (status === 'idle') subEl.textContent = 'Waiting for the host to play the music…';
+      else if (status === 'playing') subEl.textContent = 'Listen and buzz when you know the song!';
+      else subEl.textContent = '';
+
+      // Hint
+      const hintEl = document.getElementById('mm-player-hint');
+      if (song.question) { hintEl.textContent = `💬 ${song.question}`; hintEl.style.display = ''; }
+      else hintEl.style.display = 'none';
+
+      const body = document.getElementById('mm-player-body');
+      const iAmWinner = mm.buzzerWinnerId && players.find(p => p.sessionId === sessionId && p._id === mm.buzzerWinnerId);
+      const iWonByName = mm.buzzerWinnerName === myName;
+
+      if (status === 'idle' || status === 'judged') {
+        // Just wait
+        body.innerHTML = `<div class="mm-waiting-msg">${status === 'judged' ? '✅ Points awarded! Next song coming up…' : '⏳ Waiting for host to start the music…'}</div>`;
+        mmBuzzerLocked = false;
+        mmAnswerSubmitted = false;
+      } else if (status === 'playing') {
+        if (mmBuzzerLocked) {
+          body.innerHTML = `<div class="mm-waiting-msg">⏳ Buzzer sent… waiting for result</div>`;
+        } else {
+          body.innerHTML = `
+            <div class="mm-buzzer-wrap">
+              <button class="mm-buzzer-btn" id="mm-buzzer-btn" onclick="pressMusicManiaBuzzer()">BUZZ!</button>
+            </div>`;
+        }
+      } else if (status === 'buzzed') {
+        if (iWonByName && !mmAnswerSubmitted) {
+          // This player buzzed — show answer input
+          body.innerHTML = `
+            <div class="mm-winner-toast" style="margin-bottom:16px;">
+              <div class="mm-winner-name">🔔 You buzzed first!</div>
+              <div class="mm-winner-sub">Type the song name below</div>
+            </div>
+            <input class="mm-answer-input" id="mm-answer-input" type="text"
+              placeholder="Song name…" maxlength="100" autocomplete="off" autocorrect="off" spellcheck="false"
+              onkeyup="if(event.key==='Enter') submitMusicManiaAnswer()"/>
+            <button class="mm-submit-btn" id="mm-submit-btn" onclick="submitMusicManiaAnswer()">Submit Answer 🎵</button>`;
+          setTimeout(() => { const inp = document.getElementById('mm-answer-input'); if (inp) inp.focus(); }, 60);
+        } else if (iWonByName && mmAnswerSubmitted) {
+          body.innerHTML = `<div class="mm-submitted-badge">✅ Answer submitted! Waiting for host to judge…</div>`;
+        } else {
+          // Another player buzzed
+          body.innerHTML = `
+            <div class="mm-winner-toast">
+              <div class="mm-winner-name">🔔 ${esc(mm.buzzerWinnerName || '?')}</div>
+              <div class="mm-winner-sub">buzzed first! Waiting for their answer…</div>
+            </div>`;
+        }
+      } else if (status === 'answered') {
+        if (iWonByName) {
+          body.innerHTML = `<div class="mm-submitted-badge">✅ Answer submitted! Waiting for host to judge…</div>`;
+        } else {
+          body.innerHTML = `
+            <div class="mm-winner-toast">
+              <div class="mm-winner-name">${esc(mm.buzzerWinnerName || '?')} answered</div>
+              <div class="mm-winner-sub">Waiting for host to decide…</div>
+            </div>`;
+        }
+      } else if (status === 'done') {
+        const scores = mm.scores || {};
+        const myMMScore = scores[myName] || 0;
+        body.innerHTML = `
+          <div style="text-align:center;padding:16px 0;">
+            <div style="font-size:40px;margin-bottom:8px;">🎵</div>
+            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;">Music Mania Complete!</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.55);">Your round score: <strong style="color:#1DB954;">${myMMScore} pts</strong></div>
+          </div>`;
+      }
+
+      mmLastStatus = status;
+    }
+
+    async function pressMusicManiaBuzzer() {
+      if (mmBuzzerLocked) return;
+      const btn = document.getElementById('mm-buzzer-btn');
+      if (!btn) return;
+      mmBuzzerLocked = true;
+      btn.classList.add('locked'); btn.textContent = 'Sent!';
+      try {
+        const r = await fetch(`${API}/api/music-mania-buzz`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId })
+        });
+        const d = await r.json();
+        if (!r.ok) {
+          mmBuzzerLocked = false;
+          if (btn) { btn.classList.remove('locked'); btn.textContent = 'BUZZ!'; }
+        }
+      } catch (e) {
+        mmBuzzerLocked = false;
+        if (btn) { btn.classList.remove('locked'); btn.textContent = 'BUZZ!'; }
+      }
+    }
+
+    async function submitMusicManiaAnswer() {
+      const inp = document.getElementById('mm-answer-input');
+      if (!inp) return;
+      const answer = inp.value.trim();
+      if (!answer) { inp.style.borderColor = '#1DB954'; inp.placeholder = 'Please type something!'; inp.focus(); return; }
+      const btn = document.getElementById('mm-submit-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+      inp.disabled = true;
+      mmAnswerSubmitted = true;
+      try {
+        await fetch(`${API}/api/music-mania-answer`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, answer })
+        });
+      } catch (e) {
+        mmAnswerSubmitted = false;
+        if (btn) { btn.disabled = false; btn.textContent = 'Submit Answer 🎵'; }
+        if (inp) inp.disabled = false;
+      }
     }
 
     function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }

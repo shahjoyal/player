@@ -841,7 +841,7 @@
       <div class="ornament">Game Night</div>
       <div class="welcome-card">
         <span class="welcome-emoji">🎉</span>
-        <h1 class="welcome-title">Only 4 days to go for the special day!</h1>
+        <h1 class="welcome-title">Only 3 days to go for the special day!</h1>
         <p class="welcome-sub">Enter your name to join the fun</p>
 
         <div class="input-wrap">
@@ -2231,6 +2231,7 @@ if (!r.ok) {
     let mmAnswerSubmitted = false;
     let mmLastSongIdx = null;
     let mmLastStatus = null;
+    let mmLastRenderKey = null; // "songIdx-status" — only re-render body when this changes
 
     function initMusicMania(state, players) {
       const mm = state.musicMania || {};
@@ -2239,42 +2240,53 @@ if (!r.ok) {
       const total = mm.totalSongs || songs.length;
       const status = mm.status || 'idle';
       const song = songs[idx] || {};
+      const iWonByName = mm.buzzerWinnerName === myName;
 
-      // Update score
+      // ── Always-safe updates (don't touch body innerHTML) ──────────────────────
+
+      // Score strip — just a number, safe to update anytime
       const me = players.find(p => p.sessionId === sessionId);
       if (me) document.getElementById('mm-player-score').textContent = me.score;
 
-      // Reset buzzer lock on new song
-      if (mmLastSongIdx !== idx) {
-        mmBuzzerLocked = false;
-        mmAnswerSubmitted = false;
-        mmLastSongIdx = idx;
-      }
-
-      // Badge
+      // Badge & hint — just text nodes, no inputs
       document.getElementById('mm-player-badge').textContent = `Song ${idx + 1} of ${total}`;
+      const hintEl = document.getElementById('mm-player-hint');
+      if (song.question) { hintEl.textContent = `💬 ${song.question}`; hintEl.style.display = ''; }
+      else hintEl.style.display = 'none';
 
-      // Sub
       const subEl = document.getElementById('mm-player-sub');
       if (status === 'done') subEl.textContent = '🏁 All songs complete!';
       else if (status === 'idle') subEl.textContent = 'Waiting for the host to play the music…';
       else if (status === 'playing') subEl.textContent = 'Listen and buzz when you know the song!';
       else subEl.textContent = '';
 
-      // Hint
-      const hintEl = document.getElementById('mm-player-hint');
-      if (song.question) { hintEl.textContent = `💬 ${song.question}`; hintEl.style.display = ''; }
-      else hintEl.style.display = 'none';
+      // ── Reset per-song flags when song index changes ─────────────────────────
+      if (mmLastSongIdx !== idx) {
+        mmBuzzerLocked = false;
+        mmAnswerSubmitted = false;
+        mmLastSongIdx = idx;
+        mmLastRenderKey = null; // force re-render for new song
+      }
+
+      // ── Guard: never re-render body while player is actively typing ───────────
+      const activeInput = document.getElementById('mm-answer-input');
+      const playerIsTyping = activeInput && document.activeElement === activeInput;
+      if (playerIsTyping) return; // poll fired mid-type — skip body re-render entirely
+
+      // ── Only re-render body when state actually changes ───────────────────────
+      // For 'playing' we also track buzzerLocked so the button swaps correctly
+      const renderKey = `${idx}-${status}-${mmBuzzerLocked ? 'locked' : 'open'}-${iWonByName ? 'winner' : 'other'}-${mmAnswerSubmitted ? 'submitted' : 'pending'}`;
+      if (renderKey === mmLastRenderKey) return; // nothing changed, skip
+      mmLastRenderKey = renderKey;
 
       const body = document.getElementById('mm-player-body');
-      const iAmWinner = mm.buzzerWinnerId && players.find(p => p.sessionId === sessionId && p._id === mm.buzzerWinnerId);
-      const iWonByName = mm.buzzerWinnerName === myName;
 
+      // ── Render body based on status ───────────────────────────────────────────
       if (status === 'idle' || status === 'judged') {
-        // Just wait
         body.innerHTML = `<div class="mm-waiting-msg">${status === 'judged' ? '✅ Points awarded! Next song coming up…' : '⏳ Waiting for host to start the music…'}</div>`;
         mmBuzzerLocked = false;
         mmAnswerSubmitted = false;
+
       } else if (status === 'playing') {
         if (mmBuzzerLocked) {
           body.innerHTML = `<div class="mm-waiting-msg">⏳ Buzzer sent… waiting for result</div>`;
@@ -2284,9 +2296,10 @@ if (!r.ok) {
               <button class="mm-buzzer-btn" id="mm-buzzer-btn" onclick="pressMusicManiaBuzzer()">BUZZ!</button>
             </div>`;
         }
+
       } else if (status === 'buzzed') {
         if (iWonByName && !mmAnswerSubmitted) {
-          // This player buzzed — show answer input
+          // Winner sees input — rendered ONCE, then guarded by playerIsTyping above
           body.innerHTML = `
             <div class="mm-winner-toast" style="margin-bottom:16px;">
               <div class="mm-winner-name">🔔 You buzzed first!</div>
@@ -2297,16 +2310,18 @@ if (!r.ok) {
               onkeyup="if(event.key==='Enter') submitMusicManiaAnswer()"/>
             <button class="mm-submit-btn" id="mm-submit-btn" onclick="submitMusicManiaAnswer()">Submit Answer 🎵</button>`;
           setTimeout(() => { const inp = document.getElementById('mm-answer-input'); if (inp) inp.focus(); }, 60);
+
         } else if (iWonByName && mmAnswerSubmitted) {
           body.innerHTML = `<div class="mm-submitted-badge">✅ Answer submitted! Waiting for host to judge…</div>`;
+
         } else {
-          // Another player buzzed
           body.innerHTML = `
             <div class="mm-winner-toast">
               <div class="mm-winner-name">🔔 ${esc(mm.buzzerWinnerName || '?')}</div>
               <div class="mm-winner-sub">buzzed first! Waiting for their answer…</div>
             </div>`;
         }
+
       } else if (status === 'answered') {
         if (iWonByName) {
           body.innerHTML = `<div class="mm-submitted-badge">✅ Answer submitted! Waiting for host to judge…</div>`;
@@ -2317,6 +2332,7 @@ if (!r.ok) {
               <div class="mm-winner-sub">Waiting for host to decide…</div>
             </div>`;
         }
+
       } else if (status === 'done') {
         const scores = mm.scores || {};
         const myMMScore = scores[myName] || 0;
